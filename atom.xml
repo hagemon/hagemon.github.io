@@ -2,13 +2,617 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://hagemon.github.io</id>
     <title>Hagemon&apos;s Log</title>
-    <updated>2021-02-13T13:17:31.038Z</updated>
+    <updated>2021-02-13T13:31:38.855Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://hagemon.github.io"/>
     <link rel="self" href="https://hagemon.github.io/atom.xml"/>
     <logo>https://hagemon.github.io/images/avatar.png</logo>
     <icon>https://hagemon.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, Hagemon&apos;s Log</rights>
+    <entry>
+        <title type="html"><![CDATA[Clipin Log 4. 高亮区域的选取&拖拽&调整]]></title>
+        <id>https://hagemon.github.io/post/clipin-log-4-gao-liang-qu-yu-de-xuan-qu-andtuo-zhuai-anddiao-zheng/</id>
+        <link href="https://hagemon.github.io/post/clipin-log-4-gao-liang-qu-yu-de-xuan-qu-andtuo-zhuai-anddiao-zheng/">
+        </link>
+        <updated>2021-02-13T13:25:34.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="高亮区域的选取">高亮区域的选取</h1>
+<p>确定了高亮区域的渲染方式后，我们在ClipWindowController中添加对鼠标事件的监听，用于获取高亮区域。</p>
+<p>在ClipWindowController中设置一些变量，用来记录用户操作过程中的一些NSPoint和NSRect：</p>
+<pre><code>class ClipWindowController: NSWindowController {
+    
+    
+    var clipView: ClipView?
+		var screenImage: NSImage?
+    
+    var lastRect: NSRect?        // 上一个完整的区域，用于保存拖拽或调整前的区域
+    var highlightRect: NSRect?   // 当前高亮的区域，通过鼠标操作动态更新
+		var startPoint: NSPoint?     // 上一个完整区域的origin
+    var lastPoint: NSPoint?      // 上一次更新区域时鼠标的位置
+    
+		// functions ....
+}
+</code></pre>
+<h2 id="实现思路">实现思路：</h2>
+<ul>
+<li>鼠标落下时状态变为start，并记录落下位置为高亮区域的startPoint</li>
+<li>鼠标拖拽时通过当前位置和startPoint创建新的Rect，用于更新highlightRect</li>
+</ul>
+<p>其中用到<code>mouseDown</code>、<code>mouseUp</code>、<code>mouseDrag</code>这三个事件监听：</p>
+<pre><code>override func mouseDown(with event: NSEvent) {
+      let location = event.locationInWindow
+      switch ClipManager.shared.status {
+      case .ready:
+          ClipManager.shared.status = .start
+          self.startPoint = location
+      case .select:
+          // 暂不实现
+					break
+      default:
+          return
+      }
+  }
+</code></pre>
+<pre><code>override func mouseUp(with event: NSEvent) {
+    switch ClipManager.shared.status {
+    case .start:
+        guard let rect = self.highlightRect, let view = self.clipView else {
+						// 没有形成高亮区域
+            ClipManager.shared.status = .ready
+            return
+        }
+        ClipManager.shared.status = .select
+        self.lastRect = rect
+        self.highlight()
+    case .drag, .adjust:
+				// 暂不实现
+				break
+    default:
+        return
+    }
+}
+</code></pre>
+<pre><code>override func mouseDragged(with event: NSEvent) {
+    let location = event.locationInWindow
+    switch ClipManager.shared.status {
+    case .start:
+        guard let start = self.startPoint else { return }
+				// 根据 startPoint和当前位置构建新的rect并更新highlightRect
+        self.highlightRect = RectUtil.getRect(aPoint: start, bPoint: location)
+				// 重新渲染
+        self.highlight()
+    case .adjust:
+        // 暂不实现
+				break
+    case .drag:
+         // 暂不实现
+				break
+    default:
+        break
+    }
+}
+</code></pre>
+<p>其中<code>RectUtil.getRect</code>是在工具类中的一个静态方法，根据两个Point获取对应的Rect：</p>
+<p>Utils/RectUtil.swift</p>
+<pre><code>class RectUtil: NSObject {
+	  static func getRect(aPoint: NSPoint, bPoint:NSPoint) -&gt; NSRect{
+	      return NSIntegralRect(NSRect(
+	          x: min(aPoint.x, bPoint.x),
+	          y: min(aPoint.y, bPoint.y),
+	          width: abs(aPoint.x-bPoint.x),
+	          height: abs(aPoint.y-bPoint.y)
+	      ))
+	  }
+	  // ... other functions
+}
+</code></pre>
+<h1 id="高亮区域的拖拽">高亮区域的拖拽</h1>
+<h2 id="实现思路-2">实现思路：</h2>
+<ul>
+<li>判断mouseDown是否在高亮区域内部</li>
+<li>mouseUp时保存当前高亮区域信息</li>
+<li>mouseDragged时计算偏移程度，同时检测rect是否超出屏幕，更新highlightRect</li>
+</ul>
+<pre><code>override func mouseDown(with event: NSEvent) {
+      let location = event.locationInWindow
+      switch ClipManager.shared.status {
+      case .ready:
+          // ....
+      case .select:
+					// 判断鼠标区域
+          guard let rect = self.highlightRect,
+								rect.contains(location)
+					else { return }
+					ClipManager.shared.status = .drag
+					self.lastPoint = location
+      default:
+          return
+      }
+  }
+</code></pre>
+<pre><code>override func mouseUp(with event: NSEvent) {
+    switch ClipManager.shared.status {
+    case .start:
+        // ....
+    case .drag, .adjust:
+				// 保存高亮区域信息
+				guard let rect = self.highlightRect else { return }
+        self.startPoint = rect.origin
+        self.selectDotType = .none
+        self.lastRect = rect
+        ClipManager.shared.status = .select
+    default:
+        return
+    }
+}
+</code></pre>
+<pre><code>override func mouseDragged(with event: NSEvent) {
+    let location = event.locationInWindow
+    switch ClipManager.shared.status {
+    case .start:
+        // ....
+    case .adjust:
+        // 暂不实现
+				break
+    case .drag:
+        guard var rect = self.highlightRect,
+                  let window = self.window
+        else { break }
+        
+				// 和上一次检测的鼠标位置的偏移
+        var dx = location.x - self.lastPoint!.x
+        var dy = location.y - self.lastPoint!.y
+
+				// 偏移后的rect
+        let offsetRect = rect.offsetBy(dx: dx, dy: dy)
+        switch RectUtil.detectOverflow(rect: offsetRect, in: window) {
+        case .bothOverflow:
+						// 如果x和y都溢出，则抹零两轴的偏移量
+            dx = 0
+            dy = 0
+        case .xOverflow:
+						// x溢出，抹零x轴偏移量
+            dx = 0
+        case .yOverflow:
+						// y溢出，抹零y轴偏移量
+            dy = 0
+        default:
+            break
+        }
+        rect = rect.offsetBy(dx: dx, dy: dy)
+        
+				// 更新highlightRect，记录鼠标位置
+        self.highlightRect = rect
+        self.lastPoint = location
+        self.highlight()
+    default:
+        break
+    }
+}
+</code></pre>
+<p>其中rect溢出检测实现为：</p>
+<pre><code>class RectUtil: NSObject {
+		static func detectOverflow(rect: NSRect, in window:NSWindow) -&gt; RectIssue {
+        let origin = rect.origin
+        let points = [origin,
+                      origin.offsetBy(dx: rect.width, dy: 0),
+                      origin.offsetBy(dx: 0, dy: rect.height),
+                      origin.offsetBy(dx: rect.width, dy: rect.height)
+        ]
+        var xFlag = false
+        var yFlag = false
+        for p in points {
+            if p.x &lt; 0 || p.x &gt; window.frame.width{
+                xFlag = true
+            }
+            if p.y &lt; 0 || p.y &gt; window.frame.height{
+                yFlag = true
+            }
+        }
+        if xFlag &amp;&amp; yFlag {
+            return .bothOverflow
+        }else if xFlag {
+            return .xOverflow
+        }else if yFlag {
+            return .yOverflow
+        }else{
+            return .normal
+        }
+    }
+	  // ... other functions
+}
+
+enum RectIssue {
+    case xOverflow
+    case yOverflow
+    case bothOverflow
+    case normal
+}
+</code></pre>
+<h1 id="高亮区域的调整">高亮区域的调整</h1>
+<h2 id="实现思路-3">实现思路：</h2>
+<ul>
+<li>为高亮区域添加八个标识点</li>
+<li>若mouseDown在这八个点内则进入adjust状态</li>
+<li>mouseUp时保存高亮区域信息（和拖拽相同）</li>
+<li>mouseDragged时判断点击了哪个标识点
+<ul>
+<li>若为四个角落的点(<code>.corner</code>)则找到该点在<code>lastRect</code>上中心对称的点作为<strong>定点</strong>，鼠标位置作为<strong>动点</strong>；</li>
+<li>若是四条边上的点，则将其<strong>对边的其中一个端点</strong>作为<strong>定点</strong>，将当前鼠标位置所在边上与定点对称的点作为<strong>动点</strong>，如图所示：</li>
+</ul>
+</li>
+</ul>
+<figure data-type="image" tabindex="1"><img src="https://hagemon.github.io/post-images/1613223037730.jpg" alt="" loading="lazy"></figure>
+<h2 id="标识点显示">标识点显示</h2>
+<h3 id="标识点类型">标识点类型：</h3>
+<pre><code>enum DotType {
+    case corner  // 四个角的点
+    case top     // 上边中心对应的点
+    case bottom  // 下边中心对应的点
+    case right   // 右边中心对应的点
+    case left    // 左边中心对应的点
+    case none    // 无类型标识点，当没有标识点被选到时的默认值
+}
+</code></pre>
+<h3 id="实现思路-4">实现思路：</h3>
+<ul>
+<li>在view中根据当前的drawingRect构造八个点的NSPoint</li>
+<li>使用NSBezierPath绘制八个标识点</li>
+</ul>
+<pre><code>class ClipView: NSView {
+    
+    var image: NSImage?
+    var drawingRect: NSRect?
+    var showDots = false  // 是否显示标识点
+    var paths: [(NSBezierPath, DotType)] = [] // 记录标识点的path和对应的类型
+
+    override func draw(_ dirtyRect: NSRect) {
+        
+        super.draw(dirtyRect)
+
+        // Drawing code here.
+        guard let image = self.image else {
+            return
+        }
+        var rect = NSIntersectionRect(self.drawingRect!, self.bounds)
+        rect = NSIntegralRect(rect)
+        image.draw(in: rect, from: rect, operation: .sourceOver, fraction: 1.0)
+				
+				// 根据当前drawingRect绘制标识点
+        if self.showDots {
+            self.drawDots(rect: rect)
+        }
+
+    }
+    
+    private func drawDots(rect: NSRect) {
+        let radius: CGFloat = 1.5 // 标识点半径
+        let dots = self.getDotsCoord(with: rect, radius: radius)  // 获取八个点的坐标
+        self.paths = []
+        for (dot, type) in dots {
+            let path = NSBezierPath(ovalIn: NSRect(origin: dot, size: CGSize(width: radius*2, height: radius*2)))
+            self.paths.append((path, type))
+            path.lineWidth = 3
+            NSColor.white.set()
+            path.stroke()
+        }
+    }
+    
+    func getDotsCoord(with rect:NSRect, radius: CGFloat) -&gt; [(NSPoint, DotType)] {
+        let width = rect.width
+        let height = rect.height
+				// 为了让标识点的中心落在正确的位置，根据半径提前偏移rect
+				// 计算出来的位置是标识点圆圈对应矩阵的左下角（起始坐标）
+        let origin = rect.offsetBy(dx: -radius, dy: -radius).origin 
+        let dots: [(NSPoint, DotType)] = [
+            (origin, .corner),
+            (origin.offsetBy(dx: width/2, dy: 0), .bottom),
+            (origin.offsetBy(dx: 0, dy: height/2), .left),
+            (origin.offsetBy(dx: width, dy: 0), .corner),
+            (origin.offsetBy(dx: 0, dy: height), .corner),
+            (origin.offsetBy(dx: width, dy: height/2), .right),
+            (origin.offsetBy(dx: width/2, dy: height), .top),
+            (origin.offsetBy(dx: width, dy: height), .corner)
+        ].map({
+            (point, type) in
+						// 取整
+            return (NSPoint(x: Int(point.x), y: Int(point.y)), type)
+        })
+        return dots
+    }   
+    
+}
+</code></pre>
+<h2 id="区域调整">区域调整</h2>
+<p>在Controller中记录当前选择的标识点，并在mouseDown中添加对adjust or drag的判断</p>
+<pre><code>class ClipWindowController: NSWindowController {
+    
+    
+    var clipView: ClipView?
+		var screenImage: NSImage?
+    
+    var lastRect: NSRect?  
+    var highlightRect: NSRect?  
+		var startPoint: NSPoint?     
+    var lastPoint: NSPoint?    
+
+		var selectDotType: DotType = .none  // 当前选择标识点的类型，默认为none，可以用于判断是否有选择标识点
+    var selectDot: NSPoint = .zero      // 当前选择的标识点，默认为zero
+    
+		// other functions ....
+
+		override func mouseDown(with event: NSEvent) {
+        let location = event.locationInWindow
+        switch ClipManager.shared.status {
+        case .ready:
+            // ...
+        case .select:
+            guard let rect = self.highlightRect,
+                  let view = self.clipView,
+                  rect.insetBy(dx: -5, dy: -5).contains(location) // 适当放宽点击判定区域
+            else { return }
+            for (path, type) in view.paths {
+								 // 适当放宽点击判定区域
+                if path.bounds.insetBy(dx: -5, dy: -5).contains(location) {
+                    self.selectDotType = type
+                    self.selectDot = path.bounds.center()
+                    break
+                }
+            }
+            if self.selectDotType != .none {
+                ClipManager.shared.status = .adjust
+            } else {
+                ClipManager.shared.status = .drag
+            }
+            self.lastPoint = location
+        default:
+            return
+        }
+    }
+
+		override func mouseUp(with event: NSEvent) {
+        switch ClipManager.shared.status {
+        case .start:
+            // ...
+        case .drag, .adjust:
+            guard let rect = self.highlightRect else { return }
+            self.startPoint = rect.origin
+            self.selectDotType = .none
+            self.lastRect = rect
+            ClipManager.shared.status = .select
+        default:
+            return
+        }
+    }
+
+		override func mouseDragged(with event: NSEvent) {
+        let location = event.locationInWindow
+        switch ClipManager.shared.status {
+        case .start:
+            // ....
+        case .adjust:
+            guard let lastRect = self.lastRect,
+                  self.selectDotType != .none
+            else { break }
+            let dx = location.x - self.selectDot.x
+            let dy = location.y - self.selectDot.y
+            var rect: NSRect = .zero
+            switch self.selectDotType {
+            case .corner:
+                let symPoint = lastRect.symmetricalPoint(point: self.selectDot)
+                rect = RectUtil.getRect(aPoint: symPoint, bPoint: location)
+            case .top:
+                rect = RectUtil.getRect(
+                    aPoint: lastRect.origin,
+                    bPoint: self.selectDot.offsetBy(dx: lastRect.width/2, dy: dy)
+                )
+            case .bottom:
+                rect = RectUtil.getRect(
+                    aPoint: lastRect.origin.offsetBy(dx: 0, dy: lastRect.height),
+                    bPoint: self.selectDot.offsetBy(dx: lastRect.width/2, dy: dy)
+                )
+            case .left:
+                rect = RectUtil.getRect(
+                    aPoint: lastRect.origin.offsetBy(dx: dx, dy: 0),
+                    bPoint: self.selectDot.offsetBy(dx: lastRect.width, dy: lastRect.height/2)
+                )
+            case .right:
+                rect = RectUtil.getRect(
+                    aPoint: lastRect.origin,
+                    bPoint: self.selectDot.offsetBy(dx: dx, dy: lastRect.height/2)
+                )
+            
+            default:
+                break
+            }
+            self.highlightRect = rect
+            self.lastPoint = location
+            self.startPoint = rect.origin
+            self.highlight()
+        case .drag:
+            // ...
+        default:
+            break
+        }
+    }
+}
+</code></pre>
+<p>其中<code>symmetricalPoint</code>是获取rect中某个点关于中心对称的点：</p>
+<pre><code>extension NSRect {
+    func center() -&gt; NSPoint{
+        let origin = self.origin
+        return NSPoint(x: origin.x+self.width/2, y: origin.y+self.height/2)
+        
+    }
+    
+    func symmetricalPoint(point: NSPoint) -&gt; NSPoint {
+        let center = self.center()
+				// 转换为整数，放置抖动
+        return NSPoint(x: Int(2*center.x-point.x), y: Int(2*center.y-point.y))
+    }
+}
+</code></pre>
+<p>接下来是<a href="https://hagemon.github.io/post/clipin-log-5">单屏幕Pin实现</a></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Clipin Log 3. 截屏页面的实现]]></title>
+        <id>https://hagemon.github.io/post/clipin-log-3-jie-ping-ye-mian-de-shi-xian/</id>
+        <link href="https://hagemon.github.io/post/clipin-log-3-jie-ping-ye-mian-de-shi-xian/">
+        </link>
+        <updated>2021-02-13T13:24:06.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="实现思路">实现思路</h2>
+<ul>
+<li>创建和屏幕大小相等的NSWindow，且拥有以下特性：
+<ul>
+<li>borderless</li>
+<li>contentview透明背景</li>
+<li>level在其余窗口之上</li>
+</ul>
+</li>
+<li>捕捉高亮区域</li>
+<li>重载<code>NSWindow.contentView</code>中的draw方法，渲染高亮区域的图像覆盖背景</li>
+<li>按下ESC退出Clip</li>
+<li>按下Enter完成对高亮区域图像的获取</li>
+<li>用NSWindowController控制以上行为</li>
+</ul>
+<h2 id="实现过程">实现过程</h2>
+<p>创建NSWindowController，NSWindow，NSView对应的子类：</p>
+<figure data-type="image" tabindex="1"><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/11c87e84-fbc6-4e2b-afc9-3a7ddc650fa0/Untitled.png" alt="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/11c87e84-fbc6-4e2b-afc9-3a7ddc650fa0/Untitled.png" loading="lazy"></figure>
+<p>在<code>ClipManager.shared.start()</code>中创建控制器、窗口和页面的对象并建立关系：</p>
+<pre><code>func start() {
+		guard let screen = NSScreen.main else { return }  // 单显示器环境
+		NSApplication.shared.activate(ignoringOtherApps: true)  // 在触发快捷键后激活App，使开启的窗口能够变为key window
+    let view = ClipView(frame: screen.frame)
+    let clipWindow = ClipWindow(contentRect: screen.frame, contentView: view)
+    let clipWindowController = ClipWindowController(window: clipWindow)
+    self.controllers.append(clipWindowController) // 将其加入当前保存的控制器中
+    self.status = .ready
+    clipWindowController.capture(screen)
+}
+</code></pre>
+<p>ClipWindow的条件在初始化时既可以满足：</p>
+<pre><code>class ClipWindow: NSWindow {
+    
+    init(contentRect: NSRect, contentView: ClipView) {
+        super.init(contentRect: contentRect, styleMask: .borderless, backing: .buffered, defer: false)
+        self.contentView = contentView // ClipView as its contentView
+        self.level = .statusBar
+    }
+}
+</code></pre>
+<p>我们暂时不使用鼠标监听事件来获取高亮区域，而是使用一个临时的NSRect来表示我们所选取的范围：</p>
+<pre><code>let tmpRect = NSRect(x: 300, y: 300, width: 200, height: 400)
+</code></pre>
+<p>调用<code>ClipWindowController.capture(screen)</code>进入准备Clip的状态。在capture中实现获取当前屏幕图像，并设置Window的透明背景功能，最后显示ClipWindow：</p>
+<pre><code>class ClipWindowController: NSWindowController {
+		var clipView: ClipView?  // 为了方便使用self.window.view
+		var screenImage: NSImage?  // 背景图片
+		let tmpRect = NSRect(x: 300, y: 300, width: 200, height: 400)
+
+		func capture(screen: NSScreen) {
+				guard let window = self.window else { return }
+				guard let cgScreenImage = CGDisplayCreateImage(CGMainDisplayID()) else { return } // 获取主显示器的CGImage
+        self.screenImage = NSImage(cgImage: cgScreenImage, size: screen.frame.size) // 转化为NSImage
+        window.backgroundColor = NSColor(white: 0, alpha: 0.5) // 设置背景为透明，透明度为0.5
+        self.clipView = window.contentView as? ClipView
+        self.showWindow(nil)
+		}
+}
+</code></pre>
+<p>渲染高亮区域图像是最重要的步骤，通过重载ClipView的draw函数实现渲染功能：</p>
+<pre><code>class ClipView: NSView {
+    
+    var image: NSImage?  //屏幕图像
+    var drawingRect: NSRect?  // 高亮区域
+
+    override func draw(_ dirtyRect: NSRect) {
+        
+        super.draw(dirtyRect)
+
+        // Drawing code here.
+        guard let image = self.image, let drawingRect = self.drawingRect else {
+            return
+        }
+        var rect = NSIntersectionRect(drawingRect, self.bounds)  // 取高亮区域和页面的交集区域
+        rect = NSIntegralRect(rect)  // 区域取整，为了防止抖动问题
+
+				// 取屏幕图像中高亮区域部分渲染在view上，使用.sourceOver操作
+				// 由于source图像是alpha为1，所以渲染结果即是区域图像本身
+        image.draw(in: rect, from: rect, operation: .sourceOver, fraction: 1.0)
+    }    
+}
+</code></pre>
+<p>其中image和drawingRect变量会在绘制的过程中动态的给出，Controller中的<code>highlight()</code>函数会获取当前高亮区域的信息并告知系统view需要刷新：</p>
+<pre><code>// In ClipWindowController
+func highlight() {
+    guard let rect = self.tmpRect, // 暂时使用临时区域，之后使用
+          // let rect = self.highlightRect,
+					let image = self.screenImage,
+          let view = self.clipView
+    else { return }
+    DispatchQueue.main.async {
+        if view.image == nil {
+            view.image = image
+        }
+        view.drawingRect = rect  // 动态改变绘制区域的值
+        view.needsDisplay = true  // 告知系统view需要刷新
+    }
+}
+</code></pre>
+<h2 id="esc退出clip">ESC退出Clip</h2>
+<p>之前提到，在AppDetegate中注册了局部事件的监听，在捕捉到ESC后执行单例的结束操作<code>ClipManager.shared.end()</code> ，对当前开启的所有controller的窗口进行关闭操作：</p>
+<pre><code>class ClipManager {
+    
+    static let shared = ClipManager() // 单例
+    var status: ClipStatus = .off // Clip初始状态
+		var controllers: [ClipWindowController] = []  // 保存当前打开的所有控制器
+    
+		// .... other functions
+    
+    @objc func end() {
+        for controller in self.controllers {
+            controller.window?.orderOut(nil)
+        }
+        self.controllers.removeAll()
+        self.status = .off 
+    }
+    
+}
+</code></pre>
+<h2 id="enter获取高亮区域图像">Enter获取高亮区域图像</h2>
+<p>之前提到，在Enter后发送<code>clipEnd</code>的通知，在ClipWindowController中捕捉：</p>
+<pre><code>class ClipWindowController: NSWindowController {
+
+		// .... variables
+    
+    func capture(_ screen:NSScreen) {
+        NotificationCenter.default.addObserver(self, selector: #selector(self.done), name: NotiNames.clipEnd.name, object: nil)
+				// .... Get screen image
+    }
+
+		@objc func done() {
+        guard let view = self.clipView,
+              let rect = view.drawingRect
+        else {
+            return
+        }
+				// 获取view中特定rect对于的bitmapRep
+        guard let bitmapRep = view.bitmapImageRepForCachingDisplay(in: rect) else {return}
+        view.cacheDisplay(in: rect, to: bitmapRep)
+
+				// bitmapRep即为获取到的图像信息，可以进行保存或别的操作
+
+				// 利用bitmapRep进行Pin操作，暂不实现
+        // ....
+    }
+
+		// .... other functions
+
+}
+</code></pre>
+<p>接下来是<a href="https://hagemon.github.io/post/clipin-log-4/">高亮区域的选取</a></p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Clipin Log 2. 截屏管理器]]></title>
         <id>https://hagemon.github.io/post/clipin-log-2/</id>
@@ -17,7 +621,7 @@
         <updated>2021-01-09T13:13:22.000Z</updated>
         <content type="html"><![CDATA[<p>Manager/ClipManager.swift</p>
 <h2 id="截屏状态">截屏状态</h2>
-<pre><code class="language-swift">enum ClipStatus {
+<pre><code>enum ClipStatus {
     case off     // 未开启
     case ready   // 就绪
     case start   // 开始选择区域
@@ -30,7 +634,7 @@
 <figure data-type="image" tabindex="1"><img src="https://hagemon.github.io/post-images/1613222166438.png" alt="" loading="lazy"></figure>
 <h2 id="单例">单例</h2>
 <p>使用单例来控制Clip的操作：</p>
-<pre><code class="language-swift">import Cocoa
+<pre><code>import Cocoa
 
 class ClipManager {
     
@@ -54,7 +658,7 @@ class ClipManager {
 </code></pre>
 <p>通过调用<code>ClipManager.shared.start()</code>进入Clip功能。</p>
 <p>这里提前提一下，在初始化单例时添加对结束通知的监听，当某个组件完成了Pin的工作，则会post对应的通知，在ClipManager中处理Pin完成之后的操作：</p>
-<pre><code class="language-swift">private init() {
+<pre><code>private init() {
 		NotificationCenter.default.addObserver(self,
                                            selector: #selector(self.end),
                                            name: NotiNames.pinEnd.name,
@@ -66,7 +670,7 @@ class ClipManager {
 }
 </code></pre>
 <p>此处的notification name是枚举变量：</p>
-<pre><code class="language-swift">enum NotiNames: String {
+<pre><code>enum NotiNames: String {
     var name: NSNotification.Name {
         return Notification.Name(self.rawValue)
     }
