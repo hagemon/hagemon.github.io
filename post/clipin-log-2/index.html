@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Clipin Log 2. 截屏管理器 | Hagemon&#39;s Log</title>
-<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1613223173552">
+<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1613224145660">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://hagemon.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="Clipin Log 2. 截屏管理器 | Hagemon&#39;s Log - Atom Feed" href="https://hagemon.github.io/atom.xml">
@@ -17,7 +17,7 @@ enum ClipStatus {
     case off     // 未开启
     case ready   // 就绪
     case start   // 开始选择..." />
-    <meta name="keywords" content="" />
+    <meta name="keywords" content="iOS,Clipin" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
   </head>
@@ -26,7 +26,7 @@ enum ClipStatus {
       <div class="main-content">
         <div class="site-header">
   <a href="https://hagemon.github.io">
-  <img class="avatar" src="https://hagemon.github.io/images/avatar.png?v=1613223173552" alt="">
+  <img class="avatar" src="https://hagemon.github.io/images/avatar.png?v=1613224145660" alt="">
   </a>
   <h1 class="site-title">
     Hagemon&#39;s Log
@@ -93,6 +93,14 @@ enum ClipStatus {
                 2 min read
               </span>
               
+                <a href="https://hagemon.github.io/tag/5hne80IJu/" class="post-tag">
+                  # iOS
+                </a>
+              
+                <a href="https://hagemon.github.io/tag/VavrNj5esO/" class="post-tag">
+                  # Clipin
+                </a>
+              
             </div>
             
             <div class="post-content-wrapper">
@@ -118,7 +126,7 @@ class ClipManager {
     
     static let shared = ClipManager() // 单例
     var status: ClipStatus = .off // Clip初始状态
-		var controllers: [ClipWindowController] = []  // 保存当前打开的所有控制器
+	var controllers: [ClipWindowController] = []  // 保存当前打开的所有控制器
     
     private init() {
         NotificationCenter.default.addObserver(self, selector: #selector(self.end), name: NotiNames.pinEnd.name, object: nil)

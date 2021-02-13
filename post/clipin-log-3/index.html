@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Clipin Log 3. 截屏页面的实现 | Hagemon&#39;s Log</title>
-<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1613223173552">
+<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1613224145660">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://hagemon.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="Clipin Log 3. 截屏页面的实现 | Hagemon&#39;s Log - Atom Feed" href="https://hagemon.github.io/atom.xml">
@@ -22,7 +22,7 @@ level在其余窗口之上
 
 捕捉高亮区域
 重载NSWindow.contentView中的draw方法，渲染高亮区..." />
-    <meta name="keywords" content="" />
+    <meta name="keywords" content="iOS,Clipin" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
   </head>
@@ -31,7 +31,7 @@ level在其余窗口之上
       <div class="main-content">
         <div class="site-header">
   <a href="https://hagemon.github.io">
-  <img class="avatar" src="https://hagemon.github.io/images/avatar.png?v=1613223173552" alt="">
+  <img class="avatar" src="https://hagemon.github.io/images/avatar.png?v=1613224145660" alt="">
   </a>
   <h1 class="site-title">
     Hagemon&#39;s Log
@@ -98,6 +98,14 @@ level在其余窗口之上
                 5 min read
               </span>
               
+                <a href="https://hagemon.github.io/tag/5hne80IJu/" class="post-tag">
+                  # iOS
+                </a>
+              
+                <a href="https://hagemon.github.io/tag/VavrNj5esO/" class="post-tag">
+                  # Clipin
+                </a>
+              
             </div>
             
             <div class="post-content-wrapper">
@@ -118,12 +126,11 @@ level在其余窗口之上
 <li>用NSWindowController控制以上行为</li>
 </ul>
 <h2 id="实现过程">实现过程</h2>
-<p>创建NSWindowController，NSWindow，NSView对应的子类：</p>
-<figure data-type="image" tabindex="1"><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/11c87e84-fbc6-4e2b-afc9-3a7ddc650fa0/Untitled.png" alt="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/11c87e84-fbc6-4e2b-afc9-3a7ddc650fa0/Untitled.png" loading="lazy"></figure>
+<p>创建NSWindowController，NSWindow，NSView对应的子类。</p>
 <p>在<code>ClipManager.shared.start()</code>中创建控制器、窗口和页面的对象并建立关系：</p>
 <pre><code>func start() {
-		guard let screen = NSScreen.main else { return }  // 单显示器环境
-		NSApplication.shared.activate(ignoringOtherApps: true)  // 在触发快捷键后激活App，使开启的窗口能够变为key window
+	guard let screen = NSScreen.main else { return }  // 单显示器环境
+	NSApplication.shared.activate(ignoringOtherApps: true)  // 在触发快捷键后激活App，使开启的窗口能够变为key window
     let view = ClipView(frame: screen.frame)
     let clipWindow = ClipWindow(contentRect: screen.frame, contentView: view)
     let clipWindowController = ClipWindowController(window: clipWindow)
@@ -152,12 +159,12 @@ level在其余窗口之上
 		let tmpRect = NSRect(x: 300, y: 300, width: 200, height: 400)
 
 		func capture(screen: NSScreen) {
-				guard let window = self.window else { return }
-				guard let cgScreenImage = CGDisplayCreateImage(CGMainDisplayID()) else { return } // 获取主显示器的CGImage
-        self.screenImage = NSImage(cgImage: cgScreenImage, size: screen.frame.size) // 转化为NSImage
-        window.backgroundColor = NSColor(white: 0, alpha: 0.5) // 设置背景为透明，透明度为0.5
-        self.clipView = window.contentView as? ClipView
-        self.showWindow(nil)
+            guard let window = self.window else { return }
+            guard let cgScreenImage = CGDisplayCreateImage(CGMainDisplayID())                     else { return } // 获取主显示器的CGImage
+            self.screenImage = NSImage(cgImage: cgScreenImage, size: screen.frame.size) // 转化为NSImage
+            window.backgroundColor = NSColor(white: 0, alpha: 0.5) // 设置背景为透明，透明度为0.5
+            self.clipView = window.contentView as? ClipView
+            self.showWindow(nil)
 		}
 }
 </code></pre>
