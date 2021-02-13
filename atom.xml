@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://hagemon.github.io</id>
     <title>Hagemon&apos;s Log</title>
-    <updated>2021-02-13T13:10:33.525Z</updated>
+    <updated>2021-02-13T13:11:25.165Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://hagemon.github.io"/>
     <link rel="self" href="https://hagemon.github.io/atom.xml"/>
@@ -107,7 +107,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
 }
 </code></pre>
-<p>接下来看看<a href="https://hagemon.github.io/posts/clipin-log-2/">截屏管理器</a></p>
+<p>接下来看看<a href="https://hagemon.github.io/post/clipin-log-2/">截屏管理器</a></p>
 ]]></content>
     </entry>
     <entry>
@@ -132,7 +132,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 <li>Pin：Pin功能相关的Controller和View</li>
 </ul>
 <p>Status bar应用的相关配置和快捷键监听等功能在<code>AppDelegate.swift</code>中实现。</p>
-<p>首先进入<a href="https://hagemon.github.io/posts/clipin-log-1/">Status Bar应用&amp;监听快捷键</a>。</p>
+<p>首先进入<a href="https://hagemon.github.io/post/clipin-log-1/">Status Bar应用&amp;监听快捷键</a>。</p>
 ]]></content>
     </entry>
     <entry>
