@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://hagemon.github.io</id>
     <title>Hagemon&apos;s Log</title>
-    <updated>2021-02-13T13:07:16.121Z</updated>
+    <updated>2021-02-13T13:09:15.524Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://hagemon.github.io"/>
     <link rel="self" href="https://hagemon.github.io/atom.xml"/>
@@ -15,8 +15,7 @@
         <link href="https://hagemon.github.io/post/clipin-log-1/">
         </link>
         <updated>2021-02-13T12:53:34.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="创建一个基于status-bar的应用">创建一个基于Status Bar的应用</h1>
-<h2 id="storyboard">Storyboard</h2>
+        <content type="html"><![CDATA[<h2 id="storyboard">Storyboard</h2>
 <p>由于是基于Status Bar的应用，所以在Storyboard中将页面相关的组件都删除了，保留了Menu相关的组件。</p>
 <h2 id="配置infoplist">配置info.plist</h2>
 <p>在info.plist中添加名为<code>Application is agent (UIElement)</code>的key，并将value值设置为<code>YES</code>。这样App就不会在Dock中显示</p>
@@ -42,7 +41,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @objc func showMenu() {//to be do}
 }
 </code></pre>
-<h1 id="监听快捷键">监听快捷键</h1>
 <h2 id="全局快捷键基于hotkey">全局快捷键（基于HotKey）</h2>
 <p>为了启动截屏功能，需要监听全局的快捷键。在AppDelegate中使用HotKey对全局快捷键<code>cmd+shift+a</code>进行注册：</p>
 <pre><code>import Cocoa
@@ -107,7 +105,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
 }
 </code></pre>
-<p>接下来看看<a href="https://hagemon.github.io/clipin-log-2/">截屏管理器</a></p>
+<p>接下来看看<a href="https://hagemon.github.io/posts/clipin-log-2/">截屏管理器</a></p>
 ]]></content>
     </entry>
     <entry>
@@ -132,7 +130,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 <li>Pin：Pin功能相关的Controller和View</li>
 </ul>
 <p>Status bar应用的相关配置和快捷键监听等功能在<code>AppDelegate.swift</code>中实现。</p>
-<p>首先进入<a href="https://hagemon.github.io/clipin-log-1/">Status Bar应用&amp;监听快捷键</a>。</p>
+<p>首先进入<a href="https://hagemon.github.io/posts/clipin-log-1/">Status Bar应用&amp;监听快捷键</a>。</p>
 ]]></content>
     </entry>
     <entry>

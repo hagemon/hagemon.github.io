@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Clipin Log 1. 基于Status Bar的应用&amp;监听快捷键 | Hagemon&#39;s Log</title>
-<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1613221628477">
+<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1613221751334">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://hagemon.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="Clipin Log 1. 基于Status Bar的应用&amp;监听快捷键 | Hagemon&#39;s Log - Atom Feed" href="https://hagemon.github.io/atom.xml">
@@ -11,11 +11,10 @@
 
 
 
-    <meta name="description" content="创建一个基于Status Bar的应用
-Storyboard
+    <meta name="description" content="Storyboard
 由于是基于Status Bar的应用，所以在Storyboard中将页面相关的组件都删除了，保留了Menu相关的组件。
 配置info.plist
-在info.plist中添加名为..." />
+在info.plist中添加名为Application is agent..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -25,7 +24,7 @@ Storyboard
       <div class="main-content">
         <div class="site-header">
   <a href="https://hagemon.github.io">
-  <img class="avatar" src="https://hagemon.github.io/images/avatar.png?v=1613221628477" alt="">
+  <img class="avatar" src="https://hagemon.github.io/images/avatar.png?v=1613221751334" alt="">
   </a>
   <h1 class="site-title">
     Hagemon&#39;s Log
@@ -96,8 +95,7 @@ Storyboard
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <h1 id="创建一个基于status-bar的应用">创建一个基于Status Bar的应用</h1>
-<h2 id="storyboard">Storyboard</h2>
+                <h2 id="storyboard">Storyboard</h2>
 <p>由于是基于Status Bar的应用，所以在Storyboard中将页面相关的组件都删除了，保留了Menu相关的组件。</p>
 <h2 id="配置infoplist">配置info.plist</h2>
 <p>在info.plist中添加名为<code>Application is agent (UIElement)</code>的key，并将value值设置为<code>YES</code>。这样App就不会在Dock中显示</p>
@@ -123,7 +121,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @objc func showMenu() {//to be do}
 }
 </code></pre>
-<h1 id="监听快捷键">监听快捷键</h1>
 <h2 id="全局快捷键基于hotkey">全局快捷键（基于HotKey）</h2>
 <p>为了启动截屏功能，需要监听全局的快捷键。在AppDelegate中使用HotKey对全局快捷键<code>cmd+shift+a</code>进行注册：</p>
 <pre><code>import Cocoa
@@ -188,20 +185,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
 }
 </code></pre>
-<p>接下来看看<a href="https://hagemon.github.io/clipin-log-2/">截屏管理器</a></p>
+<p>接下来看看<a href="https://hagemon.github.io/posts/clipin-log-2/">截屏管理器</a></p>
 
               </div>
               <div class="toc-container">
                 <ul class="markdownIt-TOC">
-<li><a href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%9F%BA%E4%BA%8Estatus-bar%E7%9A%84%E5%BA%94%E7%94%A8">创建一个基于Status Bar的应用</a>
+<li>
 <ul>
 <li><a href="#storyboard">Storyboard</a></li>
 <li><a href="#%E9%85%8D%E7%BD%AEinfoplist">配置info.plist</a></li>
 <li><a href="#appdelegate">AppDelegate</a></li>
-</ul>
-</li>
-<li><a href="#%E7%9B%91%E5%90%AC%E5%BF%AB%E6%8D%B7%E9%94%AE">监听快捷键</a>
-<ul>
 <li><a href="#%E5%85%A8%E5%B1%80%E5%BF%AB%E6%8D%B7%E9%94%AE%E5%9F%BA%E4%BA%8Ehotkey">全局快捷键（基于HotKey）</a></li>
 <li><a href="#%E5%B1%80%E9%83%A8%E5%BF%AB%E6%8D%B7%E9%94%AE">局部快捷键</a></li>
 </ul>
