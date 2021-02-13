@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://hagemon.github.io</id>
     <title>Hagemon&apos;s Log</title>
-    <updated>2021-02-13T14:04:11.579Z</updated>
+    <updated>2021-02-13T14:04:27.619Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://hagemon.github.io"/>
     <link rel="self" href="https://hagemon.github.io/atom.xml"/>
@@ -25,7 +25,7 @@
 <li>对于每个控制器，获取对应显示器当前页面图像</li>
 <li>在执行Pin操作时，需要将窗口偏移到正确的位置</li>
 </ul>
-<pre><code>class ClipManager {
+<pre><code class="language-swift">class ClipManager {
     
 		// ....    
     var controllers: [ClipWindowController] = []
