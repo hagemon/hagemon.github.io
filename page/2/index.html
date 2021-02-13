@@ -4,7 +4,7 @@
 <meta name="description" content=""/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-<title>Clipin Log 2. 截屏管理器 | Hagemon&#39;s Log</title>
+<title>Hagemon&#39;s Log</title>
 
 <link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1613227730404">
 
@@ -25,11 +25,11 @@
 
 
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
 </head>
 <body>
 <div class="main gt-bg-theme-color-first">
-    <nav class="navbar navbar-expand-lg">
+    <div class="main-content">
+        <nav class="navbar navbar-expand-lg">
     <div class="navbar-brand">
         <img class="user-avatar" src="/images/avatar.png" alt="头像">
         <div class="site-name gt-c-content-color-first">
@@ -85,110 +85,45 @@
     </div>
 </nav>
 
-    <div class="post-container">
-        <div class="post-detail gt-bg-theme-color-second">
-            <article class="gt-post-content">
-                <h2 class="post-title">
-                    Clipin Log 2. 截屏管理器
-                </h2>
-                <div class="post-info">
-                    <time class="post-time gt-c-content-color-first">
-                        · 2021-01-09 ·
-                    </time>
-                    
-                        <a href="https://hagemon.github.io/tag/5hne80IJu/" class="post-tags">
-                            # iOS
-                        </a>
-                    
-                        <a href="https://hagemon.github.io/tag/VavrNj5esO/" class="post-tags">
-                            # Clipin
-                        </a>
-                    
-                </div>
-                <div class="post-content">
-                    <p>Manager/ClipManager.swift</p>
-<h2 id="截屏状态">截屏状态</h2>
-<pre><code class="language-swift">enum ClipStatus {
-    case off     // 未开启
-    case ready   // 就绪
-    case start   // 开始选择区域
-    case select  // 已选择区域
-    case adjust  // 调整区域大小
-    case drag    // 拖拽区域
-}
-</code></pre>
-<p>截屏的状态转移可以表述为下图</p>
-<figure data-type="image" tabindex="1"><img src="https://hagemon.github.io/post-images/1613222166438.png" alt="" loading="lazy"></figure>
-<h2 id="单例">单例</h2>
-<p>使用单例来控制Clip的操作：</p>
-<pre><code class="language-swift">import Cocoa
 
-class ClipManager {
-    
-    static let shared = ClipManager() // 单例
-    var status: ClipStatus = .off // Clip初始状态
-	var controllers: [ClipWindowController] = []  // 保存当前打开的所有控制器
-    
-    private init() {
-        NotificationCenter.default.addObserver(self, selector: #selector(self.end), name: NotiNames.pinEnd.name, object: nil)
-    }
-    
-    func start() {
-        // 开始Clip
-    }
-    
-    @objc func end() {
-        // 结束Clip
-    }
-    
-}
-</code></pre>
-<p>通过调用<code>ClipManager.shared.start()</code>进入Clip功能。</p>
-<p>这里提前提一下，在初始化单例时添加对结束通知的监听，当某个组件完成了Pin的工作，则会post对应的通知，在ClipManager中处理Pin完成之后的操作：</p>
-<pre><code class="language-swift">private init() {
-		NotificationCenter.default.addObserver(self,
-                                           selector: #selector(self.end),
-                                           name: NotiNames.pinEnd.name,
-                                           object: nil)
-}
-
-@objc func end() {
-    // Clip结束后的操作
-}
-</code></pre>
-<p>此处的notification name是枚举变量：</p>
-<pre><code class="language-swift">enum NotiNames: String {
-    var name: NSNotification.Name {
-        return Notification.Name(self.rawValue)
-    }
-    case clipEnd = &quot;doEndClip&quot;  // 结束Clip
-    case pinEnd = &quot;doEndPin&quot;  // 结束Pin
-    case pinFloating = &quot;pinFloating&quot;  // Pin窗口上浮
-    case pinNormal = &quot;pinNormal&quot;  // Pin窗口下沉
-}
-</code></pre>
-<h2 id="clip操作相关的通知传递">Clip操作相关的通知传递</h2>
-<p>对于Clip操作，在select状态下按下Enter会发送<code>clipEnd</code>的通知，由WindowController接收通知并做后续处理，在之后的章节中会详细介绍。</p>
-<p>接下来进入<a href="https://hagemon.github.io/post/clipin-log-3">截屏界面的实现</a></p>
-
-                </div>
-            </article>
-        </div>
-
+        <div class="post-list-container">
+    <div class="post-inner">
         
-            <div class="next-post">
-                <div class="next gt-c-content-color-first">下一篇</div>
-                <a href="https://hagemon.github.io/post/clipin-log-1/" class="post-title gt-a-link">
-                    Clipin Log 1. 基于Status Bar的应用&amp;监听快捷键
-                </a>
+            <div class="post gt-bg-theme-color-second">
+                <div class="post-left">
+                    <div>
+                        
+                        <a href="https://hagemon.github.io/post/gbdt-zhong-dui-yu-ti-du-ni-he-de-li-jie/">
+                            <span class="post-title gt-c-content-color-first">GBDT中对于梯度拟合的理解</span>
+                        </a>
+                    </div>
+                    <div class="gt-post-content post-abstract gt-c-content-color-second">
+                        
+                    </div>
+                    <div class="post-info">
+                        <time class="post-time gt-c-content-color-first">
+                            发布于 · 2019-08-20 ·
+                        </time>
+                        
+                            <a href="https://hagemon.github.io/tag/HeQC1tAsz/" class="post-tag">
+                                # Machine Learning
+                            </a>
+                        
+                    </div>
+                </div>
+                
             </div>
         
+    </div>
+</div>
 
-        
+        <div class="pagination-container">
+    
+        <a href="https://hagemon.github.io/" class="prev-page gt-a-link">上一页</a>
+    
+    
+</div>
 
-        
-
-        
 
         <div class="site-footer gt-c-content-color-first">
     <div class="slogan gt-c-content-color-first"></div>
