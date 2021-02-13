@@ -1,0 +1,280 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Clipin Log 1. 基于Status Bar的应用&amp;监听快捷键 | Hagemon&#39;s Log</title>
+<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1613221248128">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://hagemon.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="Clipin Log 1. 基于Status Bar的应用&amp;监听快捷键 | Hagemon&#39;s Log - Atom Feed" href="https://hagemon.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="创建一个基于Status Bar的应用
+Storyboard
+由于是基于Status Bar的应用，所以在Storyboard中将页面相关的组件都删除了，保留了Menu相关的组件。
+配置info.plist
+在info.plist中添加名为..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://hagemon.github.io">
+  <img class="avatar" src="https://hagemon.github.io/images/avatar.png?v=1613221248128" alt="">
+  </a>
+  <h1 class="site-title">
+    Hagemon&#39;s Log
+  </h1>
+  <p class="site-description">
+    
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="hagemon.github.io" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              Clipin Log 1. 基于Status Bar的应用&amp;监听快捷键
+            </h2>
+            <div class="post-info">
+              <span>
+                2021-02-13
+              </span>
+              <span>
+                3 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h1 id="创建一个基于status-bar的应用">创建一个基于Status Bar的应用</h1>
+<h2 id="storyboard">Storyboard</h2>
+<p>由于是基于Status Bar的应用，所以在Storyboard中将页面相关的组件都删除了，保留了Menu相关的组件。</p>
+<h2 id="配置infoplist">配置info.plist</h2>
+<p>在info.plist中添加名为<code>Application is agent (UIElement)</code>的key，并将value值设置为<code>YES</code>。这样App就不会在Dock中显示</p>
+<h2 id="appdelegate">AppDelegate</h2>
+<p>在AppDelegate中创建StatusBar按钮并配置对应的action</p>
+<pre><code>import Cocoa
+
+@main
+class AppDelegate: NSObject, NSApplicationDelegate {
+    
+    let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.squareLength)
+
+    func applicationDidFinishLaunching(_ aNotification: Notification) {        
+        guard let button = self.statusItem.button else { return }
+        button.image = NSImage(named: NSImage.Name(&quot;StatusBarIcon&quot;)) // StatusBarIcon is in Assets.xcassets
+        button.action = #selector(showMenu)
+    }
+
+    func applicationWillTerminate(_ aNotification: Notification) {
+        // Insert code here to tear down your application
+    }
+        
+    @objc func showMenu() {//to be do}
+}
+</code></pre>
+<h1 id="监听快捷键">监听快捷键</h1>
+<h2 id="全局快捷键基于hotkey">全局快捷键（基于HotKey）</h2>
+<p>为了启动截屏功能，需要监听全局的快捷键。在AppDelegate中使用HotKey对全局快捷键<code>cmd+shift+a</code>进行注册：</p>
+<pre><code>import Cocoa
+import HotKey
+
+@main
+class AppDelegate: NSObject, NSApplicationDelegate {
+    
+    let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.squareLength)
+    let hotKey = HotKey(key: .a, modifiers: [.shift, .command])
+
+    func applicationDidFinishLaunching(_ aNotification: Notification) {
+               
+        self.hotKey.keyUpHandler = {
+            print(&quot;hello&quot;)
+        }
+        
+        guard let button = self.statusItem.button else { return }
+        button.image = NSImage(named: NSImage.Name(&quot;StatusBarIcon&quot;))
+        button.action = #selector(showMenu)
+    }
+
+    func applicationWillTerminate(_ aNotification: Notification) {
+        // Insert code here to tear down your application
+    }
+    
+    @objc func showMenu() {}
+}
+</code></pre>
+<h2 id="局部快捷键">局部快捷键</h2>
+<p>局部快捷键用于监听应用内的一些键盘事件，比如回车完成Clip操作，Esc退出Clip操作：</p>
+<pre><code>import Cocoa
+import HotKey
+
+@main
+class AppDelegate: NSObject, NSApplicationDelegate {
+    
+		// ... variables
+
+    func applicationDidFinishLaunching(_ aNotification: Notification) {
+
+				// local hotkey
+        NSEvent.addLocalMonitorForEvents(matching: .keyDown, handler: {
+		        (event) -&gt; NSEvent? in
+		        if ClipManager.shared.status != .off &amp;&amp; event.keyCode == kVK_Escape {
+								// 退出Clip之后的操作
+		            ClipManager.shared.end()
+		        }
+		        if ClipManager.shared.status == .select &amp;&amp; event.keyCode == kVK_Return {
+								// 完成Clip之后的操作，post一个名为clipEnd的通知
+		            NotificationCenter.default.post(name: NotiNames.clipEnd.name, object: self, userInfo: nil)
+        }
+		        return nil
+        })
+
+        // ... global hotkey and status bar item
+    }
+
+    func applicationWillTerminate(_ aNotification: Notification) {
+        // Insert code here to tear down your application
+    }
+    
+}
+</code></pre>
+<p>接下来看看<a href="https://hagemon.github.io/clipin-log-2">截屏管理器</a></p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%9F%BA%E4%BA%8Estatus-bar%E7%9A%84%E5%BA%94%E7%94%A8">创建一个基于Status Bar的应用</a>
+<ul>
+<li><a href="#storyboard">Storyboard</a></li>
+<li><a href="#%E9%85%8D%E7%BD%AEinfoplist">配置info.plist</a></li>
+<li><a href="#appdelegate">AppDelegate</a></li>
+</ul>
+</li>
+<li><a href="#%E7%9B%91%E5%90%AC%E5%BF%AB%E6%8D%B7%E9%94%AE">监听快捷键</a>
+<ul>
+<li><a href="#%E5%85%A8%E5%B1%80%E5%BF%AB%E6%8D%B7%E9%94%AE%E5%9F%BA%E4%BA%8Ehotkey">全局快捷键（基于HotKey）</a></li>
+<li><a href="#%E5%B1%80%E9%83%A8%E5%BF%AB%E6%8D%B7%E9%94%AE">局部快捷键</a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://hagemon.github.io/post/clipin-log-0/">
+              <h3 class="post-title">
+                Clipin Log 0. Mac OS上截图&amp;保留小工具的开发记录
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Hello World
+  <a class="rss" href="https://hagemon.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
