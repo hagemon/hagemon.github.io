@@ -6,7 +6,7 @@
 
 <title>Clipin Log 1. 基于Status Bar的应用&amp;监听快捷键 | Hagemon&#39;s Log</title>
 
-<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1613228508347">
+<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1613229284300">
 
 <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://hagemon.github.io/styles/main.css">
@@ -77,7 +77,7 @@
             
         </div>
         <div style="text-align: center">
-            <form id="gridea-search-form" style="position: relative" data-update="1613228508347" action="/search/index.html">
+            <form id="gridea-search-form" style="position: relative" data-update="1613229284300" action="/search/index.html">
                 <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
                 <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
             </form>
@@ -107,6 +107,7 @@
                 </div>
                 <div class="post-content">
                     <h1 id="创建一个基于status-bar的应用">创建一个基于Status Bar的应用</h1>
+<p>基于Status Bar的应用不需要设置额外的UI，所以不需要使用StoryBoard，只要在AppDelegate中配置好相应的StatusBarItem即可。</p>
 <h2 id="storyboard">Storyboard</h2>
 <p>由于是基于Status Bar的应用，所以在Storyboard中将页面相关的组件都删除了，保留了Menu相关的组件。</p>
 <h2 id="配置infoplist">配置info.plist</h2>
@@ -134,6 +135,29 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 }
 </code></pre>
 <h1 id="监听快捷键">监听快捷键</h1>
+<p>基于HotKey实现对全剧快捷键的监听，HotKey底层使用了<code>Carbon</code>的<code>RegisterEventHotKey</code>接口：</p>
+<pre><code class="language-swift">
+static let eventHotKeySignature: UInt32 = {
+    let string = &quot;SSHk&quot;
+    var result: FourCharCode = 0
+    for char in string.utf16 {
+        result = (result &lt;&lt; 8) + FourCharCode(char)
+    }
+    return result
+}()
+
+// Register with the system
+var eventHotKey: EventHotKeyRef?
+let hotKeyID = EventHotKeyID(signature: eventHotKeySignature, id: box.carbonHotKeyID)
+let registerError = RegisterEventHotKey(
+    hotKey.keyCombo.carbonKeyCode,
+    hotKey.keyCombo.carbonModifiers,
+    hotKeyID,
+    GetEventDispatcherTarget(),
+    0,
+    &amp;eventHotKey
+)
+</code></pre>
 <h2 id="全局快捷键基于hotkey">全局快捷键（基于HotKey）</h2>
 <p>为了启动截屏功能，需要监听全局的快捷键。在AppDelegate中使用HotKey对全局快捷键<code>cmd+shift+a</code>进行注册：</p>
 <pre><code class="language-swift">import Cocoa

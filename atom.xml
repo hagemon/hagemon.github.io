@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://hagemon.github.io</id>
     <title>Hagemon&apos;s Log</title>
-    <updated>2021-02-13T15:02:10.461Z</updated>
+    <updated>2021-02-13T15:14:47.372Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://hagemon.github.io"/>
     <link rel="self" href="https://hagemon.github.io/atom.xml"/>
@@ -28,6 +28,7 @@
 </ul>
 <p>所以使用双向链表+哈希表的组合作为cache结构。</p>
 <h1 id="python简易实现">Python简易实现</h1>
+<p>使用Python快速实现上述功能，包括数据结点、双向链表和Cache的实现。</p>
 <h2 id="数据结点">数据结点</h2>
 <pre><code class="language-python">class Node:
     def __init__(self, key, val):
@@ -1417,6 +1418,7 @@ class ClipManager {
         </link>
         <updated>2021-01-09T12:53:34.000Z</updated>
         <content type="html"><![CDATA[<h1 id="创建一个基于status-bar的应用">创建一个基于Status Bar的应用</h1>
+<p>基于Status Bar的应用不需要设置额外的UI，所以不需要使用StoryBoard，只要在AppDelegate中配置好相应的StatusBarItem即可。</p>
 <h2 id="storyboard">Storyboard</h2>
 <p>由于是基于Status Bar的应用，所以在Storyboard中将页面相关的组件都删除了，保留了Menu相关的组件。</p>
 <h2 id="配置infoplist">配置info.plist</h2>
@@ -1444,6 +1446,29 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 }
 </code></pre>
 <h1 id="监听快捷键">监听快捷键</h1>
+<p>基于HotKey实现对全剧快捷键的监听，HotKey底层使用了<code>Carbon</code>的<code>RegisterEventHotKey</code>接口：</p>
+<pre><code class="language-swift">
+static let eventHotKeySignature: UInt32 = {
+    let string = &quot;SSHk&quot;
+    var result: FourCharCode = 0
+    for char in string.utf16 {
+        result = (result &lt;&lt; 8) + FourCharCode(char)
+    }
+    return result
+}()
+
+// Register with the system
+var eventHotKey: EventHotKeyRef?
+let hotKeyID = EventHotKeyID(signature: eventHotKeySignature, id: box.carbonHotKeyID)
+let registerError = RegisterEventHotKey(
+    hotKey.keyCombo.carbonKeyCode,
+    hotKey.keyCombo.carbonModifiers,
+    hotKeyID,
+    GetEventDispatcherTarget(),
+    0,
+    &amp;eventHotKey
+)
+</code></pre>
 <h2 id="全局快捷键基于hotkey">全局快捷键（基于HotKey）</h2>
 <p>为了启动截屏功能，需要监听全局的快捷键。在AppDelegate中使用HotKey对全局快捷键<code>cmd+shift+a</code>进行注册：</p>
 <pre><code class="language-swift">import Cocoa

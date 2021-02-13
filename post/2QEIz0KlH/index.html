@@ -6,7 +6,7 @@
 
 <title>实现基于LRU的Cache | Hagemon&#39;s Log</title>
 
-<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1613228508347">
+<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1613229284300">
 
 <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://hagemon.github.io/styles/main.css">
@@ -77,7 +77,7 @@
             
         </div>
         <div style="text-align: center">
-            <form id="gridea-search-form" style="position: relative" data-update="1613228508347" action="/search/index.html">
+            <form id="gridea-search-form" style="position: relative" data-update="1613229284300" action="/search/index.html">
                 <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
                 <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
             </form>
@@ -119,6 +119,7 @@
 </ul>
 <p>所以使用双向链表+哈希表的组合作为cache结构。</p>
 <h1 id="python简易实现">Python简易实现</h1>
+<p>使用Python快速实现上述功能，包括数据结点、双向链表和Cache的实现。</p>
 <h2 id="数据结点">数据结点</h2>
 <pre><code class="language-python">class Node:
     def __init__(self, key, val):
