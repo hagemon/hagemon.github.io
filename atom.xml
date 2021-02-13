@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://hagemon.github.io</id>
     <title>Hagemon&apos;s Log</title>
-    <updated>2021-02-13T12:47:58.251Z</updated>
+    <updated>2021-02-13T12:57:06.001Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://hagemon.github.io"/>
     <link rel="self" href="https://hagemon.github.io/atom.xml"/>
@@ -10,34 +10,129 @@
     <icon>https://hagemon.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, Hagemon&apos;s Log</rights>
     <entry>
-        <title type="html"><![CDATA[The K-Armed Bandit Problem]]></title>
-        <id>https://hagemon.github.io/post/the-k-armed-bandit-problem/</id>
-        <link href="https://hagemon.github.io/post/the-k-armed-bandit-problem/">
+        <title type="html"><![CDATA[Clipin Log 1. 基于Status Bar的应用&监听快捷键]]></title>
+        <id>https://hagemon.github.io/post/clipin-log-1-ji-yu-status-bar-de-ying-yong-andjian-ting-kuai-jie-jian/</id>
+        <link href="https://hagemon.github.io/post/clipin-log-1-ji-yu-status-bar-de-ying-yong-andjian-ting-kuai-jie-jian/">
         </link>
-        <updated>2021-02-13T12:46:18.000Z</updated>
-        <content type="html"><![CDATA[<p>监督学习通过给模型正确的标签（label）/行为（action）等因素来指导模型学习，而强化学习则是通过评估行为的好坏来对模型进行修正。所以在强化学习过程中，就需要对行为的利用（exploiting）和探索（exploration），来使用当前较好的action或是探索潜在的更好的action。</p>
-<p>我们从最简单的情况开始讨论，即某个行为只由某单一的条件促成。我们把这种情况称为非关联问题（nonassociative）。</p>
-<p>K臂老虎机问题指的是我们可以从K个选项中不断地进行选择（这些选择就是action），每一次的action可以让我们得到一个reward，这个reward的值是根据action的条件概率分布得来的。</p>
-<p>我们以临床诊断（Clinical Trials）为例：它是一个经典的Bandit问题。</p>
-<figure data-type="image" tabindex="1"><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/6882c7c4-fd3a-4af3-ae02-d27ac749b7f2/Untitled.png" alt="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/6882c7c4-fd3a-4af3-ae02-d27ac749b7f2/Untitled.png" loading="lazy"></figure>
-<p>医生可以通过选择不同的药物来治疗病人，并观察病人的反应来判断药物的好坏。从图中可以看到，第三种药物对病人有着更好的影响。此时医生应该作出判断：</p>
+        <updated>2021-02-13T12:53:34.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="创建一个基于status-bar的应用">创建一个基于Status Bar的应用</h1>
+<h2 id="storyboard">Storyboard</h2>
+<p>由于是基于Status Bar的应用，所以在Storyboard中将页面相关的组件都删除了，保留了Menu相关的组件。</p>
+<h2 id="配置infoplist">配置info.plist</h2>
+<p>在info.plist中添加名为<code>Application is agent (UIElement)</code>的key，并将value值设置为<code>YES</code>。这样App就不会在Dock中显示</p>
+<h2 id="appdelegate">AppDelegate</h2>
+<p>在AppDelegate中创建StatusBar按钮并配置对应的action</p>
+<pre><code class="language-swift">import Cocoa
+
+@main
+class AppDelegate: NSObject, NSApplicationDelegate {
+    
+    let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.squareLength)
+
+    func applicationDidFinishLaunching(_ aNotification: Notification) {        
+        guard let button = self.statusItem.button else { return }
+        button.image = NSImage(named: NSImage.Name(&quot;StatusBarIcon&quot;)) // StatusBarIcon is in Assets.xcassets
+        button.action = #selector(showMenu)
+    }
+
+    func applicationWillTerminate(_ aNotification: Notification) {
+        // Insert code here to tear down your application
+    }
+        
+    @objc func showMenu() {//to be do}
+}
+</code></pre>
+<h1 id="监听快捷键">监听快捷键</h1>
+<h2 id="全局快捷键基于hotkey">全局快捷键（基于HotKey）</h2>
+<p>为了启动截屏功能，需要监听全局的快捷键。在AppDelegate中使用HotKey对全局快捷键<code>cmd+shift+a</code>进行注册：</p>
+<pre><code class="language-swift">import Cocoa
+import HotKey
+
+@main
+class AppDelegate: NSObject, NSApplicationDelegate {
+    
+    let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.squareLength)
+    let hotKey = HotKey(key: .a, modifiers: [.shift, .command])
+
+    func applicationDidFinishLaunching(_ aNotification: Notification) {
+               
+        self.hotKey.keyUpHandler = {
+            print(&quot;hello&quot;)
+        }
+        
+        guard let button = self.statusItem.button else { return }
+        button.image = NSImage(named: NSImage.Name(&quot;StatusBarIcon&quot;))
+        button.action = #selector(showMenu)
+    }
+
+    func applicationWillTerminate(_ aNotification: Notification) {
+        // Insert code here to tear down your application
+    }
+    
+    @objc func showMenu() {}
+}
+</code></pre>
+<h2 id="局部快捷键">局部快捷键</h2>
+<p>局部快捷键用于监听应用内的一些键盘事件，比如回车完成Clip操作，Esc退出Clip操作：</p>
+<pre><code class="language-swift">import Cocoa
+import HotKey
+
+@main
+class AppDelegate: NSObject, NSApplicationDelegate {
+    
+		// ... variables
+
+    func applicationDidFinishLaunching(_ aNotification: Notification) {
+
+				// local hotkey
+        NSEvent.addLocalMonitorForEvents(matching: .keyDown, handler: {
+		        (event) -&gt; NSEvent? in
+		        if ClipManager.shared.status != .off &amp;&amp; event.keyCode == kVK_Escape {
+								// 退出Clip之后的操作
+		            ClipManager.shared.end()
+		        }
+		        if ClipManager.shared.status == .select &amp;&amp; event.keyCode == kVK_Return {
+								// 完成Clip之后的操作，post一个名为clipEnd的通知
+		            NotificationCenter.default.post(name: NotiNames.clipEnd.name, object: self, userInfo: nil)
+        }
+		        return nil
+        })
+
+        // ... global hotkey and status bar item
+    }
+
+    func applicationWillTerminate(_ aNotification: Notification) {
+        // Insert code here to tear down your application
+    }
+    
+}
+</code></pre>
+<p>接下来看看截屏管理器</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Clipin Log 0. Mac OS上截图&保留小工具的开发记录]]></title>
+        <id>https://hagemon.github.io/post/clipin-yi-ge-mac-os-shang-bao-chi-ping-mu-jie-tu-de-xiao-gong-ju/</id>
+        <link href="https://hagemon.github.io/post/clipin-yi-ge-mac-os-shang-bao-chi-ping-mu-jie-tu-de-xiao-gong-ju/">
+        </link>
+        <updated>2021-01-09T12:50:05.000Z</updated>
+        <content type="html"><![CDATA[<p>源码地址：<a href="https://github.com/hagemon/Clipin">https://github.com/hagemon/Clipin</a></p>
+<p>源码的版本为Swift 5.0。</p>
+<p>我们将截图操作称为<strong>Clip</strong>，将截图钉在屏幕上的操作称为<strong>Pin</strong>。</p>
+<p>该工具可以临时将一些需要对照的信息保持在屏幕最上方，（或许）能提高工作效率。</p>
+<p>该工具在很大程度上参考了<a href="https://github.com/isee15/Capture-Screen-For-Multi-Screens-On-Mac">Snip</a>的源码，且集成了<a href="https://github.com/soffes/HotKey">HotKey</a>开源库监听快捷键。</p>
+<p>本文章是作者在开发该工具过程中的记录，由简入繁地介绍该工具的创建过程，如文中有纰漏或是不健康的代码，还请各位赐教。😋</p>
+<p>本工具还会持续地开发和维护，该文章也会不断地更新和修改。</p>
+<h1 id="项目架构介绍">项目架构介绍</h1>
+<p>根据作者个人的习惯，将项目分为以下几个模块：</p>
 <ul>
-<li>坚持利用当前效果最好的药物来对病人进行治疗（Exploiting）</li>
-<li>继续探索剩下的药物能否在之后的治疗中起到更好的效果（Exploring）</li>
+<li>Util：一些工具类、函数、枚举和扩展</li>
+<li>Manager：管理Clip、Pin操作过程的单例管理器</li>
+<li>Clip：Clip功能相关的Controller和View</li>
+<li>Pin：Pin功能相关的Controller和View</li>
 </ul>
-<p>这两个选择实际上是矛盾的，如果坚持使用当前最好的药物，可能失去了找到更好解决方案的机会；但研究其它药物是否能够有更好的效果，可能会对病人的健康带来影响。</p>
-<p>这个例子就是一个经典的不确定性决策问题（Decision-making under uncertainty），也是一个k臂老虎机问题。</p>
-<p>在k-armed bandit问题中，我们需要一个决策者（我们称为实体agent），它能够在k个不同的actions中做出选择，并基于这些选择得到对应的reward。</p>
-<p>在上述的例子中，医生可以通过一定的行为得到一个reward反馈。我们把这个过程称作Action-Values或者Action value function。将这个过程用数学形式表示为：</p>
-<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>q</mi><mo>∗</mo></msub><mo>(</mo><mi>a</mi><mo>)</mo><mo>=</mo><mi mathvariant="double-struck">E</mi><mo>[</mo><msub><mi>R</mi><mi>t</mi></msub><mi mathvariant="normal">∣</mi><msub><mi>A</mi><mi>t</mi></msub><mo>=</mo><mi>a</mi><mo>]</mo><mtext> </mtext><mi mathvariant="normal">∀</mi><mi>a</mi><mo>∈</mo><mo>{</mo><mn>1</mn><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><mi>k</mi><mo>}</mo><mspace linebreak="newline"></mspace><mo>=</mo><munder><mo>∑</mo><mi>r</mi></munder><mi>p</mi><mo>(</mo><mi>r</mi><mi mathvariant="normal">∣</mi><mi>a</mi><mo>)</mo><mi>r</mi></mrow><annotation encoding="application/x-tex">q_*(a)=\mathbb{E}[R_t|A_t=a]\ \forall a\in \{1,\dots, k\} \\ =\sum_r p(r|a)r
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.175696em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault">a</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathbb">E</span></span><span class="mopen">[</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">a</span><span class="mclose">]</span><span class="mspace"> </span><span class="mord">∀</span><span class="mord mathdefault">a</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="mclose">}</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.3000100000000003em;vertical-align:-1.250005em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.050005em;"><span style="top:-1.8999949999999999em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.02778em;">r</span></span></span><span style="top:-3.0500049999999996em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.250005em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">p</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord">∣</span><span class="mord mathdefault">a</span><span class="mclose">)</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span></span></span></span></span></p>
-<p>即在行为a的条件下得到的reward值的期望。</p>
-<p>我们的目的就是为了得到最大的reward期望，所以要采取一些能够带来最大收益的行动</p>
-<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><munder><mo><mi mathvariant="normal">arg max</mi><mo>⁡</mo></mo><mi>a</mi></munder><msub><mi>q</mi><mo>∗</mo></msub><mo>(</mo><mi>a</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">\argmax_a q_*(a)
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.64444em;vertical-align:-0.89444em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.43055999999999994em;"><span style="top:-2.20556em;margin-left:0em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">a</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span><span class="mop"><span class="mop"><span class="mord mathrm">a</span><span class="mord mathrm">r</span><span class="mord mathrm" style="margin-right:0.01389em;">g</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathrm">m</span><span class="mord mathrm">a</span><span class="mord mathrm">x</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.89444em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.175696em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault">a</span><span class="mclose">)</span></span></span></span></span></p>
-<p>我们把之前的诊断例子中的reward设定地更加数学化。假设我们获得的reward是患者的血压，在服用不同的药物之后，患者的血压值可能是服从不同的分布的：</p>
-<figure data-type="image" tabindex="2"><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/9ad45f54-9d58-48f3-a07f-c384411f86dc/Untitled.png" alt="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/9ad45f54-9d58-48f3-a07f-c384411f86dc/Untitled.png" loading="lazy"></figure>
-<p>根据分布的不同，我们可以计算出对应的期望值。</p>
+<p>Status bar应用的相关配置和快捷键监听等功能在<code>AppDelegate.swift</code>中实现。</p>
+<p>首先进入Status Bar应用 &amp; 监听快捷键。</p>
 ]]></content>
     </entry>
     <entry>
