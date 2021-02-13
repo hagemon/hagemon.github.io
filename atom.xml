@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://hagemon.github.io</id>
     <title>Hagemon&apos;s Log</title>
-    <updated>2021-02-13T14:06:15.201Z</updated>
+    <updated>2021-02-13T14:21:04.524Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://hagemon.github.io"/>
     <link rel="self" href="https://hagemon.github.io/atom.xml"/>
@@ -26,17 +26,14 @@
 <li>在执行Pin操作时，需要将窗口偏移到正确的位置</li>
 </ul>
 <pre><code class="language-swift">class ClipManager {
-    
-		// ....    
+	// ....    
     var controllers: [ClipWindowController] = []
     // ....
-    
     func start() {
         NotificationCenter.default.post(name: NotiNames.pinNormal.name, object: nil)
         NSApplication.shared.activate(ignoringOtherApps: true)
         
         for screen in NSScreen.screens {  // 获取所有屏幕
-            
             let view = ClipView(frame: screen.frame)
             let clipWindow = ClipWindow(contentRect: screen.frame, contentView: view)
             let clipWindowController = ClipWindowController(window: clipWindow)
@@ -44,49 +41,45 @@
             self.status = .ready
             clipWindowController.capture(screen)
         }
-        
+
     }
     
     // ....
 }
 </code></pre>
 <p>在ClipWindowController中获取各屏幕的图像：</p>
-<pre><code>class ClipWindowController: NSWindowController {
-
-		func capture(_ screen:NSScreen) {
+<pre><code class="language-swift">class ClipWindowController: NSWindowController {
+	func capture(_ screen:NSScreen) {
         guard let window = self.window else { return }
-				//  获取screen对应的displayID和ID对应的图像
+        //  获取screen对应的displayID和ID对应的图像
         guard let displayID = screen.deviceDescription[NSDeviceDescriptionKey(rawValue: &quot;NSScreenNumber&quot;)] as? CGDirectDisplayID,
-              let cgScreenImage = CGDisplayCreateImage(displayID)
+                let cgScreenImage = CGDisplayCreateImage(displayID)
         else { return }
         self.screenImage = NSImage(cgImage: cgScreenImage, size: screen.frame.size)
         window.backgroundColor = NSColor(white: 0, alpha: 0.5)
         self.clipView = window.contentView as? ClipView
         self.showWindow(nil)
     }
-
 }
 </code></pre>
 <p>在PinManager中修改pin函数，将屏幕起始坐标增加为新的参数，并对pin窗口进行偏移：</p>
-<pre><code>class PinManager: NSObject {
-
-		func pin(rep: NSBitmapImageRep, rect:NSRect, screenOrigin:NSPoint) {
+<pre><code class="language-swift">class PinManager: NSObject {
+	func pin(rep: NSBitmapImageRep, rect:NSRect, screenOrigin:NSPoint) {
         let image = NSImage(size: rect.size)
         image.addRepresentation(rep)
         let view = PinView(image: image)
         let window = PinWindow(rect: rect, contentView: view)
         let controller = PinWindowController(window: window)
         self.controllers.append(controller)
-				// 以屏幕左下角坐标为基准，偏移pin窗口
+        // 以屏幕左下角坐标为基准，偏移pin窗口
         window.setFrameOrigin(screenOrigin.offsetBy(dx: rect.origin.x, dy: rect.origin.y))
         controller.showWindow(nil)
         NotificationCenter.default.post(name: NotiNames.pinEnd.name, object: nil)
     }
-
 }
 </code></pre>
 <p>同时在调用pin函数时增加对屏幕起始坐标参数的传入：</p>
-<pre><code>// ClipWindowController.swift
+<pre><code class="language-swift">// ClipWindowController.swift
 @objc func done() {
     guard let view = self.clipView,
           let rect = view.drawingRect
@@ -110,11 +103,9 @@
         </link>
         <updated>2021-01-09T13:41:18.000Z</updated>
         <content type="html"><![CDATA[<p>Pin功能的触发时机是在ClipManager的select状态下点击回车时，所以在ClipWindowController的done中，将bitmapRep和对应的rect作为参数，执行Pin操作</p>
-<pre><code>class ClipWindowController: NSWindowController {
-		
-		// ....
-
-		@objc func done() {
+<pre><code class="language-swift">class ClipWindowController: NSWindowController {
+	// ....
+    @objc func done() {
         guard let view = self.clipView,
               let rect = view.drawingRect
         else {
@@ -123,18 +114,18 @@
         guard let bitmapRep = view.bitmapImageRepForCachingDisplay(in: rect) else {return}
         view.cacheDisplay(in: rect, to: bitmapRep)
 
-				// 利用bitmapRep进行Pin操作
-				PinManager.shared.pin(rep: bitmapRep, rect: rect)
+        // 利用bitmapRep进行Pin操作
+        PinManager.shared.pin(rep: bitmapRep, rect: rect)
     }
 
-		// ....
+	// ....
 
 }
 </code></pre>
 <h2 id="pinmanager单例">PinManager单例</h2>
 <p>主要完成将图像作为一个新的窗口，并放置在屏幕顶层的操作，这里称为pin操作。源码里还实现了一些保存图像的函数，后续会在小工具中使用。</p>
 <p>pin函数初始化了页面、窗口和控制器并显示窗口，在处理结束后发送<code>pinEnd</code>通知。</p>
-<pre><code>class PinManager: NSObject {
+<pre><code class="language-swift">class PinManager: NSObject {
     static let shared = PinManager()
     var controllers: [PinWindowController] = []
     
@@ -152,7 +143,7 @@
 </code></pre>
 <h2 id="图像显示到窗口中">图像显示到窗口中</h2>
 <p>和ClipView类似，在PinView的中渲染图像：</p>
-<pre><code>class PinView: NSView {
+<pre><code class="language-swift">class PinView: NSView {
     
     var image: NSImage?
     
@@ -184,7 +175,7 @@
 <li>鼠标在窗口内时显示透明标题栏（左上角的三个按钮），移除窗口标题栏消失</li>
 </ul>
 <p>上述功能都可以通过PinWindowController和PinWindow的初始化配置实现</p>
-<pre><code>class PinWindowController: NSWindowController {
+<pre><code class="language-swift">class PinWindowController: NSWindowController {
 
     var pinWindow: PinWindow?
     
@@ -212,7 +203,7 @@
         
 }
 </code></pre>
-<pre><code>class PinWindow: NSWindow {
+<pre><code class="language-swift">class PinWindow: NSWindow {
     init(rect: NSRect, contentView: PinView) {
         super.init(contentRect: rect, styleMask: [.closable, .titled, .miniaturizable, .fullSizeContentView], backing: .buffered, defer: false)
         self.titleVisibility = .visible
@@ -243,9 +234,9 @@
 }
 </code></pre>
 <p>代码中还让PinWindow添加两个消息<code>pinFloating</code>和<code>pinNormal</code>的监听，是为了在有Pin窗口的前提下，使用Clip功能时不让Pin窗口遮挡住Clip窗口，所以两个消息分别在<code>ClipManager.shared.start()</code>和<code>ClipManager.shared.end()</code>中添加：</p>
-<pre><code>class ClipManager {
+<pre><code class="language-swift">class ClipManager {
 
-		// ....
+	// ....
     
     func start() {
         NotificationCenter.default.post(name: NotiNames.pinNormal.name, object: nil)
@@ -271,18 +262,18 @@
         <content type="html"><![CDATA[<h1 id="高亮区域的选取">高亮区域的选取</h1>
 <p>确定了高亮区域的渲染方式后，我们在ClipWindowController中添加对鼠标事件的监听，用于获取高亮区域。</p>
 <p>在ClipWindowController中设置一些变量，用来记录用户操作过程中的一些NSPoint和NSRect：</p>
-<pre><code>class ClipWindowController: NSWindowController {
+<pre><code class="language-swift">class ClipWindowController: NSWindowController {
     
     
     var clipView: ClipView?
-		var screenImage: NSImage?
+    var screenImage: NSImage?
     
     var lastRect: NSRect?        // 上一个完整的区域，用于保存拖拽或调整前的区域
     var highlightRect: NSRect?   // 当前高亮的区域，通过鼠标操作动态更新
-		var startPoint: NSPoint?     // 上一个完整区域的origin
+    var startPoint: NSPoint?     // 上一个完整区域的origin
     var lastPoint: NSPoint?      // 上一次更新区域时鼠标的位置
     
-		// functions ....
+    // functions ....
 }
 </code></pre>
 <h2 id="实现思路">实现思路：</h2>
@@ -291,7 +282,7 @@
 <li>鼠标拖拽时通过当前位置和startPoint创建新的Rect，用于更新highlightRect</li>
 </ul>
 <p>其中用到<code>mouseDown</code>、<code>mouseUp</code>、<code>mouseDrag</code>这三个事件监听：</p>
-<pre><code>override func mouseDown(with event: NSEvent) {
+<pre><code class="language-swift">override func mouseDown(with event: NSEvent) {
       let location = event.locationInWindow
       switch ClipManager.shared.status {
       case .ready:
@@ -299,17 +290,17 @@
           self.startPoint = location
       case .select:
           // 暂不实现
-					break
+          break
       default:
           return
       }
   }
 </code></pre>
-<pre><code>override func mouseUp(with event: NSEvent) {
+<pre><code class="language-swift">override func mouseUp(with event: NSEvent) {
     switch ClipManager.shared.status {
     case .start:
         guard let rect = self.highlightRect, let view = self.clipView else {
-						// 没有形成高亮区域
+            // 没有形成高亮区域
             ClipManager.shared.status = .ready
             return
         }
@@ -317,28 +308,28 @@
         self.lastRect = rect
         self.highlight()
     case .drag, .adjust:
-				// 暂不实现
-				break
+        // 暂不实现
+        break
     default:
         return
     }
 }
 </code></pre>
-<pre><code>override func mouseDragged(with event: NSEvent) {
+<pre><code class="language-swift">override func mouseDragged(with event: NSEvent) {
     let location = event.locationInWindow
     switch ClipManager.shared.status {
     case .start:
         guard let start = self.startPoint else { return }
-				// 根据 startPoint和当前位置构建新的rect并更新highlightRect
+        // 根据 startPoint和当前位置构建新的rect并更新highlightRect
         self.highlightRect = RectUtil.getRect(aPoint: start, bPoint: location)
-				// 重新渲染
+        // 重新渲染
         self.highlight()
     case .adjust:
         // 暂不实现
-				break
+        break
     case .drag:
          // 暂不实现
-				break
+        break
     default:
         break
     }
@@ -346,7 +337,7 @@
 </code></pre>
 <p>其中<code>RectUtil.getRect</code>是在工具类中的一个静态方法，根据两个Point获取对应的Rect：</p>
 <p>Utils/RectUtil.swift</p>
-<pre><code>class RectUtil: NSObject {
+<pre><code class="language-swift">class RectUtil: NSObject {
 	  static func getRect(aPoint: NSPoint, bPoint:NSPoint) -&gt; NSRect{
 	      return NSIntegralRect(NSRect(
 	          x: min(aPoint.x, bPoint.x),
@@ -365,30 +356,30 @@
 <li>mouseUp时保存当前高亮区域信息</li>
 <li>mouseDragged时计算偏移程度，同时检测rect是否超出屏幕，更新highlightRect</li>
 </ul>
-<pre><code>override func mouseDown(with event: NSEvent) {
+<pre><code class="language-swift">override func mouseDown(with event: NSEvent) {
       let location = event.locationInWindow
       switch ClipManager.shared.status {
       case .ready:
           // ....
       case .select:
-					// 判断鼠标区域
+          // 判断鼠标区域
           guard let rect = self.highlightRect,
-								rect.contains(location)
-					else { return }
-					ClipManager.shared.status = .drag
-					self.lastPoint = location
+                    rect.contains(location)
+          else { return }
+          ClipManager.shared.status = .drag
+          self.lastPoint = location
       default:
           return
       }
   }
 </code></pre>
-<pre><code>override func mouseUp(with event: NSEvent) {
+<pre><code class="language-swift">override func mouseUp(with event: NSEvent) {
     switch ClipManager.shared.status {
     case .start:
         // ....
     case .drag, .adjust:
-				// 保存高亮区域信息
-				guard let rect = self.highlightRect else { return }
+        // 保存高亮区域信息
+        guard let rect = self.highlightRect else { return }
         self.startPoint = rect.origin
         self.selectDotType = .none
         self.lastRect = rect
@@ -398,52 +389,52 @@
     }
 }
 </code></pre>
-<pre><code>override func mouseDragged(with event: NSEvent) {
+<pre><code class="language-swift">override func mouseDragged(with event: NSEvent) {
     let location = event.locationInWindow
     switch ClipManager.shared.status {
-    case .start:
-        // ....
-    case .adjust:
-        // 暂不实现
-				break
-    case .drag:
-        guard var rect = self.highlightRect,
-                  let window = self.window
-        else { break }
-        
-				// 和上一次检测的鼠标位置的偏移
-        var dx = location.x - self.lastPoint!.x
-        var dy = location.y - self.lastPoint!.y
+        case .start:
+            // ....
+        case .adjust:
+            // 暂不实现
+            break
+        case .drag:
+            guard var rect = self.highlightRect,
+                    let window = self.window
+            else { break }
+            
+            // 和上一次检测的鼠标位置的偏移
+            var dx = location.x - self.lastPoint!.x
+            var dy = location.y - self.lastPoint!.y
 
-				// 偏移后的rect
-        let offsetRect = rect.offsetBy(dx: dx, dy: dy)
-        switch RectUtil.detectOverflow(rect: offsetRect, in: window) {
-        case .bothOverflow:
-						// 如果x和y都溢出，则抹零两轴的偏移量
-            dx = 0
-            dy = 0
-        case .xOverflow:
-						// x溢出，抹零x轴偏移量
-            dx = 0
-        case .yOverflow:
-						// y溢出，抹零y轴偏移量
-            dy = 0
+            // 偏移后的rect
+            let offsetRect = rect.offsetBy(dx: dx, dy: dy)
+            switch RectUtil.detectOverflow(rect: offsetRect, in: window) {
+            case .bothOverflow:
+                // 如果x和y都溢出，则抹零两轴的偏移量
+                dx = 0
+                dy = 0
+            case .xOverflow:
+                // x溢出，抹零x轴偏移量
+                dx = 0
+            case .yOverflow:
+                // y溢出，抹零y轴偏移量
+                dy = 0
+            default:
+                break
+            }
+            rect = rect.offsetBy(dx: dx, dy: dy)
+        
+            // 更新highlightRect，记录鼠标位置
+            self.highlightRect = rect
+            self.lastPoint = location
+            self.highlight()
         default:
             break
-        }
-        rect = rect.offsetBy(dx: dx, dy: dy)
-        
-				// 更新highlightRect，记录鼠标位置
-        self.highlightRect = rect
-        self.lastPoint = location
-        self.highlight()
-    default:
-        break
     }
 }
 </code></pre>
 <p>其中rect溢出检测实现为：</p>
-<pre><code>class RectUtil: NSObject {
+<pre><code class="language-swift">class RectUtil: NSObject {
 		static func detectOverflow(rect: NSRect, in window:NSWindow) -&gt; RectIssue {
         let origin = rect.origin
         let points = [origin,
@@ -471,7 +462,7 @@
             return .normal
         }
     }
-	  // ... other functions
+    // ... other functions
 }
 
 enum RectIssue {
@@ -497,7 +488,7 @@ enum RectIssue {
 <figure data-type="image" tabindex="1"><img src="https://hagemon.github.io/post-images/1613223037730.jpg" alt="" loading="lazy"></figure>
 <h2 id="标识点显示">标识点显示</h2>
 <h3 id="标识点类型">标识点类型：</h3>
-<pre><code>enum DotType {
+<pre><code class="language-swift">enum DotType {
     case corner  // 四个角的点
     case top     // 上边中心对应的点
     case bottom  // 下边中心对应的点
@@ -511,7 +502,7 @@ enum RectIssue {
 <li>在view中根据当前的drawingRect构造八个点的NSPoint</li>
 <li>使用NSBezierPath绘制八个标识点</li>
 </ul>
-<pre><code>class ClipView: NSView {
+<pre><code class="language-swift">class ClipView: NSView {
     
     var image: NSImage?
     var drawingRect: NSRect?
@@ -577,31 +568,31 @@ enum RectIssue {
 </code></pre>
 <h2 id="区域调整">区域调整</h2>
 <p>在Controller中记录当前选择的标识点，并在mouseDown中添加对adjust or drag的判断</p>
-<pre><code>class ClipWindowController: NSWindowController {
+<pre><code class="language-swift">class ClipWindowController: NSWindowController {
     
     
     var clipView: ClipView?
-		var screenImage: NSImage?
+    var screenImage: NSImage?
     
     var lastRect: NSRect?  
     var highlightRect: NSRect?  
-		var startPoint: NSPoint?     
+    var startPoint: NSPoint?     
     var lastPoint: NSPoint?    
 
-		var selectDotType: DotType = .none  // 当前选择标识点的类型，默认为none，可以用于判断是否有选择标识点
+    var selectDotType: DotType = .none  // 当前选择标识点的类型，默认为none，可以用于判断是否有选择标识点
     var selectDot: NSPoint = .zero      // 当前选择的标识点，默认为zero
     
 		// other functions ....
 
-		override func mouseDown(with event: NSEvent) {
+    override func mouseDown(with event: NSEvent) {
         let location = event.locationInWindow
         switch ClipManager.shared.status {
         case .ready:
             // ...
         case .select:
             guard let rect = self.highlightRect,
-                  let view = self.clipView,
-                  rect.insetBy(dx: -5, dy: -5).contains(location) // 适当放宽点击判定区域
+                     let view = self.clipView,
+                     rect.insetBy(dx: -5, dy: -5).contains(location) // 适当放宽点击判定区域
             else { return }
             for (path, type) in view.paths {
 								 // 适当放宽点击判定区域
@@ -622,7 +613,7 @@ enum RectIssue {
         }
     }
 
-		override func mouseUp(with event: NSEvent) {
+    override func mouseUp(with event: NSEvent) {
         switch ClipManager.shared.status {
         case .start:
             // ...
@@ -637,7 +628,7 @@ enum RectIssue {
         }
     }
 
-		override func mouseDragged(with event: NSEvent) {
+    override func mouseDragged(with event: NSEvent) {
         let location = event.locationInWindow
         switch ClipManager.shared.status {
         case .start:
@@ -690,7 +681,7 @@ enum RectIssue {
 }
 </code></pre>
 <p>其中<code>symmetricalPoint</code>是获取rect中某个点关于中心对称的点：</p>
-<pre><code>extension NSRect {
+<pre><code class="language-swift">extension NSRect {
     func center() -&gt; NSPoint{
         let origin = self.origin
         return NSPoint(x: origin.x+self.width/2, y: origin.y+self.height/2)
@@ -731,7 +722,7 @@ enum RectIssue {
 <h2 id="实现过程">实现过程</h2>
 <p>创建NSWindowController，NSWindow，NSView对应的子类。</p>
 <p>在<code>ClipManager.shared.start()</code>中创建控制器、窗口和页面的对象并建立关系：</p>
-<pre><code>func start() {
+<pre><code class="language-swift">func start() {
 	guard let screen = NSScreen.main else { return }  // 单显示器环境
 	NSApplication.shared.activate(ignoringOtherApps: true)  // 在触发快捷键后激活App，使开启的窗口能够变为key window
     let view = ClipView(frame: screen.frame)
@@ -743,7 +734,7 @@ enum RectIssue {
 }
 </code></pre>
 <p>ClipWindow的条件在初始化时既可以满足：</p>
-<pre><code>class ClipWindow: NSWindow {
+<pre><code class="language-swift">class ClipWindow: NSWindow {
     
     init(contentRect: NSRect, contentView: ClipView) {
         super.init(contentRect: contentRect, styleMask: .borderless, backing: .buffered, defer: false)
@@ -753,10 +744,10 @@ enum RectIssue {
 }
 </code></pre>
 <p>我们暂时不使用鼠标监听事件来获取高亮区域，而是使用一个临时的NSRect来表示我们所选取的范围：</p>
-<pre><code>let tmpRect = NSRect(x: 300, y: 300, width: 200, height: 400)
+<pre><code class="language-swift">let tmpRect = NSRect(x: 300, y: 300, width: 200, height: 400)
 </code></pre>
 <p>调用<code>ClipWindowController.capture(screen)</code>进入准备Clip的状态。在capture中实现获取当前屏幕图像，并设置Window的透明背景功能，最后显示ClipWindow：</p>
-<pre><code>class ClipWindowController: NSWindowController {
+<pre><code class="language-swift">class ClipWindowController: NSWindowController {
 		var clipView: ClipView?  // 为了方便使用self.window.view
 		var screenImage: NSImage?  // 背景图片
 		let tmpRect = NSRect(x: 300, y: 300, width: 200, height: 400)
@@ -772,7 +763,7 @@ enum RectIssue {
 }
 </code></pre>
 <p>渲染高亮区域图像是最重要的步骤，通过重载ClipView的draw函数实现渲染功能：</p>
-<pre><code>class ClipView: NSView {
+<pre><code class="language-swift">class ClipView: NSView {
     
     var image: NSImage?  //屏幕图像
     var drawingRect: NSRect?  // 高亮区域
@@ -795,7 +786,7 @@ enum RectIssue {
 }
 </code></pre>
 <p>其中image和drawingRect变量会在绘制的过程中动态的给出，Controller中的<code>highlight()</code>函数会获取当前高亮区域的信息并告知系统view需要刷新：</p>
-<pre><code>// In ClipWindowController
+<pre><code class="language-swift">// In ClipWindowController
 func highlight() {
     guard let rect = self.tmpRect, // 暂时使用临时区域，之后使用
           // let rect = self.highlightRect,
@@ -813,7 +804,7 @@ func highlight() {
 </code></pre>
 <h2 id="esc退出clip">ESC退出Clip</h2>
 <p>之前提到，在AppDetegate中注册了局部事件的监听，在捕捉到ESC后执行单例的结束操作<code>ClipManager.shared.end()</code> ，对当前开启的所有controller的窗口进行关闭操作：</p>
-<pre><code>class ClipManager {
+<pre><code class="language-swift">class ClipManager {
     
     static let shared = ClipManager() // 单例
     var status: ClipStatus = .off // Clip初始状态
@@ -833,16 +824,16 @@ func highlight() {
 </code></pre>
 <h2 id="enter获取高亮区域图像">Enter获取高亮区域图像</h2>
 <p>之前提到，在Enter后发送<code>clipEnd</code>的通知，在ClipWindowController中捕捉：</p>
-<pre><code>class ClipWindowController: NSWindowController {
+<pre><code class="language-swift">class ClipWindowController: NSWindowController {
 
-		// .... variables
+    // .... variables
     
     func capture(_ screen:NSScreen) {
         NotificationCenter.default.addObserver(self, selector: #selector(self.done), name: NotiNames.clipEnd.name, object: nil)
 				// .... Get screen image
     }
 
-		@objc func done() {
+    @objc func done() {
         guard let view = self.clipView,
               let rect = view.drawingRect
         else {
@@ -852,13 +843,13 @@ func highlight() {
         guard let bitmapRep = view.bitmapImageRepForCachingDisplay(in: rect) else {return}
         view.cacheDisplay(in: rect, to: bitmapRep)
 
-				// bitmapRep即为获取到的图像信息，可以进行保存或别的操作
+        // bitmapRep即为获取到的图像信息，可以进行保存或别的操作
 
-				// 利用bitmapRep进行Pin操作，暂不实现
+        // 利用bitmapRep进行Pin操作，暂不实现
         // ....
     }
 
-		// .... other functions
+    // .... other functions
 
 }
 </code></pre>
@@ -873,7 +864,7 @@ func highlight() {
         <updated>2021-01-09T13:13:22.000Z</updated>
         <content type="html"><![CDATA[<p>Manager/ClipManager.swift</p>
 <h2 id="截屏状态">截屏状态</h2>
-<pre><code>enum ClipStatus {
+<pre><code class="language-swift">enum ClipStatus {
     case off     // 未开启
     case ready   // 就绪
     case start   // 开始选择区域
@@ -886,7 +877,7 @@ func highlight() {
 <figure data-type="image" tabindex="1"><img src="https://hagemon.github.io/post-images/1613222166438.png" alt="" loading="lazy"></figure>
 <h2 id="单例">单例</h2>
 <p>使用单例来控制Clip的操作：</p>
-<pre><code>import Cocoa
+<pre><code class="language-swift">import Cocoa
 
 class ClipManager {
     
@@ -910,7 +901,7 @@ class ClipManager {
 </code></pre>
 <p>通过调用<code>ClipManager.shared.start()</code>进入Clip功能。</p>
 <p>这里提前提一下，在初始化单例时添加对结束通知的监听，当某个组件完成了Pin的工作，则会post对应的通知，在ClipManager中处理Pin完成之后的操作：</p>
-<pre><code>private init() {
+<pre><code class="language-swift">private init() {
 		NotificationCenter.default.addObserver(self,
                                            selector: #selector(self.end),
                                            name: NotiNames.pinEnd.name,
@@ -922,7 +913,7 @@ class ClipManager {
 }
 </code></pre>
 <p>此处的notification name是枚举变量：</p>
-<pre><code>enum NotiNames: String {
+<pre><code class="language-swift">enum NotiNames: String {
     var name: NSNotification.Name {
         return Notification.Name(self.rawValue)
     }
@@ -950,7 +941,7 @@ class ClipManager {
 <p>在info.plist中添加名为<code>Application is agent (UIElement)</code>的key，并将value值设置为<code>YES</code>。这样App就不会在Dock中显示</p>
 <h2 id="appdelegate">AppDelegate</h2>
 <p>在AppDelegate中创建StatusBar按钮并配置对应的action</p>
-<pre><code>import Cocoa
+<pre><code class="language-swift">import Cocoa
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -973,7 +964,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 <h1 id="监听快捷键">监听快捷键</h1>
 <h2 id="全局快捷键基于hotkey">全局快捷键（基于HotKey）</h2>
 <p>为了启动截屏功能，需要监听全局的快捷键。在AppDelegate中使用HotKey对全局快捷键<code>cmd+shift+a</code>进行注册：</p>
-<pre><code>import Cocoa
+<pre><code class="language-swift">import Cocoa
 import HotKey
 
 @main
@@ -1002,7 +993,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 </code></pre>
 <h2 id="局部快捷键">局部快捷键</h2>
 <p>局部快捷键用于监听应用内的一些键盘事件，比如回车完成Clip操作，Esc退出Clip操作：</p>
-<pre><code>import Cocoa
+<pre><code class="language-swift">import Cocoa
 import HotKey
 
 @main
@@ -1014,16 +1005,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         // local hotkey
         NSEvent.addLocalMonitorForEvents(matching: .keyDown, handler: {
-                (event) -&gt; NSEvent? in
-                if ClipManager.shared.status != .off &amp;&amp; event.keyCode == kVK_Escape {
-                    // 退出Clip之后的操作
-                    ClipManager.shared.end()
-                }
-                if ClipManager.shared.status == .select &amp;&amp; event.keyCode == kVK_Return {
-                    // 完成Clip之后的操作，post一个名为clipEnd的通知
-                    NotificationCenter.default.post(name: NotiNames.clipEnd.name, object: self, userInfo: nil)
-                }
-                return nil
+            (event) -&gt; NSEvent? in
+            if ClipManager.shared.status != .off &amp;&amp; event.keyCode == kVK_Escape {
+                // 退出Clip之后的操作
+                ClipManager.shared.end()
+            }
+            if ClipManager.shared.status == .select &amp;&amp; event.keyCode == kVK_Return {
+                // 完成Clip之后的操作，post一个名为clipEnd的通知
+                NotificationCenter.default.post(name: NotiNames.clipEnd.name, object: self, userInfo: nil)
+            }
+            return nil
         })
 
         // ... global hotkey and status bar item

@@ -6,7 +6,7 @@
 
 <title>Clipin Log 5. 单屏幕Pin实现 | Hagemon&#39;s Log</title>
 
-<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1613225170049">
+<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1613226062178">
 
 <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://hagemon.github.io/styles/main.css">
@@ -77,7 +77,7 @@
             
         </div>
         <div style="text-align: center">
-            <form id="gridea-search-form" style="position: relative" data-update="1613225170049" action="/search/index.html">
+            <form id="gridea-search-form" style="position: relative" data-update="1613226062178" action="/search/index.html">
                 <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
                 <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
             </form>
@@ -107,11 +107,9 @@
                 </div>
                 <div class="post-content">
                     <p>Pin功能的触发时机是在ClipManager的select状态下点击回车时，所以在ClipWindowController的done中，将bitmapRep和对应的rect作为参数，执行Pin操作</p>
-<pre><code>class ClipWindowController: NSWindowController {
-		
-		// ....
-
-		@objc func done() {
+<pre><code class="language-swift">class ClipWindowController: NSWindowController {
+	// ....
+    @objc func done() {
         guard let view = self.clipView,
               let rect = view.drawingRect
         else {
@@ -120,18 +118,18 @@
         guard let bitmapRep = view.bitmapImageRepForCachingDisplay(in: rect) else {return}
         view.cacheDisplay(in: rect, to: bitmapRep)
 
-				// 利用bitmapRep进行Pin操作
-				PinManager.shared.pin(rep: bitmapRep, rect: rect)
+        // 利用bitmapRep进行Pin操作
+        PinManager.shared.pin(rep: bitmapRep, rect: rect)
     }
 
-		// ....
+	// ....
 
 }
 </code></pre>
 <h2 id="pinmanager单例">PinManager单例</h2>
 <p>主要完成将图像作为一个新的窗口，并放置在屏幕顶层的操作，这里称为pin操作。源码里还实现了一些保存图像的函数，后续会在小工具中使用。</p>
 <p>pin函数初始化了页面、窗口和控制器并显示窗口，在处理结束后发送<code>pinEnd</code>通知。</p>
-<pre><code>class PinManager: NSObject {
+<pre><code class="language-swift">class PinManager: NSObject {
     static let shared = PinManager()
     var controllers: [PinWindowController] = []
     
@@ -149,7 +147,7 @@
 </code></pre>
 <h2 id="图像显示到窗口中">图像显示到窗口中</h2>
 <p>和ClipView类似，在PinView的中渲染图像：</p>
-<pre><code>class PinView: NSView {
+<pre><code class="language-swift">class PinView: NSView {
     
     var image: NSImage?
     
@@ -181,7 +179,7 @@
 <li>鼠标在窗口内时显示透明标题栏（左上角的三个按钮），移除窗口标题栏消失</li>
 </ul>
 <p>上述功能都可以通过PinWindowController和PinWindow的初始化配置实现</p>
-<pre><code>class PinWindowController: NSWindowController {
+<pre><code class="language-swift">class PinWindowController: NSWindowController {
 
     var pinWindow: PinWindow?
     
@@ -209,7 +207,7 @@
         
 }
 </code></pre>
-<pre><code>class PinWindow: NSWindow {
+<pre><code class="language-swift">class PinWindow: NSWindow {
     init(rect: NSRect, contentView: PinView) {
         super.init(contentRect: rect, styleMask: [.closable, .titled, .miniaturizable, .fullSizeContentView], backing: .buffered, defer: false)
         self.titleVisibility = .visible
@@ -240,9 +238,9 @@
 }
 </code></pre>
 <p>代码中还让PinWindow添加两个消息<code>pinFloating</code>和<code>pinNormal</code>的监听，是为了在有Pin窗口的前提下，使用Clip功能时不让Pin窗口遮挡住Clip窗口，所以两个消息分别在<code>ClipManager.shared.start()</code>和<code>ClipManager.shared.end()</code>中添加：</p>
-<pre><code>class ClipManager {
+<pre><code class="language-swift">class ClipManager {
 
-		// ....
+	// ....
     
     func start() {
         NotificationCenter.default.post(name: NotiNames.pinNormal.name, object: nil)

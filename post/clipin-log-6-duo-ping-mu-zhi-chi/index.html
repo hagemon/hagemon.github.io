@@ -6,7 +6,7 @@
 
 <title>Clipin Log 6. 多屏幕支持 | Hagemon&#39;s Log</title>
 
-<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1613225170049">
+<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1613226062178">
 
 <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://hagemon.github.io/styles/main.css">
@@ -77,7 +77,7 @@
             
         </div>
         <div style="text-align: center">
-            <form id="gridea-search-form" style="position: relative" data-update="1613225170049" action="/search/index.html">
+            <form id="gridea-search-form" style="position: relative" data-update="1613226062178" action="/search/index.html">
                 <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
                 <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
             </form>
@@ -117,17 +117,14 @@
 <li>在执行Pin操作时，需要将窗口偏移到正确的位置</li>
 </ul>
 <pre><code class="language-swift">class ClipManager {
-    
-		// ....    
+	// ....    
     var controllers: [ClipWindowController] = []
     // ....
-    
     func start() {
         NotificationCenter.default.post(name: NotiNames.pinNormal.name, object: nil)
         NSApplication.shared.activate(ignoringOtherApps: true)
         
         for screen in NSScreen.screens {  // 获取所有屏幕
-            
             let view = ClipView(frame: screen.frame)
             let clipWindow = ClipWindow(contentRect: screen.frame, contentView: view)
             let clipWindowController = ClipWindowController(window: clipWindow)
@@ -135,49 +132,45 @@
             self.status = .ready
             clipWindowController.capture(screen)
         }
-        
+
     }
     
     // ....
 }
 </code></pre>
 <p>在ClipWindowController中获取各屏幕的图像：</p>
-<pre><code>class ClipWindowController: NSWindowController {
-
-		func capture(_ screen:NSScreen) {
+<pre><code class="language-swift">class ClipWindowController: NSWindowController {
+	func capture(_ screen:NSScreen) {
         guard let window = self.window else { return }
-				//  获取screen对应的displayID和ID对应的图像
+        //  获取screen对应的displayID和ID对应的图像
         guard let displayID = screen.deviceDescription[NSDeviceDescriptionKey(rawValue: &quot;NSScreenNumber&quot;)] as? CGDirectDisplayID,
-              let cgScreenImage = CGDisplayCreateImage(displayID)
+                let cgScreenImage = CGDisplayCreateImage(displayID)
         else { return }
         self.screenImage = NSImage(cgImage: cgScreenImage, size: screen.frame.size)
         window.backgroundColor = NSColor(white: 0, alpha: 0.5)
         self.clipView = window.contentView as? ClipView
         self.showWindow(nil)
     }
-
 }
 </code></pre>
 <p>在PinManager中修改pin函数，将屏幕起始坐标增加为新的参数，并对pin窗口进行偏移：</p>
-<pre><code>class PinManager: NSObject {
-
-		func pin(rep: NSBitmapImageRep, rect:NSRect, screenOrigin:NSPoint) {
+<pre><code class="language-swift">class PinManager: NSObject {
+	func pin(rep: NSBitmapImageRep, rect:NSRect, screenOrigin:NSPoint) {
         let image = NSImage(size: rect.size)
         image.addRepresentation(rep)
         let view = PinView(image: image)
         let window = PinWindow(rect: rect, contentView: view)
         let controller = PinWindowController(window: window)
         self.controllers.append(controller)
-				// 以屏幕左下角坐标为基准，偏移pin窗口
+        // 以屏幕左下角坐标为基准，偏移pin窗口
         window.setFrameOrigin(screenOrigin.offsetBy(dx: rect.origin.x, dy: rect.origin.y))
         controller.showWindow(nil)
         NotificationCenter.default.post(name: NotiNames.pinEnd.name, object: nil)
     }
-
 }
 </code></pre>
 <p>同时在调用pin函数时增加对屏幕起始坐标参数的传入：</p>
-<pre><code>// ClipWindowController.swift
+<pre><code class="language-swift">// ClipWindowController.swift
 @objc func done() {
     guard let view = self.clipView,
           let rect = view.drawingRect

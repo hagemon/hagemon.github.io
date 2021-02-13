@@ -6,7 +6,7 @@
 
 <title>Clipin Log 4. 高亮区域的选取&amp;拖拽&amp;调整 | Hagemon&#39;s Log</title>
 
-<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1613225170049">
+<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1613226062178">
 
 <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://hagemon.github.io/styles/main.css">
@@ -77,7 +77,7 @@
             
         </div>
         <div style="text-align: center">
-            <form id="gridea-search-form" style="position: relative" data-update="1613225170049" action="/search/index.html">
+            <form id="gridea-search-form" style="position: relative" data-update="1613226062178" action="/search/index.html">
                 <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
                 <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
             </form>
@@ -109,18 +109,18 @@
                     <h1 id="高亮区域的选取">高亮区域的选取</h1>
 <p>确定了高亮区域的渲染方式后，我们在ClipWindowController中添加对鼠标事件的监听，用于获取高亮区域。</p>
 <p>在ClipWindowController中设置一些变量，用来记录用户操作过程中的一些NSPoint和NSRect：</p>
-<pre><code>class ClipWindowController: NSWindowController {
+<pre><code class="language-swift">class ClipWindowController: NSWindowController {
     
     
     var clipView: ClipView?
-		var screenImage: NSImage?
+    var screenImage: NSImage?
     
     var lastRect: NSRect?        // 上一个完整的区域，用于保存拖拽或调整前的区域
     var highlightRect: NSRect?   // 当前高亮的区域，通过鼠标操作动态更新
-		var startPoint: NSPoint?     // 上一个完整区域的origin
+    var startPoint: NSPoint?     // 上一个完整区域的origin
     var lastPoint: NSPoint?      // 上一次更新区域时鼠标的位置
     
-		// functions ....
+    // functions ....
 }
 </code></pre>
 <h2 id="实现思路">实现思路：</h2>
@@ -129,7 +129,7 @@
 <li>鼠标拖拽时通过当前位置和startPoint创建新的Rect，用于更新highlightRect</li>
 </ul>
 <p>其中用到<code>mouseDown</code>、<code>mouseUp</code>、<code>mouseDrag</code>这三个事件监听：</p>
-<pre><code>override func mouseDown(with event: NSEvent) {
+<pre><code class="language-swift">override func mouseDown(with event: NSEvent) {
       let location = event.locationInWindow
       switch ClipManager.shared.status {
       case .ready:
@@ -137,17 +137,17 @@
           self.startPoint = location
       case .select:
           // 暂不实现
-					break
+          break
       default:
           return
       }
   }
 </code></pre>
-<pre><code>override func mouseUp(with event: NSEvent) {
+<pre><code class="language-swift">override func mouseUp(with event: NSEvent) {
     switch ClipManager.shared.status {
     case .start:
         guard let rect = self.highlightRect, let view = self.clipView else {
-						// 没有形成高亮区域
+            // 没有形成高亮区域
             ClipManager.shared.status = .ready
             return
         }
@@ -155,28 +155,28 @@
         self.lastRect = rect
         self.highlight()
     case .drag, .adjust:
-				// 暂不实现
-				break
+        // 暂不实现
+        break
     default:
         return
     }
 }
 </code></pre>
-<pre><code>override func mouseDragged(with event: NSEvent) {
+<pre><code class="language-swift">override func mouseDragged(with event: NSEvent) {
     let location = event.locationInWindow
     switch ClipManager.shared.status {
     case .start:
         guard let start = self.startPoint else { return }
-				// 根据 startPoint和当前位置构建新的rect并更新highlightRect
+        // 根据 startPoint和当前位置构建新的rect并更新highlightRect
         self.highlightRect = RectUtil.getRect(aPoint: start, bPoint: location)
-				// 重新渲染
+        // 重新渲染
         self.highlight()
     case .adjust:
         // 暂不实现
-				break
+        break
     case .drag:
          // 暂不实现
-				break
+        break
     default:
         break
     }
@@ -184,7 +184,7 @@
 </code></pre>
 <p>其中<code>RectUtil.getRect</code>是在工具类中的一个静态方法，根据两个Point获取对应的Rect：</p>
 <p>Utils/RectUtil.swift</p>
-<pre><code>class RectUtil: NSObject {
+<pre><code class="language-swift">class RectUtil: NSObject {
 	  static func getRect(aPoint: NSPoint, bPoint:NSPoint) -&gt; NSRect{
 	      return NSIntegralRect(NSRect(
 	          x: min(aPoint.x, bPoint.x),
@@ -203,30 +203,30 @@
 <li>mouseUp时保存当前高亮区域信息</li>
 <li>mouseDragged时计算偏移程度，同时检测rect是否超出屏幕，更新highlightRect</li>
 </ul>
-<pre><code>override func mouseDown(with event: NSEvent) {
+<pre><code class="language-swift">override func mouseDown(with event: NSEvent) {
       let location = event.locationInWindow
       switch ClipManager.shared.status {
       case .ready:
           // ....
       case .select:
-					// 判断鼠标区域
+          // 判断鼠标区域
           guard let rect = self.highlightRect,
-								rect.contains(location)
-					else { return }
-					ClipManager.shared.status = .drag
-					self.lastPoint = location
+                    rect.contains(location)
+          else { return }
+          ClipManager.shared.status = .drag
+          self.lastPoint = location
       default:
           return
       }
   }
 </code></pre>
-<pre><code>override func mouseUp(with event: NSEvent) {
+<pre><code class="language-swift">override func mouseUp(with event: NSEvent) {
     switch ClipManager.shared.status {
     case .start:
         // ....
     case .drag, .adjust:
-				// 保存高亮区域信息
-				guard let rect = self.highlightRect else { return }
+        // 保存高亮区域信息
+        guard let rect = self.highlightRect else { return }
         self.startPoint = rect.origin
         self.selectDotType = .none
         self.lastRect = rect
@@ -236,52 +236,52 @@
     }
 }
 </code></pre>
-<pre><code>override func mouseDragged(with event: NSEvent) {
+<pre><code class="language-swift">override func mouseDragged(with event: NSEvent) {
     let location = event.locationInWindow
     switch ClipManager.shared.status {
-    case .start:
-        // ....
-    case .adjust:
-        // 暂不实现
-				break
-    case .drag:
-        guard var rect = self.highlightRect,
-                  let window = self.window
-        else { break }
-        
-				// 和上一次检测的鼠标位置的偏移
-        var dx = location.x - self.lastPoint!.x
-        var dy = location.y - self.lastPoint!.y
+        case .start:
+            // ....
+        case .adjust:
+            // 暂不实现
+            break
+        case .drag:
+            guard var rect = self.highlightRect,
+                    let window = self.window
+            else { break }
+            
+            // 和上一次检测的鼠标位置的偏移
+            var dx = location.x - self.lastPoint!.x
+            var dy = location.y - self.lastPoint!.y
 
-				// 偏移后的rect
-        let offsetRect = rect.offsetBy(dx: dx, dy: dy)
-        switch RectUtil.detectOverflow(rect: offsetRect, in: window) {
-        case .bothOverflow:
-						// 如果x和y都溢出，则抹零两轴的偏移量
-            dx = 0
-            dy = 0
-        case .xOverflow:
-						// x溢出，抹零x轴偏移量
-            dx = 0
-        case .yOverflow:
-						// y溢出，抹零y轴偏移量
-            dy = 0
+            // 偏移后的rect
+            let offsetRect = rect.offsetBy(dx: dx, dy: dy)
+            switch RectUtil.detectOverflow(rect: offsetRect, in: window) {
+            case .bothOverflow:
+                // 如果x和y都溢出，则抹零两轴的偏移量
+                dx = 0
+                dy = 0
+            case .xOverflow:
+                // x溢出，抹零x轴偏移量
+                dx = 0
+            case .yOverflow:
+                // y溢出，抹零y轴偏移量
+                dy = 0
+            default:
+                break
+            }
+            rect = rect.offsetBy(dx: dx, dy: dy)
+        
+            // 更新highlightRect，记录鼠标位置
+            self.highlightRect = rect
+            self.lastPoint = location
+            self.highlight()
         default:
             break
-        }
-        rect = rect.offsetBy(dx: dx, dy: dy)
-        
-				// 更新highlightRect，记录鼠标位置
-        self.highlightRect = rect
-        self.lastPoint = location
-        self.highlight()
-    default:
-        break
     }
 }
 </code></pre>
 <p>其中rect溢出检测实现为：</p>
-<pre><code>class RectUtil: NSObject {
+<pre><code class="language-swift">class RectUtil: NSObject {
 		static func detectOverflow(rect: NSRect, in window:NSWindow) -&gt; RectIssue {
         let origin = rect.origin
         let points = [origin,
@@ -309,7 +309,7 @@
             return .normal
         }
     }
-	  // ... other functions
+    // ... other functions
 }
 
 enum RectIssue {
@@ -335,7 +335,7 @@ enum RectIssue {
 <figure data-type="image" tabindex="1"><img src="https://hagemon.github.io/post-images/1613223037730.jpg" alt="" loading="lazy"></figure>
 <h2 id="标识点显示">标识点显示</h2>
 <h3 id="标识点类型">标识点类型：</h3>
-<pre><code>enum DotType {
+<pre><code class="language-swift">enum DotType {
     case corner  // 四个角的点
     case top     // 上边中心对应的点
     case bottom  // 下边中心对应的点
@@ -349,7 +349,7 @@ enum RectIssue {
 <li>在view中根据当前的drawingRect构造八个点的NSPoint</li>
 <li>使用NSBezierPath绘制八个标识点</li>
 </ul>
-<pre><code>class ClipView: NSView {
+<pre><code class="language-swift">class ClipView: NSView {
     
     var image: NSImage?
     var drawingRect: NSRect?
@@ -415,31 +415,31 @@ enum RectIssue {
 </code></pre>
 <h2 id="区域调整">区域调整</h2>
 <p>在Controller中记录当前选择的标识点，并在mouseDown中添加对adjust or drag的判断</p>
-<pre><code>class ClipWindowController: NSWindowController {
+<pre><code class="language-swift">class ClipWindowController: NSWindowController {
     
     
     var clipView: ClipView?
-		var screenImage: NSImage?
+    var screenImage: NSImage?
     
     var lastRect: NSRect?  
     var highlightRect: NSRect?  
-		var startPoint: NSPoint?     
+    var startPoint: NSPoint?     
     var lastPoint: NSPoint?    
 
-		var selectDotType: DotType = .none  // 当前选择标识点的类型，默认为none，可以用于判断是否有选择标识点
+    var selectDotType: DotType = .none  // 当前选择标识点的类型，默认为none，可以用于判断是否有选择标识点
     var selectDot: NSPoint = .zero      // 当前选择的标识点，默认为zero
     
 		// other functions ....
 
-		override func mouseDown(with event: NSEvent) {
+    override func mouseDown(with event: NSEvent) {
         let location = event.locationInWindow
         switch ClipManager.shared.status {
         case .ready:
             // ...
         case .select:
             guard let rect = self.highlightRect,
-                  let view = self.clipView,
-                  rect.insetBy(dx: -5, dy: -5).contains(location) // 适当放宽点击判定区域
+                     let view = self.clipView,
+                     rect.insetBy(dx: -5, dy: -5).contains(location) // 适当放宽点击判定区域
             else { return }
             for (path, type) in view.paths {
 								 // 适当放宽点击判定区域
@@ -460,7 +460,7 @@ enum RectIssue {
         }
     }
 
-		override func mouseUp(with event: NSEvent) {
+    override func mouseUp(with event: NSEvent) {
         switch ClipManager.shared.status {
         case .start:
             // ...
@@ -475,7 +475,7 @@ enum RectIssue {
         }
     }
 
-		override func mouseDragged(with event: NSEvent) {
+    override func mouseDragged(with event: NSEvent) {
         let location = event.locationInWindow
         switch ClipManager.shared.status {
         case .start:
@@ -528,7 +528,7 @@ enum RectIssue {
 }
 </code></pre>
 <p>其中<code>symmetricalPoint</code>是获取rect中某个点关于中心对称的点：</p>
-<pre><code>extension NSRect {
+<pre><code class="language-swift">extension NSRect {
     func center() -&gt; NSPoint{
         let origin = self.origin
         return NSPoint(x: origin.x+self.width/2, y: origin.y+self.height/2)

@@ -6,7 +6,7 @@
 
 <title>Clipin Log 3. 截屏页面的实现 | Hagemon&#39;s Log</title>
 
-<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1613225170049">
+<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1613226062178">
 
 <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://hagemon.github.io/styles/main.css">
@@ -77,7 +77,7 @@
             
         </div>
         <div style="text-align: center">
-            <form id="gridea-search-form" style="position: relative" data-update="1613225170049" action="/search/index.html">
+            <form id="gridea-search-form" style="position: relative" data-update="1613226062178" action="/search/index.html">
                 <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
                 <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
             </form>
@@ -124,7 +124,7 @@
 <h2 id="实现过程">实现过程</h2>
 <p>创建NSWindowController，NSWindow，NSView对应的子类。</p>
 <p>在<code>ClipManager.shared.start()</code>中创建控制器、窗口和页面的对象并建立关系：</p>
-<pre><code>func start() {
+<pre><code class="language-swift">func start() {
 	guard let screen = NSScreen.main else { return }  // 单显示器环境
 	NSApplication.shared.activate(ignoringOtherApps: true)  // 在触发快捷键后激活App，使开启的窗口能够变为key window
     let view = ClipView(frame: screen.frame)
@@ -136,7 +136,7 @@
 }
 </code></pre>
 <p>ClipWindow的条件在初始化时既可以满足：</p>
-<pre><code>class ClipWindow: NSWindow {
+<pre><code class="language-swift">class ClipWindow: NSWindow {
     
     init(contentRect: NSRect, contentView: ClipView) {
         super.init(contentRect: contentRect, styleMask: .borderless, backing: .buffered, defer: false)
@@ -146,10 +146,10 @@
 }
 </code></pre>
 <p>我们暂时不使用鼠标监听事件来获取高亮区域，而是使用一个临时的NSRect来表示我们所选取的范围：</p>
-<pre><code>let tmpRect = NSRect(x: 300, y: 300, width: 200, height: 400)
+<pre><code class="language-swift">let tmpRect = NSRect(x: 300, y: 300, width: 200, height: 400)
 </code></pre>
 <p>调用<code>ClipWindowController.capture(screen)</code>进入准备Clip的状态。在capture中实现获取当前屏幕图像，并设置Window的透明背景功能，最后显示ClipWindow：</p>
-<pre><code>class ClipWindowController: NSWindowController {
+<pre><code class="language-swift">class ClipWindowController: NSWindowController {
 		var clipView: ClipView?  // 为了方便使用self.window.view
 		var screenImage: NSImage?  // 背景图片
 		let tmpRect = NSRect(x: 300, y: 300, width: 200, height: 400)
@@ -165,7 +165,7 @@
 }
 </code></pre>
 <p>渲染高亮区域图像是最重要的步骤，通过重载ClipView的draw函数实现渲染功能：</p>
-<pre><code>class ClipView: NSView {
+<pre><code class="language-swift">class ClipView: NSView {
     
     var image: NSImage?  //屏幕图像
     var drawingRect: NSRect?  // 高亮区域
@@ -188,7 +188,7 @@
 }
 </code></pre>
 <p>其中image和drawingRect变量会在绘制的过程中动态的给出，Controller中的<code>highlight()</code>函数会获取当前高亮区域的信息并告知系统view需要刷新：</p>
-<pre><code>// In ClipWindowController
+<pre><code class="language-swift">// In ClipWindowController
 func highlight() {
     guard let rect = self.tmpRect, // 暂时使用临时区域，之后使用
           // let rect = self.highlightRect,
@@ -206,7 +206,7 @@ func highlight() {
 </code></pre>
 <h2 id="esc退出clip">ESC退出Clip</h2>
 <p>之前提到，在AppDetegate中注册了局部事件的监听，在捕捉到ESC后执行单例的结束操作<code>ClipManager.shared.end()</code> ，对当前开启的所有controller的窗口进行关闭操作：</p>
-<pre><code>class ClipManager {
+<pre><code class="language-swift">class ClipManager {
     
     static let shared = ClipManager() // 单例
     var status: ClipStatus = .off // Clip初始状态
@@ -226,16 +226,16 @@ func highlight() {
 </code></pre>
 <h2 id="enter获取高亮区域图像">Enter获取高亮区域图像</h2>
 <p>之前提到，在Enter后发送<code>clipEnd</code>的通知，在ClipWindowController中捕捉：</p>
-<pre><code>class ClipWindowController: NSWindowController {
+<pre><code class="language-swift">class ClipWindowController: NSWindowController {
 
-		// .... variables
+    // .... variables
     
     func capture(_ screen:NSScreen) {
         NotificationCenter.default.addObserver(self, selector: #selector(self.done), name: NotiNames.clipEnd.name, object: nil)
 				// .... Get screen image
     }
 
-		@objc func done() {
+    @objc func done() {
         guard let view = self.clipView,
               let rect = view.drawingRect
         else {
@@ -245,13 +245,13 @@ func highlight() {
         guard let bitmapRep = view.bitmapImageRepForCachingDisplay(in: rect) else {return}
         view.cacheDisplay(in: rect, to: bitmapRep)
 
-				// bitmapRep即为获取到的图像信息，可以进行保存或别的操作
+        // bitmapRep即为获取到的图像信息，可以进行保存或别的操作
 
-				// 利用bitmapRep进行Pin操作，暂不实现
+        // 利用bitmapRep进行Pin操作，暂不实现
         // ....
     }
 
-		// .... other functions
+    // .... other functions
 
 }
 </code></pre>

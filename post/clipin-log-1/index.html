@@ -6,7 +6,7 @@
 
 <title>Clipin Log 1. 基于Status Bar的应用&amp;监听快捷键 | Hagemon&#39;s Log</title>
 
-<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1613225170049">
+<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1613226062178">
 
 <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://hagemon.github.io/styles/main.css">
@@ -77,7 +77,7 @@
             
         </div>
         <div style="text-align: center">
-            <form id="gridea-search-form" style="position: relative" data-update="1613225170049" action="/search/index.html">
+            <form id="gridea-search-form" style="position: relative" data-update="1613226062178" action="/search/index.html">
                 <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
                 <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
             </form>
@@ -113,7 +113,7 @@
 <p>在info.plist中添加名为<code>Application is agent (UIElement)</code>的key，并将value值设置为<code>YES</code>。这样App就不会在Dock中显示</p>
 <h2 id="appdelegate">AppDelegate</h2>
 <p>在AppDelegate中创建StatusBar按钮并配置对应的action</p>
-<pre><code>import Cocoa
+<pre><code class="language-swift">import Cocoa
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -136,7 +136,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 <h1 id="监听快捷键">监听快捷键</h1>
 <h2 id="全局快捷键基于hotkey">全局快捷键（基于HotKey）</h2>
 <p>为了启动截屏功能，需要监听全局的快捷键。在AppDelegate中使用HotKey对全局快捷键<code>cmd+shift+a</code>进行注册：</p>
-<pre><code>import Cocoa
+<pre><code class="language-swift">import Cocoa
 import HotKey
 
 @main
@@ -165,7 +165,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 </code></pre>
 <h2 id="局部快捷键">局部快捷键</h2>
 <p>局部快捷键用于监听应用内的一些键盘事件，比如回车完成Clip操作，Esc退出Clip操作：</p>
-<pre><code>import Cocoa
+<pre><code class="language-swift">import Cocoa
 import HotKey
 
 @main
@@ -177,16 +177,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         // local hotkey
         NSEvent.addLocalMonitorForEvents(matching: .keyDown, handler: {
-                (event) -&gt; NSEvent? in
-                if ClipManager.shared.status != .off &amp;&amp; event.keyCode == kVK_Escape {
-                    // 退出Clip之后的操作
-                    ClipManager.shared.end()
-                }
-                if ClipManager.shared.status == .select &amp;&amp; event.keyCode == kVK_Return {
-                    // 完成Clip之后的操作，post一个名为clipEnd的通知
-                    NotificationCenter.default.post(name: NotiNames.clipEnd.name, object: self, userInfo: nil)
-                }
-                return nil
+            (event) -&gt; NSEvent? in
+            if ClipManager.shared.status != .off &amp;&amp; event.keyCode == kVK_Escape {
+                // 退出Clip之后的操作
+                ClipManager.shared.end()
+            }
+            if ClipManager.shared.status == .select &amp;&amp; event.keyCode == kVK_Return {
+                // 完成Clip之后的操作，post一个名为clipEnd的通知
+                NotificationCenter.default.post(name: NotiNames.clipEnd.name, object: self, userInfo: nil)
+            }
+            return nil
         })
 
         // ... global hotkey and status bar item

@@ -6,7 +6,7 @@
 
 <title>Clipin Log 2. 截屏管理器 | Hagemon&#39;s Log</title>
 
-<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1613225170049">
+<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1613226062178">
 
 <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://hagemon.github.io/styles/main.css">
@@ -77,7 +77,7 @@
             
         </div>
         <div style="text-align: center">
-            <form id="gridea-search-form" style="position: relative" data-update="1613225170049" action="/search/index.html">
+            <form id="gridea-search-form" style="position: relative" data-update="1613226062178" action="/search/index.html">
                 <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
                 <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
             </form>
@@ -108,7 +108,7 @@
                 <div class="post-content">
                     <p>Manager/ClipManager.swift</p>
 <h2 id="截屏状态">截屏状态</h2>
-<pre><code>enum ClipStatus {
+<pre><code class="language-swift">enum ClipStatus {
     case off     // 未开启
     case ready   // 就绪
     case start   // 开始选择区域
@@ -121,7 +121,7 @@
 <figure data-type="image" tabindex="1"><img src="https://hagemon.github.io/post-images/1613222166438.png" alt="" loading="lazy"></figure>
 <h2 id="单例">单例</h2>
 <p>使用单例来控制Clip的操作：</p>
-<pre><code>import Cocoa
+<pre><code class="language-swift">import Cocoa
 
 class ClipManager {
     
@@ -145,7 +145,7 @@ class ClipManager {
 </code></pre>
 <p>通过调用<code>ClipManager.shared.start()</code>进入Clip功能。</p>
 <p>这里提前提一下，在初始化单例时添加对结束通知的监听，当某个组件完成了Pin的工作，则会post对应的通知，在ClipManager中处理Pin完成之后的操作：</p>
-<pre><code>private init() {
+<pre><code class="language-swift">private init() {
 		NotificationCenter.default.addObserver(self,
                                            selector: #selector(self.end),
                                            name: NotiNames.pinEnd.name,
@@ -157,7 +157,7 @@ class ClipManager {
 }
 </code></pre>
 <p>此处的notification name是枚举变量：</p>
-<pre><code>enum NotiNames: String {
+<pre><code class="language-swift">enum NotiNames: String {
     var name: NSNotification.Name {
         return Notification.Name(self.rawValue)
     }
