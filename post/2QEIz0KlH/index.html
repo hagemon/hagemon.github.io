@@ -4,7 +4,7 @@
 <meta name="description" content=""/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-<title>Clipin Log 0. Mac OS上截图&amp;保留小工具的开发记录 | Hagemon&#39;s Log</title>
+<title>实现基于LRU的Cache | Hagemon&#39;s Log</title>
 
 <link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1613228508347">
 
@@ -89,40 +89,202 @@
         <div class="post-detail gt-bg-theme-color-second">
             <article class="gt-post-content">
                 <h2 class="post-title">
-                    Clipin Log 0. Mac OS上截图&amp;保留小工具的开发记录
+                    实现基于LRU的Cache
                 </h2>
                 <div class="post-info">
                     <time class="post-time gt-c-content-color-first">
-                        · 2021-01-09 ·
+                        · 2021-02-06 ·
                     </time>
                     
                         <a href="https://hagemon.github.io/tag/5hne80IJu/" class="post-tags">
                             # iOS
                         </a>
                     
-                        <a href="https://hagemon.github.io/tag/VavrNj5esO/" class="post-tags">
-                            # Clipin
+                        <a href="https://hagemon.github.io/tag/r8kwS5C8Y/" class="post-tags">
+                            # Algorithm
                         </a>
                     
                 </div>
                 <div class="post-content">
-                    <p>源码地址：<a href="https://github.com/hagemon/Clipin">https://github.com/hagemon/Clipin</a></p>
-<p>源码的版本为Swift 5.0。</p>
-<p>我们将截图操作称为<strong>Clip</strong>，将截图钉在屏幕上的操作称为<strong>Pin</strong>。</p>
-<p>该工具可以临时将一些需要对照的信息保持在屏幕最上方，（或许）能提高工作效率。</p>
-<p>该工具在很大程度上参考了<a href="https://github.com/isee15/Capture-Screen-For-Multi-Screens-On-Mac">Snip</a>的源码，且集成了<a href="https://github.com/soffes/HotKey">HotKey</a>开源库监听快捷键。</p>
-<p>本文章是作者在开发该工具过程中的记录，由简入繁地介绍该工具的创建过程，如文中有纰漏或是不健康的代码，还请各位赐教。😋</p>
-<p>本工具还会持续地开发和维护，该文章也会不断地更新和修改。</p>
-<h1 id="项目架构介绍">项目架构介绍</h1>
-<p>根据作者个人的习惯，将项目分为以下几个模块：</p>
+                    <p>LRU需要满足：</p>
 <ul>
-<li>Util：一些工具类、函数、枚举和扩展</li>
-<li>Manager：管理Clip、Pin操作过程的单例管理器</li>
-<li>Clip：Clip功能相关的Controller和View</li>
-<li>Pin：Pin功能相关的Controller和View</li>
+<li>O(1)时间的读写</li>
+<li>将最久未被使用的数据剔除</li>
+<li>剔除操作在写入的时候进行</li>
 </ul>
-<p>Status bar应用的相关配置和快捷键监听等功能在<code>AppDelegate.swift</code>中实现。</p>
-<p>首先进入<a href="https://hagemon.github.io/post/clipin-log-1/">Status Bar应用&amp;监听快捷键</a>。</p>
+<p>要满足这些条件，需要具备的数据结构特点：</p>
+<ul>
+<li>哈希表：O(1)读取</li>
+<li>链表：最近被使用的在表头</li>
+</ul>
+<p>所以使用双向链表+哈希表的组合作为cache结构。</p>
+<h1 id="python简易实现">Python简易实现</h1>
+<h2 id="数据结点">数据结点</h2>
+<pre><code class="language-python">class Node:
+    def __init__(self, key, val):
+        self.next = None
+        self.prev = None
+        self.key = key
+        self.val = val
+</code></pre>
+<h2 id="双向链表">双向链表</h2>
+<pre><code class="language-python">class BidirectionalList:
+    def __init__(self):
+        self.head = None
+        self.tail = None
+
+    # 添加结点到链表头
+    def add_node(self, node):
+        # 链表为空时设置头尾节点
+        if not self.head:
+            self.head = node
+            self.tail = node
+            return
+        node.next = self.head
+        self.head.prev = node
+        self.head = node
+
+    # 移除结点并返回
+    def remove_node(self, node):
+        if node.prev:
+            node.prev.next = node.next
+        else:
+            self.head = node.next
+        if node.next:
+            node.next.prev = node.prev
+        else:
+            self.tail = node.prev
+        node.prev, node.next = None, None
+        return node
+</code></pre>
+<h2 id="cache实现">Cache实现</h2>
+<pre><code class="language-python">class Cache:
+    def __init__(self, capacity):
+        self.capacity = capacity
+        self.b_list = BidirectionalList()
+        self.map = {}
+
+    def set(self, key, value):
+        node = Node(key=key, val=value)
+				if key in self.map:
+            self.b_list.add_node(self.b_list.remove_node(node))
+        self.map[key] = node
+        self.b_list.add_node(node)
+        if len(self.map) &gt; self.capacity:
+            node = self.b_list.remove_node(self.b_list.tail)
+            del self.map[node.key]
+
+    def get(self, key):
+        if key not in self.map:
+            return None
+        node = self.map[key]
+        self.b_list.remove_node(node)
+        self.b_list.add_node(node)
+        return node.val
+</code></pre>
+<h1 id="swift实现">Swift实现</h1>
+<p>基于LRU算法，支持范型的Cache实现</p>
+<h2 id="node">Node</h2>
+<pre><code class="language-swift">import Cocoa
+
+final class Node&lt;T&gt;: NSObject {
+    var key: String
+    var val: T
+    var next: Node?
+    var prev: Node?
+    
+    init(key: String, value: T) {
+        self.key = key
+        self.val = value
+        self.next = nil
+        self.prev = nil
+        super.init()
+    }
+}
+</code></pre>
+<h2 id="bidirectional-list">Bidirectional List</h2>
+<pre><code class="language-swift">import Cocoa
+
+final class BidirectionalList&lt;T&gt;: NSObject {
+    var head: Node&lt;T&gt;?
+    var tail: Node&lt;T&gt;?
+    var size = 0
+    
+    final func addFront(node: Node&lt;T&gt;) {
+        guard self.size &gt; 0,
+              let head = self.head
+        else {
+            self.head = node
+            self.tail = node
+            self.size = 1
+            return
+        }
+        head.prev = node
+        node.next = head
+        self.head = node
+        self.size += 1
+    }
+    
+    final func remove(node: Node&lt;T&gt;) -&gt; Node&lt;T&gt;{
+        if let prev = node.prev, let next = node.next {
+            prev.next = next
+            next.prev = prev
+        } else if let prev = node.prev {
+            prev.next = nil
+            self.tail = prev
+        } else if let next = node.next {
+            next.prev = nil
+            self.head = next
+        }
+        node.prev = nil
+        node.next = nil
+        return node
+    }
+    
+    final func hit(node: Node&lt;T&gt;) {
+        self.addFront(node: self.remove(node: node))
+    }
+}
+</code></pre>
+<h2 id="cache">Cache</h2>
+<pre><code class="language-swift">import Cocoa
+
+final class Cache&lt;T&gt;: NSObject {
+    let capacity: Int
+    var bList = BidirectionalList&lt;T&gt;()
+    var map: [String: Node&lt;T&gt;] = [:]
+    
+    init(capacity: Int) {
+        self.capacity = capacity
+    }
+    
+    final func set(value: T, for key:String) {
+        let node = Node(key: key, value: value)
+        if self.map.keys.contains(key) {
+            self.bList.hit(node: node)
+            return
+        }
+        self.bList.addFront(node: node)
+        self.map[key] = node
+    }
+    
+    final func get(key:String) -&gt; T? {
+        guard let node = self.map[key] else {
+            return nil
+        }
+        self.bList.hit(node: node)
+        return node.val
+    }
+    
+}
+</code></pre>
+<h2 id="usage">Usage</h2>
+<pre><code class="language-swift">let cache = Cache&lt;Int&gt;(capacity: 4)
+
+cache.set(value: 3, for: &quot;3&quot;)
+cache.set(value: 4, for: &quot;4&quot;)
+print(cache.get(key: &quot;4&quot;) ?? &quot;nil&quot;)
+</code></pre>
 
                 </div>
             </article>
@@ -131,8 +293,8 @@
         
             <div class="next-post">
                 <div class="next gt-c-content-color-first">下一篇</div>
-                <a href="https://hagemon.github.io/post/you-hua-fang-fa-zong-jie/" class="post-title gt-a-link">
-                    优化方法总结
+                <a href="https://hagemon.github.io/post/swift5-xia-cloudkitcoredata-shi-xian-duo-zhong-duan-tong-bu/" class="post-title gt-a-link">
+                    Swift5+CloudKit+CoreData实现多终端同步
                 </a>
             </div>
         
