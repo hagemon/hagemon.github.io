@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://hagemon.github.io</id>
     <title>Hagemon&apos;s Log</title>
-    <updated>2021-02-13T13:31:38.855Z</updated>
+    <updated>2021-02-13T13:32:57.039Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://hagemon.github.io"/>
     <link rel="self" href="https://hagemon.github.io/atom.xml"/>
@@ -11,10 +11,10 @@
     <rights>All rights reserved 2021, Hagemon&apos;s Log</rights>
     <entry>
         <title type="html"><![CDATA[Clipin Log 4. 高亮区域的选取&拖拽&调整]]></title>
-        <id>https://hagemon.github.io/post/clipin-log-4-gao-liang-qu-yu-de-xuan-qu-andtuo-zhuai-anddiao-zheng/</id>
-        <link href="https://hagemon.github.io/post/clipin-log-4-gao-liang-qu-yu-de-xuan-qu-andtuo-zhuai-anddiao-zheng/">
+        <id>https://hagemon.github.io/post/clipin-log-4/</id>
+        <link href="https://hagemon.github.io/post/clipin-log-4/">
         </link>
-        <updated>2021-02-13T13:25:34.000Z</updated>
+        <updated>2021-01-09T13:25:34.000Z</updated>
         <content type="html"><![CDATA[<h1 id="高亮区域的选取">高亮区域的选取</h1>
 <p>确定了高亮区域的渲染方式后，我们在ClipWindowController中添加对鼠标事件的监听，用于获取高亮区域。</p>
 <p>在ClipWindowController中设置一些变量，用来记录用户操作过程中的一些NSPoint和NSRect：</p>
@@ -456,10 +456,10 @@ enum RectIssue {
     </entry>
     <entry>
         <title type="html"><![CDATA[Clipin Log 3. 截屏页面的实现]]></title>
-        <id>https://hagemon.github.io/post/clipin-log-3-jie-ping-ye-mian-de-shi-xian/</id>
-        <link href="https://hagemon.github.io/post/clipin-log-3-jie-ping-ye-mian-de-shi-xian/">
+        <id>https://hagemon.github.io/post/clipin-log-3/</id>
+        <link href="https://hagemon.github.io/post/clipin-log-3/">
         </link>
-        <updated>2021-02-13T13:24:06.000Z</updated>
+        <updated>2021-01-09T13:24:06.000Z</updated>
         <content type="html"><![CDATA[<h2 id="实现思路">实现思路</h2>
 <ul>
 <li>创建和屏幕大小相等的NSWindow，且拥有以下特性：
