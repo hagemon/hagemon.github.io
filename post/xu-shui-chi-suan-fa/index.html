@@ -1,102 +1,103 @@
-
-<!DOCTYPE html>
 <html>
   <head>
-    
-<meta charset="utf-8" >
-
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>蓄水池算法 | Hagemon&#39;s Log</title>
-<meta name="description" content="">
-
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
-
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1613221445797">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1613221592635">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://hagemon.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="蓄水池算法 | Hagemon&#39;s Log - Atom Feed" href="https://hagemon.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
-
-
-
+    <meta name="description" content="在长度未知的数据流中，要如何采样k个样本，使得这k个样本被采样的概率是相同的？
+面试中被问到的一个问题，当时没有很好地理解题目。仔细一想这个问题的应用还是很广泛的，比如要在大量级的点击事件数据流中采样点击事件，从而从事件中获得一些特征，那么..." />
+    <meta name="keywords" content="Algorithm" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
   </head>
   <body>
-    <div id="app" class="main">
-      <div class="site-header-container">
-  <div class="site-header">
-    <div class="left">
-      <a href="https://hagemon.github.io">
-        <img class="avatar" src="https://hagemon.github.io/images/avatar.png?v=1613221445797" alt="" width="32px" height="32px">
-      </a>
-      <a href="https://hagemon.github.io">
-        <h1 class="site-title">Hagemon&#39;s Log</h1>
-      </a>
-    </div>
-    <div class="right">
-      <transition name="fade">
-        <i class="icon" :class="{ 'icon-close-outline': menuVisible, 'icon-menu-outline': !menuVisible }" @click="menuVisible = !menuVisible"></i>
-      </transition>
-    </div>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://hagemon.github.io">
+  <img class="avatar" src="https://hagemon.github.io/images/avatar.png?v=1613221592635" alt="">
+  </a>
+  <h1 class="site-title">
+    Hagemon&#39;s Log
+  </h1>
+  <p class="site-description">
+    
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="hagemon.github.io" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
   </div>
 </div>
 
-<transition name="fade">
-  <div class="menu-container" style="display: none;" v-show="menuVisible">
-    <div class="menu-list">
-      
-        
-          <a href="/" class="menu purple-link">
-            首页
-          </a>
-        
-      
-        
-          <a href="/archives" class="menu purple-link">
-            归档
-          </a>
-        
-      
-        
-          <a href="/tags" class="menu purple-link">
-            标签
-          </a>
-        
-      
-        
-          <a href="/post/about" class="menu purple-link">
-            关于
-          </a>
-        
-      
-    </div>
-  </div>
-</transition>
-
-
-      <div class="content-container">
         <div class="post-detail">
-          
-          <h2 class="post-title">蓄水池算法</h2>
-          <div class="post-info post-detail-info">
-            <span><i class="icon-calendar-outline"></i> 2019-08-23</span>
-            
+          <article class="post">
+            <h2 class="post-title">
+              蓄水池算法
+            </h2>
+            <div class="post-info">
               <span>
-                <i class="icon-pricetags-outline"></i>
-                
-                  <a href="https://hagemon.github.io/tag/r8kwS5C8Y/">
-                    Algorithm
-                    
-                  </a>
-                
+                2019-08-23
               </span>
+              <span>
+                4 min read
+              </span>
+              
+                <a href="https://hagemon.github.io/tag/r8kwS5C8Y/" class="post-tag">
+                  # Algorithm
+                </a>
+              
+            </div>
             
-          </div>
-          <div class="post-content">
-            <p>在长度未知的数据流中，要如何采样k个样本，使得这k个样本被采样的概率是相同的？</p>
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>在长度未知的数据流中，要如何采样k个样本，使得这k个样本被采样的概率是相同的？</p>
 <p>面试中被问到的一个问题，当时没有很好地理解题目。仔细一想这个问题的应用还是很广泛的，比如要在大量级的点击事件数据流中采样点击事件，从而从事件中获得一些特征，那么为了保证采样的公平性，使得获得的特征更加客观，就需要采样时所有的样本被获取的概率是一样的。</p>
 <h2 id="问题描述">问题描述</h2>
 <p>设定一个长度为k的数组，目的是为了保证这k个数据在数据流不断流入的情况下，他们被选中到这个数组里的概率是一样的。</p>
@@ -113,57 +114,84 @@
 <h2 id="参考资料">参考资料</h2>
 <p>[用Python写算法 | 蓄水池算法实现随机抽样](</p>
 
-          </div>
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0">问题描述</a></li>
+<li><a href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99">参考资料</a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
         </div>
 
         
           <div class="next-post">
-            <a class="purple-link" href="https://hagemon.github.io/post/gbdt-zhong-dui-yu-ti-du-ni-he-de-li-jie/">
+            <div class="next">下一篇</div>
+            <a href="https://hagemon.github.io/post/gbdt-zhong-dui-yu-ti-du-ni-he-de-li-jie/">
               <h3 class="post-title">
-                下一篇：GBDT中对于梯度拟合的理解
+                GBDT中对于梯度拟合的理解
               </h3>
             </a>
           </div>
-          
-      </div>
+        
 
-      
+        
 
-      <div class="site-footer">
-  <div class="slogan"></div>
-  <div class="social-container">
-    
-      
-    
-      
-    
-      
-    
-      
-    
-      
-    
-  </div>
-  Hello World | <a class="rss" href="https://hagemon.github.io/atom.xml" target="_blank">RSS</a>
+        <div class="site-footer">
+  Hello World
+  <a class="rss" href="https://hagemon.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
 </div>
 
-
+      </div>
     </div>
-    <script type="application/javascript">
 
-hljs.initHighlightingOnLoad()
+    <script>
+      hljs.initHighlightingOnLoad()
 
-var app = new Vue({
-  el: '#app',
-  data: {
-    menuVisible: false,
-  },
-})
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
 
-</script>
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
 
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
 
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
 
-
+    </script>
   </body>
 </html>
