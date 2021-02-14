@@ -6,7 +6,7 @@
 
 <title>Swift5：基于正则表达式实现简单的Markdown即时渲染 | Hagemon&#39;s Log</title>
 
-<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1613296119116">
+<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1613315225414">
 
 <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://hagemon.github.io/styles/main.css">
@@ -77,7 +77,7 @@
             
         </div>
         <div style="text-align: center">
-            <form id="gridea-search-form" style="position: relative" data-update="1613296119116" action="/search/index.html">
+            <form id="gridea-search-form" style="position: relative" data-update="1613315225414" action="/search/index.html">
                 <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
                 <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
             </form>
@@ -318,10 +318,112 @@ private static func normalAttribute() -&gt; [NSAttributedString.Key: Any] {
     }
 }
 </code></pre>
-<p>值得注意的是，在使用中文（或是别的语言）输入法时，<code>textView</code>的<code>text</code>在还未输入完毕时就会引起<code>textViewDidChange</code>，如果此时直接刷新，则不会出发输入法的效果，而是直接将刚才键入的文本添加到<code>textView</code>中。<br>
-使用输入法时，<code>textView</code>会将正在输入的部分以<code>markedText</code>的形式暂存，所以判定<code>self.textView.markedTextRange</code>为空时才需要更新样式。</p>
-<h1 id="为ios设计便捷的样式按钮">为iOS设计便捷的样式按钮</h1>
+<p>值得注意的是，使用中文（或是别的语言）输入法时，未键入空格也会触发<code>textViewDidChange</code>，如果此时直接刷新，则会让输入法无法使用，并直接将刚才键入的文本添加到<code>textView</code>中。</p>
+<p>使用输入法时，<code>textView</code>会将正在输入的部分以<code>markedText</code>的形式暂存，所以判定<code>self.textView.markedTextRange</code>为空时才需要更新样式。</p>
+<h1 id="为ios设计markdown的便捷按钮">为iOS设计markdown的便捷按钮</h1>
 <p>在使用iOS端输入时，对于特殊字符（#、-或1.）的输入是十分麻烦的，所以我通过使用<code>textView</code>的<code>inputAccessoryView</code>提供了便捷的操作。</p>
+<figure data-type="image" tabindex="1"><img src="https://hagemon.github.io/post-images/1613312065248.PNG" alt="" width="200" loading="lazy"></figure>
+<p>便捷按钮的具体事件流程如下：</p>
+<ul>
+<li>点击按钮</li>
+<li>获取光标所在段落</li>
+<li>为段落添加样式</li>
+<li>刷新页面</li>
+</ul>
+<p>对于不同的样式类别，也会有不同的样式更替效果：</p>
+<ul>
+<li>Header：每次点击让header的级别按照0、1、2、3循环变化</li>
+<li>Ordered：每次点击为段落添加或取消序号</li>
+<li>Bullet：每次点击为段落添加或取消无序列表符</li>
+</ul>
+<p>为了实现这些功能，需要从这几个方面考虑。</p>
+<h2 id="获取段落">获取段落</h2>
+<p>根据光标位置，分别向前和向后寻找段落的头尾位置（对于首段或是尾段，需要寻找文档的头尾），具体来说，使用<code>textView.tokenizer.position(from: toBoundary: inDirection: )</code>方法来寻找段落或文档的头尾。</p>
+<p>因为<code>position</code>函数是通过寻找到上一个段落的结尾符号（也就是<code>\\n</code>)来定位段落的起始位置，所以对于第一个段落是找不到起始位置的，此时则需要找到文档的起始位置作为该段的起始位置。</p>
+<pre><code class="language-swift">final func getLineRange() -&gt; UITextRange? {
+    guard let range = self.textView.selectedTextRange
+    else { return nil }
+    // 以光标位置为起点
+    let position = range.start
+    // 向前寻找段落的边界（也就是段落起始位置）
+    var start = self.textView.tokenizer.position(from: position, toBoundary: .paragraph, inDirection: UITextDirection(rawValue: UITextStorageDirection.backward.rawValue))
+    // 若找不到，则将文档起点作为start
+    if start == nil {
+        start = self.textView.beginningOfDocument
+    }
+    // 向后寻找段落的边界
+    var end = self.textView.tokenizer.position(from: position, toBoundary: .paragraph, inDirection: UITextDirection(rawValue: UITextStorageDirection.forward.rawValue))
+    // 若找不到，则将文档终点作为end
+    if end == nil {
+        end = self.textView.endOfDocument
+    }
+    return self.textView.textRange(from: start!, to: end!)
+}
+</code></pre>
+<p>对于三种类型的按钮，分别调用其<code>update</code>的方法更新段落：</p>
+<pre><code class="language-swift">@objc func headerAction() {
+    guard let range = self.getLineRange(),
+            let text = self.textView.text(in: range)
+    else { return }
+    self.textView.replace(range, withText: MDParser.updateHeader(s: text))
+}
+
+@objc func orderAction() {
+    guard let range = self.getLineRange(),
+            let text = self.textView.text(in: range)
+    else { return }
+    self.textView.replace(range, withText: MDParser.updateOrder(s: text))
+}
+
+@objc func bulletAction() {
+    guard let range = self.getLineRange(),
+            let text = self.textView.text(in: range)
+    else { return }
+    self.textView.replace(range, withText: MDParser.updateBullet(s: text))
+}
+</code></pre>
+<p>值得一提的是，在<code>replace</code>之后会触发<code>textViewDidChange</code>并自动刷新，所以不需要额外的刷新操作。</p>
+<h2 id="样式更新">样式更新</h2>
+<h3 id="header">Header</h3>
+<p>根据段落内容判断当前的Header等级，并让等级加一并取余：</p>
+<pre><code class="language-swift">static func updateHeader(s: String) -&gt; String {
+    if s == &quot;\n&quot; {return s+&quot;# &quot;}
+    let re = RE.regularExpression(validateString: s, inRegex: self.headerRegex)
+    if re.count == 0 {
+        return &quot;# &quot; + s
+    }
+    let level = re[0].count
+    var replaced = String(repeating: &quot;#&quot;, count: (level + 1) % 4)
+    if replaced.count &gt; 0 {
+        replaced += &quot; &quot;
+    }
+    return RE.replace(validateString: s, withContent: replaced, inRegex: self.headerRegex+&quot;[ ]*&quot;)
+}
+</code></pre>
+<h3 id="ordered">Ordered</h3>
+<p>判断段首是否为序号，若是则去除序号，否则添加序号。</p>
+<pre><code class="language-swift">static func updateOrder(s: String) -&gt; String {
+    if s == &quot;\n&quot; {return s+&quot;1. &quot;}
+    let order = RE.regularExpression(validateString: s, inRegex: self.orderRegex)
+    if order.count &gt; 0 {
+        return RE.replace(validateString: s, withContent: &quot;&quot;, inRegex: self.orderRegex+&quot;[ ]*&quot;)
+    }
+    // This would be auto reordered, using `1.` works fine.
+    return &quot;1. &quot;+s
+}
+</code></pre>
+<p>值得注意的是，由于在之后会自动刷新并重新排序，所以这里添加任意的序号都可以。</p>
+<h3 id="bullet">Bullet</h3>
+<p>和Ordered原理相同</p>
+<pre><code class="language-swift">static func updateBullet(s: String) -&gt; String {
+    if s == &quot;\n&quot; {return s+&quot;- &quot;}
+    let bullet = RE.regularExpression(validateString: s, inRegex: self.bulletRegex)
+    if bullet.count &gt; 0 {
+        return RE.replace(validateString: s, withContent: &quot;&quot;, inRegex: self.bulletRegex+&quot;[ ]*&quot;)
+    }
+    return &quot;- &quot;+s
+}
+</code></pre>
 
                 </div>
             </article>
@@ -368,7 +470,7 @@ private static func normalAttribute() -&gt; [NSAttributedString.Key: Any] {
         
     </div>
     <div class="footer-info">
-        喜欢干净，热爱自由。
+        To be continued
     </div>
     <div>
         Theme by <a href="https://imhanjie.com/" target="_blank">imhanjie</a>, Powered by <a
