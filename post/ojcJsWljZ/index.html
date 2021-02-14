@@ -1,0 +1,386 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>Swift5：基于正则表达式实现简单的Markdown即时渲染 | Hagemon&#39;s Log</title>
+
+<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1613296119116">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://hagemon.github.io/styles/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script>
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Hagemon&#39;s Log
+        </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+                <div class="nav-item">
+                    
+                        <a href="/" class="menu gt-a-link">
+                            首页
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/archives" class="menu gt-a-link">
+                            归档
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/tags" class="menu gt-a-link">
+                            标签
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/post/about" class="menu gt-a-link">
+                            关于
+                        </a>
+                    
+                </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1613296119116" action="/search/index.html">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    Swift5：基于正则表达式实现简单的Markdown即时渲染
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2021-02-13 ·
+                    </time>
+                    
+                </div>
+                <div class="post-content">
+                    <p>本文以iOS下的UITextView为例，在MacOS上只要更改NSTextView的相应的接口名同样适用。</p>
+<h1 id="实现思路">实现思路</h1>
+<p>我在实现过程中尝试了局部实时渲染和全局实时渲染的方式，由于学艺不精，暂时没有找到很好的方法进行局部实时渲染，这里介绍一下我对于两种方法的思路。</p>
+<h2 id="局部实时渲染">局部实时渲染</h2>
+<p>最早的思路是根据用户的输入位置对应的段落，更新<code>NSMutableAttributedString</code>，具体步骤如下：</p>
+<ul>
+<li>监听<code>textViewDidChange</code></li>
+<li>找到光标对应的段落</li>
+<li>根据段落内容，基于正则表达式分析并对应文字的<code>attribute</code></li>
+</ul>
+<p>但是按照这种思路，在替换文字是会导致<code>attribute</code>的混乱。<code>attribute</code>的形式是<code>属性:Range</code>的形式，在更新了文本以后，所有的文本range位置都会发生变化。我暂时没有找到一个很方便的方法来局部更新<code>NSMutableAttributedString</code>的属性。</p>
+<h2 id="全局实时渲染">全局实时渲染</h2>
+<p>全局实时渲染指在监听文本变化后更新整个文本的<code>attribute</code>，这样会带来一些性能的损失，但是更易于实现。主要的思路如下：</p>
+<ul>
+<li>监听<code>textViewDidChange</code></li>
+<li>重新解析所有文字的<code>attribute</code>并更新</li>
+</ul>
+<p>我们首先需要封装一个正则表达式的工具<strong>RE</strong>。</p>
+<h1 id="正则表达式工具re">正则表达式工具RE</h1>
+<p>RE的主要功能包括：</p>
+<ol>
+<li>匹配并获取<code>Regex</code>对应的内容</li>
+<li>替换<code>Regex</code>所匹配的内容</li>
+<li>匹配并获取<code>Regex</code>对应的内容及其范围(<code>NSRange</code>)</li>
+</ol>
+<p>首先封装一个RE返回的结构体</p>
+<pre><code class="language-swift">struct Parsed {
+    var content: String
+    var range: NSRange
+}
+</code></pre>
+<pre><code class="language-swift">class RE: NSObject {
+    static func regularExpression(validateString:String, inRegex regex:String) -&gt; [String]{
+        // 匹配并获取内容
+        do {
+            let re: NSRegularExpression = try NSRegularExpression(pattern: regex, options: [])
+            let matches = re.matches(in: validateString, options:[], range: NSRange(location: 0, length: validateString.count))
+            
+            var data:[String] = Array()
+            for item in matches {
+                let string = (validateString as NSString).substring(with: item.range)
+                data.append(string)
+            }
+            
+            return data
+        }
+        catch {
+            return []
+        }
+    }
+
+    static func regularExpressionRange(validateString:String, inRegex regex:String) -&gt; [Parsed]{
+        // 匹配并获取内容和范围
+        do {
+            let re: NSRegularExpression = try NSRegularExpression(pattern: regex, options: [])
+            let matches = re.matches(in: validateString, options:[], range: NSRange(location: 0, length: validateString.count))
+            
+            var data:[Parsed] = Array()
+            for item in matches {
+                let string = (validateString as NSString).substring(with: item.range)
+                data.append(Parsed(content: string, range: item.range))
+            }
+            
+            return data
+        }
+        catch {
+            return []
+        }
+    }
+    
+    static func replace(validateString: String, withContent content: String, inRegex regex:String) -&gt; String {
+        do {
+            let re: NSRegularExpression = try NSRegularExpression(pattern: regex, options: [])
+            return re.stringByReplacingMatches(in: validateString, options: [], range: NSRange(location: 0, length: validateString.count), withTemplate: content)
+        } catch {
+            return validateString
+        }
+    }
+</code></pre>
+<h1 id="regex">Regex</h1>
+<p>我暂时实现了以下几个markdown语法的识别：</p>
+<ul>
+<li>Header</li>
+<li>带序号列表</li>
+<li>无序号列表</li>
+</ul>
+<p>我们需要识别出<code>textView</code>中各种类型文本及其所在的<code>NSRange</code>，对于每种类型，我们用以下几个<code>Regex</code>进行识别：</p>
+<pre><code class="language-swift">static let orderListBlockRegex = &quot;(?&lt;=(^|\n))([0-9]+\\..*(\n)?)*(?&lt;=(^|\n))([0-9]+\\..*)+&quot;
+static let bulletBlocksRegex = &quot;(?&lt;=(^|\n))-.*(\n)?&quot;
+static let headerBlocksRegex = &quot;(?&lt;=(^|\n))#{1,3}.*(\n)?&quot;
+</code></pre>
+<p>这三个<code>Regex</code>可以识别出多个连续的文本块(Block)何其对应的<code>NSRange</code>。</p>
+<h1 id="mdparser">MDParser</h1>
+<p>我封装了一个简单的Markdown解析器，返回输入的<code>String</code>经过解析后的<code>NSAttributedString</code>，具体步骤包括：</p>
+<ol>
+<li>为所有文本设置默认样式</li>
+<li>匹配标题并添加样式</li>
+<li>匹配有序列表，自动排序后添加样式</li>
+<li>匹配无需列表</li>
+<li>为特殊字符添加样式</li>
+</ol>
+<pre><code class="language-swift">
+class MDParser: NSObject {
+    
+    // 在单行文本中识别三种类型的文本
+    static let headerRegex = &quot;^#{1,3}&quot;
+    static let orderRegex = &quot;^[0-9]+\\.&quot;
+    static let bulletRegex = &quot;^-&quot;
+
+    // 在多行文本中是被三种类型的文本块
+    static let orderListBlockRegex = &quot;(?&lt;=(^|\n))([0-9]+\\..*(\n)?)*(?&lt;=(^|\n))([0-9]+\\..*)+&quot;
+    static let bulletBlocksRegex = &quot;(?&lt;=(^|\n))-.*(\n)?&quot;
+    static let headerBlocksRegex = &quot;(?&lt;=(^|\n))#{1,3}.*(\n)?&quot;
+
+    // 用于给特殊字符（#，-，1.）添加样式
+    static let specielRegex = &quot;(?&lt;=(^|\n))(#{1,3}|[0-9]+\\.|-)&quot;
+    
+    // 渲染函数
+    static func renderAll(content: String) -&gt; NSAttributedString {
+        let result = NSMutableAttributedString(string: content, attributes: self.normalAttribute())
+        // 渲染 headers
+        let headers = RE.regularExpressionRange(validateString: content, inRegex: self.headerBlocksRegex)
+        for parsed in headers {
+            // 获取header的等级
+            let level = self.getHeaderLevel(header: parsed.content)
+            // 获取header的样式
+            let attributes = self.headerAttribute(level: level)
+            result.addAttributes(attributes, range: parsed.range)
+        }
+        
+        // 渲染有序列表
+        let orderedList = RE.regularExpressionRange(validateString: content, inRegex: self.orderListBlockRegex)
+        for parsed in orderedList {
+            // 自动排序
+            let replaced = RE.replace(validateString: parsed.content, withContent: &quot;&quot;, inRegex: &quot;(?&lt;=(^|\n))[0-9]+&quot;)
+            var splited = replaced.split(separator: &quot;\n&quot;)
+            splited = splited.enumerated().map({(i, line) in &quot;\(i+1)&quot;+line})
+            let s = splited.joined(separator: &quot;\n&quot;)
+            result.mutableString.replaceCharacters(in: parsed.range, with: s)
+            // 获取并渲染有序列表样式
+            result.addAttributes(self.listAttribute(), range: parsed.range)
+        }
+
+        // 渲染无需列表
+        let bulletList = RE.regularExpressionRange(validateString: content, inRegex: self.bulletBlocksRegex)
+        for parsed in bulletList {
+            // 获取并渲染无需列表样式
+            result.addAttributes(self.listAttribute(), range: parsed.range)
+        }
+
+        // 高亮特殊字符
+        for parsed in RE.regularExpressionRange(validateString: content, inRegex: self.specielRegex) {
+            result.addAttributes([
+                .foregroundColor: UIColor(named: &quot;AccentColor&quot;)!
+            ], range: parsed.range)
+        }
+        
+        return result
+    }
+    
+    // ....
+    
+}
+</code></pre>
+<p>其中，获取<code>header</code>级别以及三种样式的代码为:</p>
+<pre><code class="language-swift">// 获取header级别
+static func getHeaderLevel(header: String) -&gt; Int {
+    guard let signs = RE.regularExpression(validateString: header, inRegex: &quot;^#{1,3}&quot;).first else { return 0 }
+    return signs.count
+}
+
+// MARK: - Attributes
+// PARAGRAGH_LEVELS和FONT_LEVELS是自定义的全局数组，存储了各级别对应的Spacing和FontSize
+private static func headerAttribute(level: Int) -&gt; [NSAttributedString.Key: Any] {
+    let paraStyle = NSMutableParagraphStyle()
+    paraStyle.paragraphSpacingBefore = PARAGRAGH_LEVELS[level]
+    paraStyle.paragraphSpacing = PARAGRAGH_LEVELS[level]
+    let font = UIFont.boldSystemFont(ofSize: FONT_LEVELS[level])
+    return [
+        .font: font,
+        .paragraphStyle: paraStyle,
+        .foregroundColor: UIColor.label
+    ]
+}
+
+private static func listAttribute() -&gt; [NSAttributedString.Key: Any] {
+    let paraStyle = NSMutableParagraphStyle()
+    paraStyle.firstLineHeadIndent = 5
+    paraStyle.paragraphSpacingBefore = 3
+    paraStyle.paragraphSpacing = 3
+    return [
+        .font: UIFont.systemFont(ofSize: FONT_LEVELS[0]),
+        .paragraphStyle: paraStyle,
+        .foregroundColor: UIColor.label
+    ]
+}
+
+private static func normalAttribute() -&gt; [NSAttributedString.Key: Any] {
+    return [
+        .font: UIFont.systemFont(ofSize: FONT_LEVELS[0]),
+        .foregroundColor: UIColor.label
+    ]
+}
+</code></pre>
+<h1 id="实时渲染">实时渲染</h1>
+<p>在<code>ViewController</code>中定义<code>refresh()</code>函数，对<code>textView</code>的文本进行渲染，可以在<code>textViewDidChange</code>中调用<code>refresh()</code>函数：</p>
+<pre><code class="language-swift">final func refresh() {
+    let selectedRange = self.textView.selectedRange // 保存当前光标位置
+    let textStorage = self.textView.textStorage
+    textStorage.setAttributedString(MDParser.renderAll(content: self.textView.text))
+    self.textView.selectedRange = selectedRange // 恢复光标位置
+}
+</code></pre>
+<p>因为在设置<code>AttributedString</code>后，光标会自动移动到最后一个字符，所以需要保存&amp;恢复光标的位置。</p>
+<pre><code class="language-swift">func textViewDidChange(_ textView: UITextView) {
+    if self.textView.markedTextRange == nil {
+        self.refresh()
+    }
+}
+</code></pre>
+<p>值得注意的是，在使用中文（或是别的语言）输入法时，<code>textView</code>的<code>text</code>在还未输入完毕时就会引起<code>textViewDidChange</code>，如果此时直接刷新，则不会出发输入法的效果，而是直接将刚才键入的文本添加到<code>textView</code>中。<br>
+使用输入法时，<code>textView</code>会将正在输入的部分以<code>markedText</code>的形式暂存，所以判定<code>self.textView.markedTextRange</code>为空时才需要更新样式。</p>
+<h1 id="为ios设计便捷的样式按钮">为iOS设计便捷的样式按钮</h1>
+<p>在使用iOS端输入时，对于特殊字符（#、-或1.）的输入是十分麻烦的，所以我通过使用<code>textView</code>的<code>inputAccessoryView</code>提供了便捷的操作。</p>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://hagemon.github.io/post/2QEIz0KlH/" class="post-title gt-a-link">
+                    实现基于LRU的Cache
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first"></div>
+    <div class="social-container">
+        
+            
+                <a href="https://hagemon.github.com" target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+            
+        
+            
+                <a href="https://twitter.com/oneFolder_" target="_blank">
+                    <i class="fab fa-twitter gt-c-content-color-first"></i>
+                </a>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        喜欢干净，热爱自由。
+    </div>
+    <div>
+        Theme by <a href="https://imhanjie.com/" target="_blank">imhanjie</a>, Powered by <a
+                href="https://github.com/getgridea/gridea" target="_blank">Gridea | <a href="https://hagemon.github.io/atom.xml" target="_blank">RSS</a></a>
+    </div>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

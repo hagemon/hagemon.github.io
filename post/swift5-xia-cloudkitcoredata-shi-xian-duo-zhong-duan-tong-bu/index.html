@@ -6,7 +6,7 @@
 
 <title>Swift5+CloudKit+CoreData实现多终端同步 | Hagemon&#39;s Log</title>
 
-<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1613229726377">
+<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1613296119116">
 
 <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://hagemon.github.io/styles/main.css">
@@ -77,7 +77,7 @@
             
         </div>
         <div style="text-align: center">
-            <form id="gridea-search-form" style="position: relative" data-update="1613229726377" action="/search/index.html">
+            <form id="gridea-search-form" style="position: relative" data-update="1613296119116" action="/search/index.html">
                 <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
                 <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
             </form>
@@ -160,7 +160,7 @@
 <li>date</li>
 </ul>
 <h1 id="终端云端">终端→云端</h1>
-<p>当拥有了基于CloudKit的context时，所有的数据库操作在save之后都会自动同步到iCloud，所以只需要实现基本的数据库操作，就可以做到将数据同步到云端。</p>
+<p>当拥有了基于CloudKit的context时，所有的数据库操作在save之后都会自动同步到iCloud，所以只需要实现基本的CURD操作，就可以做到将数据同步到云端。</p>
 <pre><code class="language-swift">final class CoreUtil: NSObject {
     
     // MARK: - Core Data Context
@@ -190,7 +190,7 @@
         }
     }
 
-    // Query
+    // Retrieve
 
     static func getModels() -&gt; [Model] {
         let request = NSFetchRequest&lt;NSFetchRequestResult&gt;(entityName: &quot;Model&quot;)
@@ -210,7 +210,7 @@
         }
     }
     
-// Saving
+    // Saving &amp; Update
 
     static func save() {
         do {
@@ -222,7 +222,7 @@
     
 }
 </code></pre>
-<p>上述的数据库操作中没有修改操作，因为在修改对象的值之后，只需要保存当前的context既可以完成对数据库中数据的修改。</p>
+<p>上述的数据库操作中没有修改(Update)操作，因为在修改对象的值之后，只需要保存当前的context既可以完成对数据库中数据的修改。</p>
 <p>我使用了Model的extension完成Model对象的修改操作（因为我使用了CoreData自动生成的Model类，所以看不到Model类的源代码）：</p>
 <pre><code class="language-swift">extension Model {
     func update(content: String){
