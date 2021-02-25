@@ -4,7 +4,7 @@
 <meta name="description" content=""/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-<title>Clipin Log 5. 单屏幕Pin实现 | Hagemon&#39;s Log</title>
+<title>Clipin Log 6. 多屏幕支持 | Hagemon&#39;s Log</title>
 
 <link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1614267292882">
 
@@ -89,7 +89,7 @@
         <div class="post-detail gt-bg-theme-color-second">
             <article class="gt-post-content">
                 <h2 class="post-title">
-                    Clipin Log 5. 单屏幕Pin实现
+                    Clipin Log 6. 多屏幕支持
                 </h2>
                 <div class="post-info">
                     <time class="post-time gt-c-content-color-first">
@@ -106,155 +106,86 @@
                     
                 </div>
                 <div class="post-content">
-                    <p>Pin功能的触发时机是在ClipManager的select状态下点击回车时，所以在ClipWindowController的done中，将bitmapRep和对应的rect作为参数，执行Pin操作</p>
-<pre><code class="language-swift">class ClipWindowController: NSWindowController {
-	// ....
-    @objc func done() {
-        guard let view = self.clipView,
-              let rect = view.drawingRect
-        else {
-            return
+                    <h2 id="多屏幕环境">多屏幕环境</h2>
+<p>在多屏幕环境下，各个屏幕的起始坐标<code>origin</code>会根据用户在系统偏好设置中对显示器排列的设置而不同，下图直观地表示了多屏幕环境下各屏幕的坐标。</p>
+<figure data-type="image" tabindex="1"><img src="https://hagemon.github.io/post-images/1613224003347.png" alt="" loading="lazy"></figure>
+<p>通过<code>screen.visibleFrame</code>可以访问屏幕在此坐标系下的frame。</p>
+<h2 id="实现思路">实现思路</h2>
+<ul>
+<li>在ClipManager.shared.start()中检测所有屏幕并创建控制器</li>
+<li>对于每个控制器，获取对应显示器当前页面图像</li>
+<li>在执行Pin操作时，需要将窗口偏移到正确的位置</li>
+</ul>
+<pre><code class="language-swift">class ClipManager {
+	// ....    
+    var controllers: [ClipWindowController] = []
+    // ....
+    func start() {
+        NotificationCenter.default.post(name: NotiNames.pinNormal.name, object: nil)
+        NSApplication.shared.activate(ignoringOtherApps: true)
+        
+        for screen in NSScreen.screens {  // 获取所有屏幕
+            let view = ClipView(frame: screen.frame)
+            let clipWindow = ClipWindow(contentRect: screen.frame, contentView: view)
+            let clipWindowController = ClipWindowController(window: clipWindow)
+            controllers.append(clipWindowController)
+            self.status = .ready
+            clipWindowController.capture(screen)
         }
-        guard let bitmapRep = view.bitmapImageRepForCachingDisplay(in: rect) else {return}
-        view.cacheDisplay(in: rect, to: bitmapRep)
 
-        // 利用bitmapRep进行Pin操作
-        PinManager.shared.pin(rep: bitmapRep, rect: rect)
     }
-
-	// ....
-
+    
+    // ....
 }
 </code></pre>
-<h2 id="pinmanager单例">PinManager单例</h2>
-<p>主要完成将图像作为一个新的窗口，并放置在屏幕顶层的操作，这里称为pin操作。源码里还实现了一些保存图像的函数，后续会在小工具中使用。</p>
-<p>pin函数初始化了页面、窗口和控制器并显示窗口，在处理结束后发送<code>pinEnd</code>通知。</p>
+<p>在ClipWindowController中获取各屏幕的图像：</p>
+<pre><code class="language-swift">class ClipWindowController: NSWindowController {
+	func capture(_ screen:NSScreen) {
+        guard let window = self.window else { return }
+        //  获取screen对应的displayID和ID对应的图像
+        guard let displayID = screen.deviceDescription[NSDeviceDescriptionKey(rawValue: &quot;NSScreenNumber&quot;)] as? CGDirectDisplayID,
+                let cgScreenImage = CGDisplayCreateImage(displayID)
+        else { return }
+        self.screenImage = NSImage(cgImage: cgScreenImage, size: screen.frame.size)
+        window.backgroundColor = NSColor(white: 0, alpha: 0.5)
+        self.clipView = window.contentView as? ClipView
+        self.showWindow(nil)
+    }
+}
+</code></pre>
+<p>在PinManager中修改pin函数，将屏幕起始坐标增加为新的参数，并对pin窗口进行偏移：</p>
 <pre><code class="language-swift">class PinManager: NSObject {
-    static let shared = PinManager()
-    var controllers: [PinWindowController] = []
-    
-    func pin(rep: NSBitmapImageRep, rect:NSRect) {
+	func pin(rep: NSBitmapImageRep, rect:NSRect, screenOrigin:NSPoint) {
         let image = NSImage(size: rect.size)
         image.addRepresentation(rep)
         let view = PinView(image: image)
         let window = PinWindow(rect: rect, contentView: view)
         let controller = PinWindowController(window: window)
         self.controllers.append(controller)
+        // 以屏幕左下角坐标为基准，偏移pin窗口
+        window.setFrameOrigin(screenOrigin.offsetBy(dx: rect.origin.x, dy: rect.origin.y))
         controller.showWindow(nil)
         NotificationCenter.default.post(name: NotiNames.pinEnd.name, object: nil)
     }
 }
 </code></pre>
-<h2 id="图像显示到窗口中">图像显示到窗口中</h2>
-<p>和ClipView类似，在PinView的中渲染图像：</p>
-<pre><code class="language-swift">class PinView: NSView {
-    
-    var image: NSImage?
-    
-    init(image: NSImage) {
-        super.init(frame: .zero)
-        self.image = image
+<p>同时在调用pin函数时增加对屏幕起始坐标参数的传入：</p>
+<pre><code class="language-swift">// ClipWindowController.swift
+@objc func done() {
+    guard let view = self.clipView,
+          let rect = view.drawingRect
+    else {
+        return
     }
-
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-    
-    override func draw(_ dirtyRect: NSRect) {
-        super.draw(dirtyRect)
-
-        // Drawing code here.
-        guard let image = self.image else { return }
-        image.draw(in: self.frame, from: self.frame, operation: .sourceOver, fraction: 1.0)
-    }
-    
+    guard let bitmapRep = view.bitmapImageRepForCachingDisplay(in: rect),
+          let window = self.window,
+          let screen = window.screen
+    else {return}
+    view.cacheDisplay(in: rect, to: bitmapRep)
+    PinManager.shared.pin(rep: bitmapRep, rect: rect, screenOrigin: screen.visibleFrame.origin)
 }
 </code></pre>
-<h2 id="窗口细节特性设置">窗口细节特性设置</h2>
-<p>Pin窗口包含以下特性：</p>
-<ul>
-<li>无边框</li>
-<li>在屏幕顶层</li>
-<li>点击窗口内部可以实现拖动</li>
-<li>鼠标在窗口内时显示透明标题栏（左上角的三个按钮），移除窗口标题栏消失</li>
-</ul>
-<p>上述功能都可以通过PinWindowController和PinWindow的初始化配置实现</p>
-<pre><code class="language-swift">class PinWindowController: NSWindowController {
-
-    var pinWindow: PinWindow?
-    
-    init(window: PinWindow) {
-        super.init(window: window)
-        self.pinWindow = window
-        guard let window = self.window, let view = window.contentView else { return }
-				// 添加鼠标进入或退出的监听
-        let trackingArea = NSTrackingArea(rect: view.frame, options: [.activeAlways, .mouseEnteredAndExited], owner: self, userInfo: [:])
-        view.addTrackingArea(trackingArea)
-        
-    }
-
-		// .... some functions
-        
-    override func mouseEntered(with event: NSEvent) {
-        guard let window = self.pinWindow else { return }
-        window.showTitle()
-    }
-    
-    override func mouseExited(with event: NSEvent) {
-        guard let window = self.pinWindow else { return }
-        window.hideTitle()
-    }
-        
-}
-</code></pre>
-<pre><code class="language-swift">class PinWindow: NSWindow {
-    init(rect: NSRect, contentView: PinView) {
-        super.init(contentRect: rect, styleMask: [.closable, .titled, .miniaturizable, .fullSizeContentView], backing: .buffered, defer: false)
-        self.titleVisibility = .visible
-        self.titlebarAppearsTransparent = true
-        self.contentView = contentView
-        self.level = .floating  // 改变窗口显示等级
-        self.isMovableByWindowBackground = true  // 可以通过拖拽窗口内容移动
-        NotificationCenter.default.addObserver(self, selector: #selector(pinFloating), name: NotiNames.pinFloating.name, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(pinNormal), name: NotiNames.pinNormal.name, object: nil)
-    }
-    
-    func hideTitle() {
-        self.styleMask = [.titled, .fullSizeContentView]  // 隐藏标题栏，原理详见官方文档
-    }
-    
-    func showTitle() {
-        self.styleMask = [.closable, .titled, .miniaturizable, .fullSizeContentView]  // 显示标题栏，原理详见官方文档
-    }
-    
-    @objc func pinFloating() {
-        self.level = .floating
-    }
-    
-    @objc func pinNormal() {
-        self.level = .normal
-    }    
-    
-}
-</code></pre>
-<p>代码中还让PinWindow添加两个消息<code>pinFloating</code>和<code>pinNormal</code>的监听，是为了在有Pin窗口的前提下，使用Clip功能时不让Pin窗口遮挡住Clip窗口，所以两个消息分别在<code>ClipManager.shared.start()</code>和<code>ClipManager.shared.end()</code>中添加：</p>
-<pre><code class="language-swift">class ClipManager {
-
-	// ....
-    
-    func start() {
-        NotificationCenter.default.post(name: NotiNames.pinNormal.name, object: nil)
-        // ....
-    }
-    
-    @objc func end() {
-        NotificationCenter.default.post(name: NotiNames.pinFloating.name, object: nil)
-        // ....
-    }
-    
-}
-</code></pre>
-<p>接下来是<a href="https://hagemon.github.io/post/clipin-post-6/">多屏幕支持</a></p>
+<p>接下来是<a href="https://hagemon.github.io/post/clipin-post-7/">对截屏的一些优化</a></p>
 
                 </div>
             </article>
@@ -263,8 +194,8 @@
         
             <div class="next-post">
                 <div class="next gt-c-content-color-first">下一篇</div>
-                <a href="https://hagemon.github.io/post/clipin-log-4/" class="post-title gt-a-link">
-                    Clipin Log 4. 高亮区域的选取&amp;拖拽&amp;调整
+                <a href="https://hagemon.github.io/post/clipin-log-5/" class="post-title gt-a-link">
+                    Clipin Log 5. 单屏幕Pin实现
                 </a>
             </div>
         

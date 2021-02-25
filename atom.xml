@@ -2,13 +2,330 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://hagemon.github.io</id>
     <title>Hagemon&apos;s Log</title>
-    <updated>2021-02-15T02:35:55.204Z</updated>
+    <updated>2021-02-25T15:34:57.442Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://hagemon.github.io"/>
     <link rel="self" href="https://hagemon.github.io/atom.xml"/>
     <logo>https://hagemon.github.io/images/avatar.png</logo>
     <icon>https://hagemon.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, Hagemon&apos;s Log</rights>
+    <entry>
+        <title type="html"><![CDATA[GCD异步渲染UITableViewCell+滚动优化]]></title>
+        <id>https://hagemon.github.io/post/JK_-93cJI/</id>
+        <link href="https://hagemon.github.io/post/JK_-93cJI/">
+        </link>
+        <updated>2021-02-25T14:16:05.000Z</updated>
+        <content type="html"><![CDATA[<p>在基于feed流的应用中，有两个需要重点解决的问题：</p>
+<ul>
+<li>异步进行耗时的数据加载</li>
+<li>滚动时控制加载任务以保持滚动流畅</li>
+</ul>
+<p>设定一个简单的场景：</p>
+<ul>
+<li>基于UITableViewCell</li>
+<li>每个cell都拥有一个UIImageView</li>
+<li>在UIImageView上绘制圆角头像</li>
+<li>绘制100个cell并进行高频率的滚动</li>
+</ul>
+<p>我们可以使用Instrument和XCode的Debugger里观察这些指标：</p>
+<ul>
+<li>Average Frame Time</li>
+<li>是否离屏渲染</li>
+</ul>
+<h1 id="简单实现">简单实现</h1>
+<p>最简单的实现方式是为每一个cell上的UIImageView设置cornerRadius，但是会存在离屏渲染，且AFT很长。<br>
+其实现在直接用png并设置cornerRadius并不会被离屏渲染，这里为了展示效果特地把layer栅格化一下😅</p>
+<pre><code class="language-swift">class TableViewController: UITableViewController {
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+
+    override func numberOfSections(in tableView: UITableView) -&gt; Int {
+        return 1
+    }
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -&gt; Int {
+        return 100
+    }
+
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -&gt; UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: &quot;cell&quot;, for: indexPath)
+        imageView.image = UIImage(named: &quot;\(indexPath.row % 8 + 1).png&quot;)
+        imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = imageView.bounds.width / 2
+        imageView.layer.shouldRasterize = true
+        return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -&gt; CGFloat {
+        return 50
+    }
+
+}
+</code></pre>
+<p>检测屏幕上离屏渲染的部分：</p>
+<figure data-type="image" tabindex="1"><img src="https://hagemon.github.io/post-images/1614265823958.PNG" alt="" width="300" loading="lazy"></figure>
+<p>因为在iPhone12 Pro上调试，所以在Instrument里的帧数还是挺高的😅</p>
+<h1 id="优化">优化</h1>
+<p>接下来将从：</p>
+<ul>
+<li>异步渲染</li>
+<li>绘制圆角</li>
+<li>滚动优化</li>
+</ul>
+<p>这几个方面进行优化</p>
+<h2 id="绘制圆角">绘制圆角</h2>
+<p>为UIImage写一个extension，基于UIBezierPath和Context绘制圆角图像：</p>
+<pre><code class="language-swift">extension UIImage {
+    func roundedImage(backgroundColor: UIColor=UIColor.white) -&gt; UIImage? {
+        let rect = CGRect(origin: CGPoint.zero, size: self.size)
+        let size = self.size
+        UIGraphicsBeginImageContextWithOptions(size, true, 0)
+        backgroundColor.setFill()
+        UIRectFill(rect)
+        let path = UIBezierPath(ovalIn: rect)
+        path.addClip()
+        self.draw(in: rect)
+        let rounded = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return rounded
+    }
+}
+</code></pre>
+<h2 id="异步渲染">异步渲染</h2>
+<p>绘制圆角矩形是一个相对耗时的操作，可以把它放在global线程里进行，在绘制完成后异步调用主线程进行UI更新。</p>
+<pre><code class="language-swift">override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -&gt; UITableViewCell {
+    let cell = tableView.dequeueReusableCell(withIdentifier: &quot;cell&quot;, for: indexPath)
+    let imageView = cell.viewWithTag(1) as! UIImageView
+
+    DispatchQueue.global().async {
+        let image = UIImage(named: &quot;\(indexPath.row % 8 + 1).png&quot;)!
+        let rounded = image.roundedImage()
+        DispatchQueue.main.async {
+            imageView.image = rounded
+        }
+    }
+    return cell
+}
+</code></pre>
+<h2 id="滚动优化">滚动优化</h2>
+<p>只是用异步渲染的话，在高频率滚动的情况下可能会对出现过的所有cell都进行加载，很容易出现内存溢出的情况，所以需要控制这些加载任务的执行。</p>
+<p>具体的实现思路为：</p>
+<ul>
+<li>使用一个字典来保存当前需要渲染的任务
+<ul>
+<li>key为indexPath.row</li>
+<li>value为需要渲染的任务</li>
+</ul>
+</li>
+<li>使用DispatchWorkItem来封装加载任务</li>
+<li>在cellForRow函数中异步执行加载任务并添加到字典中</li>
+<li>在cellDidEndDisplaying函数中取消不限时的cell的任务，并移除出字典</li>
+</ul>
+<pre><code class="language-swift">import UIKit
+
+class TableViewController: UITableViewController {
+    
+    // 用于保存图像渲染任务
+    var items: [String: DispatchWorkItem] = [:]
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+
+    // MARK: - Table view data source
+
+    override func numberOfSections(in tableView: UITableView) -&gt; Int {
+        // #warning Incomplete implementation, return the number of sections
+        return 1
+    }
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -&gt; Int {
+        return 100
+    }
+
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -&gt; UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: &quot;cell&quot;, for: indexPath)
+        let imageView = cell.viewWithTag(1) as! UIImageView
+
+        // 封装渲染任务
+        let item = DispatchWorkItem {
+            let image = UIImage(named: &quot;\(indexPath.row % 8 + 1).png&quot;)!
+            let rounded = image.roundedImage()
+            DispatchQueue.main.async {
+                // 主线程异步更新UI
+                imageView.image = rounded
+            }
+        }
+        // 添加到字典中
+        self.items.updateValue(item, forKey: &quot;\(indexPath.row)&quot;)
+        // global线程异步执行渲染任务
+        DispatchQueue.global().async {
+            item.perform()
+        }
+        return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -&gt; CGFloat {
+        return 50
+    }
+    
+    override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard let item = self.items[&quot;\(indexPath.row)&quot;] else {return}
+        // 取消已经被移除的cell中的任务
+        item.cancel()
+        // 从字典中移除对应任务
+        self.items.removeValue(forKey: &quot;\(indexPath.row)&quot;)
+    }
+
+}
+</code></pre>
+<p>可以看到，已经没有了离屏渲染的现象：</p>
+<figure data-type="image" tabindex="2"><img src="https://hagemon.github.io/post-images/1614267273643.PNG" alt="" width="300" loading="lazy"></figure>
+<p>在Instrument中滚动也保持着60的FPS。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Clipin Log 7. 提升截屏流畅度]]></title>
+        <id>https://hagemon.github.io/post/clipin-post-7/</id>
+        <link href="https://hagemon.github.io/post/clipin-post-7/">
+        </link>
+        <updated>2021-02-24T15:23:36.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="旧版本">旧版本</h1>
+<p>在之前的版本中，我在一个ClipView上对暗色背景和高亮区域绘制：</p>
+<pre><code class="language-swift">override func draw(_ dirtyRect: NSRect) {
+    
+    super.draw(dirtyRect)
+
+    // Drawing code here.
+    guard let image = self.image, let drawingRect = self.drawingRect else {
+        return
+    }
+    image.draw(in: self.bounds, operation: .sourceOver, fraction: 0.5) // 绘制背景
+    var rect = NSIntersectionRect(drawingRect, self.bounds)  // 取高亮区域和页面的交集区域
+    rect = NSIntegralRect(rect)  // 区域取整，为了防止抖动问题
+
+            // 取屏幕图像中高亮区域部分渲染在view上，使用.sourceOver操作
+            // 由于source图像是alpha为1，所以渲染结果即是区域图像本身
+    image.draw(in: rect, from: rect, operation: .sourceOver, fraction: 1.0)
+}    
+</code></pre>
+<h1 id="新版本">新版本</h1>
+<p>将背景View和高亮区域View分离，在NSWindow中分别添加两个view：</p>
+<pre><code class="language-swift">import Cocoa
+
+class ClipWindow: NSWindow {
+    
+    var rectView: RectView
+    var backView: BackView
+    
+    init(contentRect: NSRect, backView: BackView, rectView: RectView) {
+        self.rectView = rectView
+        self.backView = backView
+
+        super.init(contentRect: contentRect, styleMask: .borderless, backing: .buffered, defer: false)
+        self.contentView?.addSubview(backView)
+        self.contentView?.addSubview(rectView)
+        self.level = .statusBar
+    }
+    
+}
+</code></pre>
+<h2 id="绘制高亮区域">绘制高亮区域</h2>
+<pre><code class="language-swift">import Cocoa
+
+class RectView: NSView {
+    
+    var image: NSImage?
+    var drawingRect: NSRect?
+    var showDots = false
+    var paths: [(NSBezierPath, DotType)] = []
+    
+    override func draw(_ dirtyRect: NSRect) {
+        super.draw(dirtyRect)
+
+        // Drawing code here.
+        guard let image = self.image,
+              let drawingRect = self.drawingRect
+        else {
+            return
+        }
+        var rect = NSIntersectionRect(drawingRect, self.bounds)
+        rect = NSIntegralRect(rect)
+        image.draw(in: rect, from: rect, operation: .sourceOver, fraction: 1.0)
+        if self.showDots {
+            self.drawDots(rect: rect)
+        }
+    }
+    
+    private func drawDots(rect: NSRect) {
+        let radius: CGFloat = 1.5
+        let dots = self.getDotsCoord(with: rect, radius: radius)
+        self.paths = []
+        for (dot, type) in dots {
+            let path = NSBezierPath(ovalIn: NSRect(origin: dot, size: CGSize(width: radius*2, height: radius*2)))
+            self.paths.append((path, type))
+            path.lineWidth = 3
+            NSColor.white.set()
+            path.stroke()
+        }
+    }
+    
+    func getDotsCoord(with rect:NSRect, radius: CGFloat) -&gt; [(NSPoint, DotType)] {
+        let width = rect.width
+        let height = rect.height
+        let origin = rect.offsetBy(dx: -radius, dy: -radius).origin
+        let dots: [(NSPoint, DotType)] = [
+            (origin, .corner),
+            (origin.offsetBy(dx: width/2, dy: 0), .bottom),
+            (origin.offsetBy(dx: 0, dy: height/2), .left),
+            (origin.offsetBy(dx: width, dy: 0), .corner),
+            (origin.offsetBy(dx: 0, dy: height), .corner),
+            (origin.offsetBy(dx: width, dy: height/2), .right),
+            (origin.offsetBy(dx: width/2, dy: height), .top),
+            (origin.offsetBy(dx: width, dy: height), .corner)
+        ].map({
+            (point, type) in
+            return (NSPoint(x: Int(point.x), y: Int(point.y)), type)
+        })
+        return dots
+    }
+    
+}
+
+</code></pre>
+<h2 id="绘制背景">绘制背景</h2>
+<pre><code class="language-swift">
+import Cocoa
+
+class BackView: NSView {
+
+    var image: NSImage?
+
+    override func draw(_ dirtyRect: NSRect) {
+        
+        super.draw(dirtyRect)
+
+        // Drawing code here.
+        guard let image = self.image,
+              let window = self.window
+        else {
+            return
+        }
+        
+        let originFrame = NSRect(origin: .zero, size: window.frame.size)
+        image.draw(in: originFrame, from: originFrame, operation: .sourceOver, fraction: 0.5)
+
+    }
+    
+}
+
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Swift5：基于正则表达式实现简单的Markdown即时渲染]]></title>
         <id>https://hagemon.github.io/post/ojcJsWljZ/</id>
@@ -830,8 +1147,8 @@ return container
     </entry>
     <entry>
         <title type="html"><![CDATA[Clipin Log 6. 多屏幕支持]]></title>
-        <id>https://hagemon.github.io/post/clipin-log-6-duo-ping-mu-zhi-chi/</id>
-        <link href="https://hagemon.github.io/post/clipin-log-6-duo-ping-mu-zhi-chi/">
+        <id>https://hagemon.github.io/post/clipin-post-6/</id>
+        <link href="https://hagemon.github.io/post/clipin-post-6/">
         </link>
         <updated>2021-01-09T13:44:43.000Z</updated>
         <content type="html"><![CDATA[<h2 id="多屏幕环境">多屏幕环境</h2>
@@ -913,6 +1230,7 @@ return container
     PinManager.shared.pin(rep: bitmapRep, rect: rect, screenOrigin: screen.visibleFrame.origin)
 }
 </code></pre>
+<p>接下来是<a href="https://hagemon.github.io/post/clipin-post-7/">对截屏的一些优化</a></p>
 ]]></content>
     </entry>
     <entry>
@@ -1745,156 +2063,6 @@ class ClipManager {
 <h2 id="clip操作相关的通知传递">Clip操作相关的通知传递</h2>
 <p>对于Clip操作，在select状态下按下Enter会发送<code>clipEnd</code>的通知，由WindowController接收通知并做后续处理，在之后的章节中会详细介绍。</p>
 <p>接下来进入<a href="https://hagemon.github.io/post/clipin-log-3">截屏界面的实现</a></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Clipin Log 1. 基于Status Bar的应用&监听快捷键]]></title>
-        <id>https://hagemon.github.io/post/clipin-log-1/</id>
-        <link href="https://hagemon.github.io/post/clipin-log-1/">
-        </link>
-        <updated>2021-01-09T12:53:34.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="创建一个基于status-bar的应用">创建一个基于Status Bar的应用</h1>
-<p>基于Status Bar的应用不需要设置额外的UI，所以不需要使用StoryBoard，只要在AppDelegate中配置好相应的StatusBarItem即可。</p>
-<h2 id="storyboard">Storyboard</h2>
-<p>由于是基于Status Bar的应用，所以在Storyboard中将页面相关的组件都删除了，保留了Menu相关的组件。</p>
-<h2 id="配置infoplist">配置info.plist</h2>
-<p>在info.plist中添加名为<code>Application is agent (UIElement)</code>的key，并将value值设置为<code>YES</code>。这样App就不会在Dock中显示</p>
-<h2 id="appdelegate">AppDelegate</h2>
-<p>在AppDelegate中创建StatusBar按钮并配置对应的action</p>
-<pre><code class="language-swift">import Cocoa
-
-@main
-class AppDelegate: NSObject, NSApplicationDelegate {
-    
-    let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.squareLength)
-
-    func applicationDidFinishLaunching(_ aNotification: Notification) {        
-        guard let button = self.statusItem.button else { return }
-        button.image = NSImage(named: NSImage.Name(&quot;StatusBarIcon&quot;)) // StatusBarIcon is in Assets.xcassets
-        button.action = #selector(showMenu)
-    }
-
-    func applicationWillTerminate(_ aNotification: Notification) {
-        // Insert code here to tear down your application
-    }
-        
-    @objc func showMenu() {//to be do}
-}
-</code></pre>
-<h1 id="监听快捷键">监听快捷键</h1>
-<p>基于HotKey实现对全剧快捷键的监听，HotKey底层使用了<code>Carbon</code>的<code>RegisterEventHotKey</code>接口：</p>
-<pre><code class="language-swift">
-static let eventHotKeySignature: UInt32 = {
-    let string = &quot;SSHk&quot;
-    var result: FourCharCode = 0
-    for char in string.utf16 {
-        result = (result &lt;&lt; 8) + FourCharCode(char)
-    }
-    return result
-}()
-
-// Register with the system
-var eventHotKey: EventHotKeyRef?
-let hotKeyID = EventHotKeyID(signature: eventHotKeySignature, id: box.carbonHotKeyID)
-let registerError = RegisterEventHotKey(
-    hotKey.keyCombo.carbonKeyCode,
-    hotKey.keyCombo.carbonModifiers,
-    hotKeyID,
-    GetEventDispatcherTarget(),
-    0,
-    &amp;eventHotKey
-)
-</code></pre>
-<h2 id="全局快捷键基于hotkey">全局快捷键（基于HotKey）</h2>
-<p>为了启动截屏功能，需要监听全局的快捷键。在AppDelegate中使用HotKey对全局快捷键<code>cmd+shift+a</code>进行注册：</p>
-<pre><code class="language-swift">import Cocoa
-import HotKey
-
-@main
-class AppDelegate: NSObject, NSApplicationDelegate {
-    
-    let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.squareLength)
-    let hotKey = HotKey(key: .a, modifiers: [.shift, .command])
-
-    func applicationDidFinishLaunching(_ aNotification: Notification) {
-               
-        self.hotKey.keyUpHandler = {
-            print(&quot;hello&quot;)
-        }
-        
-        guard let button = self.statusItem.button else { return }
-        button.image = NSImage(named: NSImage.Name(&quot;StatusBarIcon&quot;))
-        button.action = #selector(showMenu)
-    }
-
-    func applicationWillTerminate(_ aNotification: Notification) {
-        // Insert code here to tear down your application
-    }
-    
-    @objc func showMenu() {}
-}
-</code></pre>
-<h2 id="局部快捷键">局部快捷键</h2>
-<p>局部快捷键用于监听应用内的一些键盘事件，比如回车完成Clip操作，Esc退出Clip操作：</p>
-<pre><code class="language-swift">import Cocoa
-import HotKey
-
-@main
-class AppDelegate: NSObject, NSApplicationDelegate {
-    
-    // ... variables
-
-    func applicationDidFinishLaunching(_ aNotification: Notification) {
-
-        // local hotkey
-        NSEvent.addLocalMonitorForEvents(matching: .keyDown, handler: {
-            (event) -&gt; NSEvent? in
-            if ClipManager.shared.status != .off &amp;&amp; event.keyCode == kVK_Escape {
-                // 退出Clip之后的操作
-                ClipManager.shared.end()
-            }
-            if ClipManager.shared.status == .select &amp;&amp; event.keyCode == kVK_Return {
-                // 完成Clip之后的操作，post一个名为clipEnd的通知
-                NotificationCenter.default.post(name: NotiNames.clipEnd.name, object: self, userInfo: nil)
-            }
-            return nil
-        })
-
-        // ... global hotkey and status bar item
-    }
-
-    func applicationWillTerminate(_ aNotification: Notification) {
-        // Insert code here to tear down your application
-    }
-    
-}
-</code></pre>
-<p>接下来看看<a href="https://hagemon.github.io/post/clipin-log-2/">截屏管理器</a></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Clipin Log 0. Mac OS上截图&保留小工具的开发记录]]></title>
-        <id>https://hagemon.github.io/post/clipin-log-0/</id>
-        <link href="https://hagemon.github.io/post/clipin-log-0/">
-        </link>
-        <updated>2021-01-09T12:50:05.000Z</updated>
-        <content type="html"><![CDATA[<p>源码地址：<a href="https://github.com/hagemon/Clipin">https://github.com/hagemon/Clipin</a></p>
-<p>源码的版本为Swift 5.0。</p>
-<p>我们将截图操作称为<strong>Clip</strong>，将截图钉在屏幕上的操作称为<strong>Pin</strong>。</p>
-<p>该工具可以临时将一些需要对照的信息保持在屏幕最上方，（或许）能提高工作效率。</p>
-<p>该工具在很大程度上参考了<a href="https://github.com/isee15/Capture-Screen-For-Multi-Screens-On-Mac">Snip</a>的源码，且集成了<a href="https://github.com/soffes/HotKey">HotKey</a>开源库监听快捷键。</p>
-<p>本文章是作者在开发该工具过程中的记录，由简入繁地介绍该工具的创建过程，如文中有纰漏或是不健康的代码，还请各位赐教。😋</p>
-<p>本工具还会持续地开发和维护，该文章也会不断地更新和修改。</p>
-<h1 id="项目架构介绍">项目架构介绍</h1>
-<p>根据作者个人的习惯，将项目分为以下几个模块：</p>
-<ul>
-<li>Util：一些工具类、函数、枚举和扩展</li>
-<li>Manager：管理Clip、Pin操作过程的单例管理器</li>
-<li>Clip：Clip功能相关的Controller和View</li>
-<li>Pin：Pin功能相关的Controller和View</li>
-</ul>
-<p>Status bar应用的相关配置和快捷键监听等功能在<code>AppDelegate.swift</code>中实现。</p>
-<p>首先进入<a href="https://hagemon.github.io/post/clipin-log-1/">Status Bar应用&amp;监听快捷键</a>。</p>
 ]]></content>
     </entry>
 </feed>

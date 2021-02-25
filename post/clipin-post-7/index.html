@@ -4,7 +4,7 @@
 <meta name="description" content=""/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-<title>实现基于LRU的Cache | Hagemon&#39;s Log</title>
+<title>Clipin Log 7. 提升截屏流畅度 | Hagemon&#39;s Log</title>
 
 <link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1614267292882">
 
@@ -89,205 +89,145 @@
         <div class="post-detail gt-bg-theme-color-second">
             <article class="gt-post-content">
                 <h2 class="post-title">
-                    实现基于LRU的Cache
+                    Clipin Log 7. 提升截屏流畅度
                 </h2>
                 <div class="post-info">
                     <time class="post-time gt-c-content-color-first">
-                        · 2021-02-06 ·
+                        · 2021-02-24 ·
                     </time>
-                    
-                        <a href="https://hagemon.github.io/tag/5hne80IJu/" class="post-tags">
-                            # iOS
-                        </a>
-                    
-                        <a href="https://hagemon.github.io/tag/r8kwS5C8Y/" class="post-tags">
-                            # Algorithm
-                        </a>
                     
                 </div>
                 <div class="post-content">
-                    <p>LRU需要满足：</p>
-<ul>
-<li>O(1)时间的读写</li>
-<li>将最久未被使用的数据剔除</li>
-<li>剔除操作在写入的时候进行</li>
-</ul>
-<p>要满足这些条件，需要具备的数据结构特点：</p>
-<ul>
-<li>哈希表：O(1)读取</li>
-<li>链表：最近被使用的在表头</li>
-</ul>
-<p>所以使用双向链表+哈希表的组合作为cache结构。</p>
-<h1 id="python简易实现">Python简易实现</h1>
-<p>使用Python快速实现上述功能，包括数据结点、双向链表和Cache的实现。</p>
-<h2 id="数据结点">数据结点</h2>
-<pre><code class="language-python">class Node:
-    def __init__(self, key, val):
-        self.next = None
-        self.prev = None
-        self.key = key
-        self.val = val
+                    <h1 id="旧版本">旧版本</h1>
+<p>在之前的版本中，我在一个ClipView上对暗色背景和高亮区域绘制：</p>
+<pre><code class="language-swift">override func draw(_ dirtyRect: NSRect) {
+    
+    super.draw(dirtyRect)
+
+    // Drawing code here.
+    guard let image = self.image, let drawingRect = self.drawingRect else {
+        return
+    }
+    image.draw(in: self.bounds, operation: .sourceOver, fraction: 0.5) // 绘制背景
+    var rect = NSIntersectionRect(drawingRect, self.bounds)  // 取高亮区域和页面的交集区域
+    rect = NSIntegralRect(rect)  // 区域取整，为了防止抖动问题
+
+            // 取屏幕图像中高亮区域部分渲染在view上，使用.sourceOver操作
+            // 由于source图像是alpha为1，所以渲染结果即是区域图像本身
+    image.draw(in: rect, from: rect, operation: .sourceOver, fraction: 1.0)
+}    
 </code></pre>
-<h2 id="双向链表">双向链表</h2>
-<pre><code class="language-python">class BidirectionalList:
-    def __init__(self):
-        self.head = None
-        self.tail = None
-
-    # 添加结点到链表头
-    def add_node(self, node):
-        # 链表为空时设置头尾节点
-        if not self.head:
-            self.head = node
-            self.tail = node
-            return
-        node.next = self.head
-        self.head.prev = node
-        self.head = node
-
-    # 移除结点并返回
-    def remove_node(self, node):
-        if node.prev:
-            node.prev.next = node.next
-        else:
-            self.head = node.next
-        if node.next:
-            node.next.prev = node.prev
-        else:
-            self.tail = node.prev
-        node.prev, node.next = None, None
-        return node
-</code></pre>
-<h2 id="cache实现">Cache实现</h2>
-<pre><code class="language-python">class Cache:
-    def __init__(self, capacity):
-        self.capacity = capacity
-        self.b_list = BidirectionalList()
-        self.map = {}
-
-    def set(self, key, value):
-        node = Node(key=key, val=value)
-				if key in self.map:
-            self.b_list.add_node(self.b_list.remove_node(node))
-        self.map[key] = node
-        self.b_list.add_node(node)
-        if len(self.map) &gt; self.capacity:
-            node = self.b_list.remove_node(self.b_list.tail)
-            del self.map[node.key]
-
-    def get(self, key):
-        if key not in self.map:
-            return None
-        node = self.map[key]
-        self.b_list.remove_node(node)
-        self.b_list.add_node(node)
-        return node.val
-</code></pre>
-<h1 id="swift实现">Swift实现</h1>
-<p>基于LRU算法，支持范型的Cache实现</p>
-<h2 id="node">Node</h2>
+<h1 id="新版本">新版本</h1>
+<p>将背景View和高亮区域View分离，在NSWindow中分别添加两个view：</p>
 <pre><code class="language-swift">import Cocoa
 
-final class Node&lt;T&gt;: NSObject {
-    var key: String
-    var val: T
-    var next: Node?
-    var prev: Node?
+class ClipWindow: NSWindow {
     
-    init(key: String, value: T) {
-        self.key = key
-        self.val = value
-        self.next = nil
-        self.prev = nil
-        super.init()
+    var rectView: RectView
+    var backView: BackView
+    
+    init(contentRect: NSRect, backView: BackView, rectView: RectView) {
+        self.rectView = rectView
+        self.backView = backView
+
+        super.init(contentRect: contentRect, styleMask: .borderless, backing: .buffered, defer: false)
+        self.contentView?.addSubview(backView)
+        self.contentView?.addSubview(rectView)
+        self.level = .statusBar
     }
+    
 }
 </code></pre>
-<h2 id="bidirectional-list">Bidirectional List</h2>
+<h2 id="绘制高亮区域">绘制高亮区域</h2>
 <pre><code class="language-swift">import Cocoa
 
-final class BidirectionalList&lt;T&gt;: NSObject {
-    var head: Node&lt;T&gt;?
-    var tail: Node&lt;T&gt;?
-    var size = 0
+class RectView: NSView {
     
-    final func addFront(node: Node&lt;T&gt;) {
-        guard self.size &gt; 0,
-              let head = self.head
+    var image: NSImage?
+    var drawingRect: NSRect?
+    var showDots = false
+    var paths: [(NSBezierPath, DotType)] = []
+    
+    override func draw(_ dirtyRect: NSRect) {
+        super.draw(dirtyRect)
+
+        // Drawing code here.
+        guard let image = self.image,
+              let drawingRect = self.drawingRect
         else {
-            self.head = node
-            self.tail = node
-            self.size = 1
             return
         }
-        head.prev = node
-        node.next = head
-        self.head = node
-        self.size += 1
-    }
-    
-    final func remove(node: Node&lt;T&gt;) -&gt; Node&lt;T&gt;{
-        if let prev = node.prev, let next = node.next {
-            prev.next = next
-            next.prev = prev
-        } else if let prev = node.prev {
-            prev.next = nil
-            self.tail = prev
-        } else if let next = node.next {
-            next.prev = nil
-            self.head = next
+        var rect = NSIntersectionRect(drawingRect, self.bounds)
+        rect = NSIntegralRect(rect)
+        image.draw(in: rect, from: rect, operation: .sourceOver, fraction: 1.0)
+        if self.showDots {
+            self.drawDots(rect: rect)
         }
-        node.prev = nil
-        node.next = nil
-        return node
     }
     
-    final func hit(node: Node&lt;T&gt;) {
-        self.addFront(node: self.remove(node: node))
-    }
-}
-</code></pre>
-<h2 id="cache">Cache</h2>
-<pre><code class="language-swift">import Cocoa
-
-final class Cache&lt;T&gt;: NSObject {
-    let capacity: Int
-    var bList = BidirectionalList&lt;T&gt;()
-    var map: [String: Node&lt;T&gt;] = [:]
-    
-    init(capacity: Int) {
-        self.capacity = capacity
-    }
-    
-    final func set(value: T, for key:String) {
-        let node = Node(key: key, value: value)
-        if self.map.keys.contains(key) {
-            self.bList.hit(node: node)
-            return
+    private func drawDots(rect: NSRect) {
+        let radius: CGFloat = 1.5
+        let dots = self.getDotsCoord(with: rect, radius: radius)
+        self.paths = []
+        for (dot, type) in dots {
+            let path = NSBezierPath(ovalIn: NSRect(origin: dot, size: CGSize(width: radius*2, height: radius*2)))
+            self.paths.append((path, type))
+            path.lineWidth = 3
+            NSColor.white.set()
+            path.stroke()
         }
-        self.bList.addFront(node: node)
-        self.map[key] = node
     }
     
-    final func get(key:String) -&gt; T? {
-        guard let node = self.map[key] else {
-            return nil
-        }
-        self.bList.hit(node: node)
-        return node.val
+    func getDotsCoord(with rect:NSRect, radius: CGFloat) -&gt; [(NSPoint, DotType)] {
+        let width = rect.width
+        let height = rect.height
+        let origin = rect.offsetBy(dx: -radius, dy: -radius).origin
+        let dots: [(NSPoint, DotType)] = [
+            (origin, .corner),
+            (origin.offsetBy(dx: width/2, dy: 0), .bottom),
+            (origin.offsetBy(dx: 0, dy: height/2), .left),
+            (origin.offsetBy(dx: width, dy: 0), .corner),
+            (origin.offsetBy(dx: 0, dy: height), .corner),
+            (origin.offsetBy(dx: width, dy: height/2), .right),
+            (origin.offsetBy(dx: width/2, dy: height), .top),
+            (origin.offsetBy(dx: width, dy: height), .corner)
+        ].map({
+            (point, type) in
+            return (NSPoint(x: Int(point.x), y: Int(point.y)), type)
+        })
+        return dots
     }
     
 }
-</code></pre>
-<h2 id="usage">Usage</h2>
-<pre><code class="language-swift">let cache = Cache&lt;Int&gt;(capacity: 4)
 
-cache.set(value: 3, for: &quot;3&quot;)
-cache.set(value: 4, for: &quot;4&quot;)
-print(cache.get(key: &quot;4&quot;) ?? &quot;nil&quot;)
 </code></pre>
-<p>参考文章：<br>
-<a href="https://github.com/halfrost/Halfrost-Field/blob/master/contents/Go/LRU:LFU_interview.md">halfrost的文章</a></p>
+<h2 id="绘制背景">绘制背景</h2>
+<pre><code class="language-swift">
+import Cocoa
+
+class BackView: NSView {
+
+    var image: NSImage?
+
+    override func draw(_ dirtyRect: NSRect) {
+        
+        super.draw(dirtyRect)
+
+        // Drawing code here.
+        guard let image = self.image,
+              let window = self.window
+        else {
+            return
+        }
+        
+        let originFrame = NSRect(origin: .zero, size: window.frame.size)
+        image.draw(in: originFrame, from: originFrame, operation: .sourceOver, fraction: 0.5)
+
+    }
+    
+}
+
+</code></pre>
 
                 </div>
             </article>
@@ -296,8 +236,8 @@ print(cache.get(key: &quot;4&quot;) ?? &quot;nil&quot;)
         
             <div class="next-post">
                 <div class="next gt-c-content-color-first">下一篇</div>
-                <a href="https://hagemon.github.io/post/swift5-xia-cloudkitcoredata-shi-xian-duo-zhong-duan-tong-bu/" class="post-title gt-a-link">
-                    Swift5+CloudKit+CoreData实现多终端同步
+                <a href="https://hagemon.github.io/post/ojcJsWljZ/" class="post-title gt-a-link">
+                    Swift5：基于正则表达式实现简单的Markdown即时渲染
                 </a>
             </div>
         
