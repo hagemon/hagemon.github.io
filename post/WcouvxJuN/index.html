@@ -1,0 +1,382 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>Swift实现简单的图像缓存 | Hagemon&#39;s Log</title>
+
+<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1614521648620">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://hagemon.github.io/styles/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script>
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Hagemon&#39;s Log
+        </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+                <div class="nav-item">
+                    
+                        <a href="/" class="menu gt-a-link">
+                            首页
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/archives" class="menu gt-a-link">
+                            归档
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/tags" class="menu gt-a-link">
+                            标签
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/post/about" class="menu gt-a-link">
+                            关于
+                        </a>
+                    
+                </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1614521648620" action="/search/index.html">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    Swift实现简单的图像缓存
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2021-02-28 ·
+                    </time>
+                    
+                </div>
+                <div class="post-content">
+                    <p>在iOS App中，为了增加用户的体验感、减少网络的请求、增加App的性能，我们在获取图像之后通常会将其进行缓存，我学习了<a href="https://juejin.cn/post/6844903807667666951">从零开始打造一个iOS图片加载框架</a>，写了一个简单的基于Swift的图像缓存。</p>
+<h2 id="图片加载">图片加载</h2>
+<p>我们从最简单的场景开始，在ViewController中实现download方法，通过URLSession下载一个图片并显示到ImageView上：</p>
+<pre><code class="language-swift">func download() {
+    let url = URL(string: &quot;https://user-gold-cdn.xitu.io/2019/3/25/169b406dfc5fe46e&quot;)
+    let session = URLSession.shared
+    let task = session.dataTask(with: url!, completionHandler: { [weak self]
+        data, res, error in
+        guard error == nil,
+              let data = data
+        else { return }
+        let image = UIImage(data: data)
+        guard let strongSelf = self else {return}
+        DispatchQueue.main.async {
+            strongSelf.imageView.image = image
+        }
+    })
+    task.resume()
+}
+</code></pre>
+<h2 id="图片缓存">图片缓存</h2>
+<p>上述的方法在每次读取页面之后都会进行下载。为了达到缓存的目的，我们创建一个工具类，以单例模式来封装图片的下载和缓存的功能。使用NSCache对图像进行缓存，当下载了以后，若后续再次需要读取这个url，则先从缓存中寻找。</p>
+<pre><code class="language-swift">class ImageDownloader: NSObject {
+    static let shared = ImageDownloader()
+    let session: URLSession
+    let cache: NSCache&lt;NSString, UIImage&gt;
+    
+    override init() {
+        self.session = URLSession.shared
+        self.cache = NSCache&lt;NSString, UIImage&gt;()
+    }
+    
+    func download(urlString: NSString, completionHandler: @escaping (UIImage?, NSError?) -&gt; ()) {
+        if urlString.length == 0 {
+            return
+        }
+        let cached = self.cache.object(forKey: urlString)
+        if cached != nil {
+            print(&quot;load \(urlString) from cache&quot;)
+            completionHandler(cached, nil)
+            return
+        }
+        guard let url = URL(string: urlString as String) else { return }
+        let task = self.session.dataTask(with: url, completionHandler: {
+            [weak self] data, res, error in
+            guard error == nil,
+                  let data = data,
+                  let strongSelf = self,
+                  let image = UIImage(data: data)
+            else {return}
+            print(&quot;\(urlString) cached&quot;)
+            strongSelf.cache.setObject(image, forKey: urlString)
+            DispatchQueue.main.async {
+                completionHandler(image, nil)
+            }
+        })
+        task.resume()
+    }
+}
+</code></pre>
+<h2 id="磁盘缓存">磁盘缓存</h2>
+<p>使用NSCache仅能把图像缓存在内存中，在下次开启app之后又要重新下载，所以需要把Data保存在磁盘之中。我们进一步把缓存功能从下载器中提取出来，封装到缓存器中。</p>
+<p>在初始化缓存器的时候，需要进行：</p>
+<ul>
+<li>内存cache创建</li>
+<li>fileManager的创建</li>
+<li>创建数据在disk保存的路径</li>
+</ul>
+<pre><code class="language-swift">override init() {
+    self.cache = NSCache&lt;NSString, UIImage&gt;()
+    self.fileManager = FileManager()
+    do {
+        self.path = try self.fileManager.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(&quot;hagemon.Cache&quot;)
+        if !self.fileManager.fileExists(atPath: self.path.absoluteString) {
+            try self.fileManager.createDirectory(at: self.path, withIntermediateDirectories: true, attributes: nil)
+        }
+    } catch {
+        fatalError(&quot;Failed to create cache on disk&quot;)
+    }
+}
+</code></pre>
+<p>同时还要实现将url的哈希，和获取文件路径的方法：</p>
+<pre><code class="language-swift">private func keyForURL(urlString: String) -&gt; String {
+    return &quot;\(urlString.hash)&quot;
+}
+
+private func urlForImage(withUrlString urlString: String) -&gt; URL {
+    let key = self.keyForURL(urlString: urlString)
+    let url = self.path.appendingPathComponent(key)
+    return url
+}
+</code></pre>
+<p>在获取图像缓存的时候，首先需要判断是否在内存中缓存，再检查是否在磁盘中有缓存：</p>
+<pre><code class="language-swift">func fetchCachedImage(with urlString: String) -&gt; UIImage? {
+    guard urlString.count &gt; 0 else {return nil}
+	// check memory cache
+    if let image = self.cache.object(forKey: urlString as NSString) {
+        print(&quot;load \(urlString) from memory cache&quot;)
+        return image
+    }
+    let url = self.urlForImage(withUrlString: urlString)
+    do {
+		// load data from url
+        let data = try Data(contentsOf: url)
+        guard let image = UIImage(data: data) else { return nil }
+        self.cache.setObject(image, forKey: urlString as NSString)
+        print(&quot;load \(urlString) from \(url.absoluteString)&quot;)
+        return image
+    } catch {
+		// url not exists
+        return nil
+    }
+}
+</code></pre>
+<p>在保存图像的时候，将图像保存到内存cache中，并在编码后保存到磁盘中：</p>
+<pre><code class="language-swift">func storeImage(image: UIImage, forKey key: String) {
+	// store to memory cache
+    self.cache.setObject(image, forKey: key as NSString)
+    print(&quot;store \(key) to memory cache&quot;)
+    guard let data = image.pngData() else {return}
+    do {
+        let url = self.urlForImage(withUrlString: key)
+		// store to disk
+        try data.write(to: url)
+        print(&quot;store \(key) to \(url.absoluteString)&quot;)
+    } catch {
+        print(error)
+        fatalError(&quot;failed to cache \(key)&quot;)
+    }
+    
+}
+</code></pre>
+<p>在Downloader中，就可以把缓存的使用改编为：</p>
+<pre><code class="language-swift">class ImageDownloader: NSObject {
+    static let shared = ImageDownloader()
+    let session: URLSession
+    
+    override init() {
+        self.session = URLSession.shared
+    }
+    
+    func download(urlString: String, completionHandler: @escaping (UIImage?, NSError?) -&gt; ()) {
+        if urlString.count == 0 {
+            return
+        }
+        let cached = ImageCache.shared.fetchCachedImage(with: urlString)
+        if cached != nil {
+            completionHandler(cached, nil)
+            return
+        }
+        guard let url = URL(string: urlString) else { return }
+        let task = self.session.dataTask(with: url, completionHandler: {
+            data, res, error in
+            guard error == nil,
+                  let data = data,
+                  let image = UIImage(data: data)
+            else {return}
+            ImageCache.shared.storeImage(image: image, forKey: urlString)
+            DispatchQueue.main.async {
+                completionHandler(image, nil)
+            }
+        })
+        task.resume()
+    }
+}
+</code></pre>
+<h2 id="异步缓存">异步缓存</h2>
+<p>有时候图像在磁盘上的存储和读写是十分消耗时间的，我们可以把这个过程放在后台进行，当存取完毕之后再更新UI。</p>
+<p>于是我们可以将获取缓存的方法由返回数据的形式改为回调的形式：</p>
+<pre><code class="language-swift">func fetchCachedImage(with urlString: String, completionHandler: @escaping (_ image: UIImage?) -&gt; ()){
+    guard urlString.count &gt; 0 else {
+        completionHandler(nil)
+        return
+    }
+    if let image = self.cache.object(forKey: urlString as NSString) {
+        print(&quot;load \(urlString) from memory cache&quot;)
+        completionHandler(image)
+    }
+    let url = self.urlForImage(withUrlString: urlString)
+    do {
+        let data = try Data(contentsOf: url)
+        guard let image = UIImage(data: data) else {
+            completionHandler(nil)
+            return
+        }
+        self.cache.setObject(image, forKey: urlString as NSString)
+        print(&quot;load \(urlString) from \(url.absoluteString)&quot;)
+        completionHandler(image)
+    } catch {
+        completionHandler(nil)
+    }
+}
+</code></pre>
+<p>在Downloader的调用中可以改为：</p>
+<pre><code class="language-swift">func download(urlString: String, completionHandler: @escaping (UIImage?, NSError?) -&gt; ()) {
+    if urlString.count == 0 {
+        return
+    }
+    ImageCache.shared.fetchCachedImage(with: urlString) {
+        cached in
+        if cached != nil {
+            completionHandler(cached, nil)
+            return
+        }
+        guard let url = URL(string: urlString) else { return }
+        let task = self.session.dataTask(with: url, completionHandler: {
+            data, res, error in
+            guard error == nil,
+                  let data = data,
+                  let image = UIImage(data: data)
+            else {return}
+            ImageCache.shared.storeImage(image: image, forKey: urlString)
+            DispatchQueue.main.async {
+                completionHandler(image, nil)
+            }
+        })
+        task.resume()
+    }
+}
+</code></pre>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://hagemon.github.io/post/JK_-93cJI/" class="post-title gt-a-link">
+                    GCD异步渲染UITableViewCell+滚动优化
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first"></div>
+    <div class="social-container">
+        
+            
+                <a href="https://hagemon.github.com" target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+            
+        
+            
+                <a href="https://twitter.com/oneFolder_" target="_blank">
+                    <i class="fab fa-twitter gt-c-content-color-first"></i>
+                </a>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        To be continued
+    </div>
+    <div>
+        Theme by <a href="https://imhanjie.com/" target="_blank">imhanjie</a>, Powered by <a
+                href="https://github.com/getgridea/gridea" target="_blank">Gridea | <a href="https://hagemon.github.io/atom.xml" target="_blank">RSS</a></a>
+    </div>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+    </div>
+</div>
+</body>
+</html>
