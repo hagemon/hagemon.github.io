@@ -6,7 +6,7 @@
 
 <title>网络攻防tips | Hagemon&#39;s Log</title>
 
-<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1624266345678">
+<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1624445883366">
 
 <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://hagemon.github.io/styles/main.css">
@@ -77,7 +77,7 @@
             
         </div>
         <div style="text-align: center">
-            <form id="gridea-search-form" style="position: relative" data-update="1624266345678" action="/search/index.html">
+            <form id="gridea-search-form" style="position: relative" data-update="1624445883366" action="/search/index.html">
                 <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
                 <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
             </form>
@@ -115,7 +115,7 @@
 <pre><code>shell=system('cat flag.txt');
 </code></pre>
 <h1 id="的解码">?的解码</h1>
-<p>问号的URL编码为%3f，浏览器会讲%3f解码为问号。如果服务端对问号有一次解码校验的过程：</p>
+<p>问号的URL编码为%3f，浏览器会将%3f解码为问号。如果服务端对问号有一次解码校验的过程：</p>
 <pre><code class="language-php">&lt;?php
 url_decode($param);
 ?&gt;
@@ -128,22 +128,15 @@ $a = 'a1234';
 $a == 1234; # 在比较时会去掉字母
 $b = 'abc';
 $b == 0; # 比较时会去掉字母
-&gt;```
-
-# phps
-
-phps是php的source文件，当找不到php在干嘛的时候可以看一下
-
-# 浏览器解码
-
-浏览器会对URL进行一次urldecode，当源码会检验URL时，我们可以通过先对参数进行适当次数的urlencode后传参。
-
-其中a的编码为%61，1的编码为%31，这个编码是十六进制数，以此类推。如果需要对编码再进行编码，则在前面加上25，如%61的编码为%2561。
-
-也可以通过写一小段php来查看编码：
-
-```php
-&lt;?php
+&gt;
+</code></pre>
+<h1 id="phps">phps</h1>
+<p>phps是php的source文件，当找不到php在干嘛的时候可以看一下</p>
+<h1 id="浏览器解码">浏览器解码</h1>
+<p>浏览器会对URL进行一次urldecode，当源码会检验URL时，我们可以通过先对参数进行适当次数的urlencode后传参。</p>
+<p>其中a的编码为%61，1的编码为%31，这个编码是十六进制数，以此类推。如果需要对编码再进行编码，则在前面加上25，如%61的编码为%2561。</p>
+<p>也可以通过写一小段php来查看编码：</p>
+<pre><code class="language-php">&lt;?php
 echo dechex(ord('a'));  // 输出61
 &gt;
 </code></pre>
@@ -183,6 +176,25 @@ function __wakeup() {
 $s = new Student();
 $stu = unserialize('O:7:&quot;Student&quot;:5:{s:9:&quot;full_name&quot;;s:8:&quot;hellp&quot;;s:5:&quot;score&quot;;i:150;s:6:&quot;grades&quot;;a:0:{}}');
 </code></pre>
+<h1 id="php伪协议">PHP伪协议</h1>
+<h2 id="input协议">input协议</h2>
+<p>PHP伪协议中，在后面加上input之后，系统会执行POST上去的PHP代码。</p>
+<p>在URL中添加<code>PHP://input</code>并模拟POST请求，在参数中可以直接植入php代码</p>
+<pre><code>POST /?param1=a&amp;param2=PHP://input HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+.....
+
+&lt;?php system(&quot;ls&quot;); ?&gt;
+</code></pre>
+<h1 id="文件包含">文件包含</h1>
+<p>文件包含会执行include的php文件，如果php文件里面同时输出你的输入，以及对某个文件进行包含，那么可以利用这点执行php代码，比如：</p>
+<pre><code class="language-php">&lt;?php
+echo $_GET['hello'];
+$page = $_GET['page'];
+include($page);
+&gt;
+</code></pre>
+<p>如果传入的page是页面本身，且同时在hello中携带代码，那么就会执行这个代码。</p>
 
                 </div>
             </article>
