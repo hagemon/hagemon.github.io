@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://hagemon.github.io</id>
     <title>Hagemon&apos;s Log</title>
-    <updated>2021-06-23T10:58:10.401Z</updated>
+    <updated>2021-06-24T12:38:31.461Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://hagemon.github.io"/>
     <link rel="self" href="https://hagemon.github.io/atom.xml"/>
@@ -348,6 +348,13 @@ include($page);
 &gt;
 </code></pre>
 <p>如果传入的page是页面本身，且同时在hello中携带代码，那么就会执行这个代码。</p>
+<h1 id="git漏洞">.git漏洞</h1>
+<p>查看网页目录下是否有.git文件夹，若有则可以使用GitHack工具对网站进行扫描，找到需要的文件。</p>
+<h1 id="php-include路径">PHP include路径</h1>
+<p>PHP中调用include函数，若参数中包含一个路径，则会自动忽略第一个斜杠之前的字符串，例如在Linux下：</p>
+<pre><code class="language-php">include &quot;aaa.php?../../../../bbb.php&quot;
+</code></pre>
+<p>则只会包含<code>../../../bbb.php</code></p>
 ]]></content>
     </entry>
     <entry>
