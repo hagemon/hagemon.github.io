@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://hagemon.github.io</id>
     <title>Hagemon&apos;s Log</title>
-    <updated>2021-06-24T12:40:46.485Z</updated>
+    <updated>2021-06-25T13:48:50.831Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://hagemon.github.io"/>
     <link rel="self" href="https://hagemon.github.io/atom.xml"/>
@@ -355,6 +355,16 @@ include($page);
 <pre><code class="language-php">include &quot;aaa.php?../../../../bbb.php&quot;
 </code></pre>
 <p>则只会包含<code>../../../bbb.php</code></p>
+<h1 id="判断服务器是否使用了django">判断服务器是否使用了Django</h1>
+<p>如果有机会通过GET或POST传输一个参数，则可以传输%80（一个大于等于128的十六进制数），则服务端会报错，错误信息中包含Django Version等信息。</p>
+<p>对于使用Django的服务，可以尝试使用@符号加上文件路径来利用文件读取的漏洞，来查看数据库内容：</p>
+<pre><code>?param=@/opt/api/api/settings.py  // 获取数据库名database_name
+?param=@/opt/api/database_name.sqlite3 // 获取数据库
+</code></pre>
+<h1 id="lfi漏洞判断">LFI漏洞判断</h1>
+<p>URL中path、dir、file、pag、page、archive、p、eng、语言文件等相关关键字眼的时候,可能存在文件包含漏洞，可以通过php的filter协议来读取php源码的base64编码形式。</p>
+<pre><code>/index.php?page=php://filter/read=convert.base64-encode/resource=index.php
+</code></pre>
 ]]></content>
     </entry>
     <entry>
