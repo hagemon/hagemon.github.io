@@ -6,7 +6,7 @@
 
 <title>网络攻防tips | Hagemon&#39;s Log</title>
 
-<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1624775389018">
+<link rel="shortcut icon" href="https://hagemon.github.io/favicon.ico?v=1624878712988">
 
 <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://hagemon.github.io/styles/main.css">
@@ -77,7 +77,7 @@
             
         </div>
         <div style="text-align: center">
-            <form id="gridea-search-form" style="position: relative" data-update="1624775389018" action="/search/index.html">
+            <form id="gridea-search-form" style="position: relative" data-update="1624878712988" action="/search/index.html">
                 <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
                 <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
             </form>
@@ -232,6 +232,29 @@ include($page);
 <li>id=1&quot; or updatexml(1, concat('~', database(), '~'), 0) or &quot;</li>
 <li>and so on</li>
 </ul>
+<h1 id="应对sql注入的过滤">应对sql注入的过滤</h1>
+<p>以下几种情况可能会同时出现，需要结合应对</p>
+<h2 id="过滤注释">过滤注释</h2>
+<p>当<code>--</code>和<code>#</code>被过滤时，可以考虑不用注释，而是在payload中去贴合sql语句，比如参数由单引号结尾时：</p>
+<pre><code class="language-php">$query = select * from users where id='$_GET['id']' LIMIT 0, 1
+</code></pre>
+<p>则构造payload</p>
+<pre><code>http://127.0.0.1/demo?id=-1' union select 1, 2, '3
+</code></pre>
+<p>同样的，如果有括号的话则payload对应修改为</p>
+<pre><code>http://127.0.0.1/demo?id=-1') union select 1, 2, ('3
+</code></pre>
+<h2 id="过滤and和or">过滤and和or</h2>
+<p>and和or可以用别的形式表示，可以尝试一下几种：</p>
+<ul>
+<li>更改大小写，后台或许不是大小写敏感的</li>
+<li>使用url编码后的and和or</li>
+<li>使用<code>&amp;&amp;</code>表示and，使用<code>||</code>表示or</li>
+</ul>
+<h2 id="过滤空格">过滤空格</h2>
+<p>空格可以使用别的字符替代，比较常见的是<code>%a0</code>，注意若在url里写，则可能要将别的特殊字符也用url编码，浏览器才会合适解析，比如要把<code>'</code>改写为<code>%27</code>。</p>
+<h2 id="过滤union-select">过滤union select</h2>
+<p>可以尝试用大写部分字符来完成</p>
 
                 </div>
             </article>
