@@ -1,15 +1,15 @@
----
-title: '关于'
-date: 2030-03-13 00:00:00
-tags: []
-published: true
-hideInList: true
-feature: 
-isTop: false
----
-## 👾 Hagemon
++++
+title = "About Me"
+date = "2022-03-13"
++++
+
+### 👾 Hagemon
 
 喜欢干净，热爱自由。
+
+B.E. for Software Engineering in FZU.
+
+Master for Computer Science in CQU.
 
 ### 🍎 iOS/MacOS Developer
 - Creator of [TapMemo](https://github.com/hagemon/TapMemo) and its [iOS version](https://github.com/hagemon/TapMemo-for-iOS).

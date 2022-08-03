@@ -1,12 +1,8 @@
----
-title: 'Clipin Log 5. 单屏幕Pin实现'
-date: 2021-01-09 21:41:18
-tags: [iOS,Clipin]
-published: true
-hideInList: false
-feature: 
-isTop: false
----
++++
+title = 'Clipin Log 5. 单屏幕Pin实现'
+date = 2021-01-09 21:41:18
++++
+
 Pin功能的触发时机是在ClipManager的select状态下点击回车时，所以在ClipWindowController的done中，将bitmapRep和对应的rect作为参数，执行Pin操作
 
 ```swift

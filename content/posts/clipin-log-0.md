@@ -1,12 +1,7 @@
----
-title: 'Clipin Log 0. Mac OS上截图&保留小工具的开发记录'
-date: 2021-01-09 20:50:05
-tags: [iOS,Clipin]
-published: true
-hideInList: false
-feature: 
-isTop: false
----
++++
+title = 'Clipin Log 0. Mac OS上截图&保留小工具的开发记录'
+date = 2021-01-09 20:50:05
++++
 源码地址：[https://github.com/hagemon/Clipin](https://github.com/hagemon/Clipin)
 
 源码的版本为Swift 5.0。

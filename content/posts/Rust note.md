@@ -1,12 +1,7 @@
----
-title: 'Rust note'
-date: 2021-10-17 15:26:57
-tags: []
-published: true
-hideInList: false
-feature: 
-isTop: false
----
++++
+title = 'Rust note'
+date = 2021-10-17 15:26:57
++++
 ## 内存管理
 
 Rust中没有垃圾回收机制，通过**所有权**和**借用**来保证数据的内存安全。

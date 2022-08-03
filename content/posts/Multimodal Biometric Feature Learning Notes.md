@@ -1,12 +1,9 @@
----
-title: 'Multimodal Biometric Feature Learning Notes'
-date: 2021-06-10 18:51:25
-tags: []
-published: true
-hideInList: false
-feature: 
-isTop: false
----
++++
+title = 'Multimodal Biometric Feature Learning Notes'
+date = 2021-06-10 18:51:25
+math = true
++++
+
 生物识别可以安全快速地鉴别个体，具体可以通过指关节纹（Finger Knuckle Print，FKP）、指纹（Finger Print)、掌纹（Palm Print）等。由于疫情影响，FKP识别成为一个不易传播疾病的识别方式。
 
 # LEARNING DISCRIMINATIVE FINGER-KNUCKLE-PRINT DESCRIPTOR
@@ -29,7 +26,7 @@ $$
 
 $$
 \begin{aligned}
-x'=(x-x_0)\cos\theta+(y-y_0)\sin\theta \\
+x'=(x-x_0)\cos\theta+(y-y_0)\sin\theta \\\\
 y'=-(x-x_0)\sin \theta + (y-y_0)\cos \theta
 \end{aligned}
 $$
@@ -57,8 +54,8 @@ $$b_{p,i,k}=\frac{1}{2}(sgn(w_k^T x_{p,i})+1)$$
 
 $$
 \begin{aligned}
-\max_{w_k}J(w_k)&=\max_{w_k}J_1(w_k)+2\lambda J_2(w_k) \\
-&=\max_{w_k}\sum_{p=1}^P \sum_{i=1}^N ||b_{p,i,k}-\mu_{p,k}||^2 \\
+\max_{w_k}J(w_k)&=\max_{w_k}J_1(w_k)+2\lambda J_2(w_k) \\\\
+&=\max_{w_k}\sum_{p=1}^P \sum_{i=1}^N ||b_{p,i,k}-\mu_{p,k}||^2 \\\\
 &+2\lambda\sum_{p=1}^P\sum_{i=1}^N (\sum_{j\in \Gamma(i)}||b_{p,i,k}-b_{p,j,k}||^2 -\sum_{j\notin \Gamma(i)}||b_{p,i,k}-b_{p,j,k}||^2 )
 \end{aligned}
 $$
@@ -69,7 +66,7 @@ $$
 
 $$
 \begin{aligned}
-J_1(W)&=\sum_{p=1}^P |||W^TX_p-W^TM_p||^2 \\
+J_1(W)&=\sum_{p=1}^P |||W^TX_p-W^TM_p||^2 \\\\
 &=tr(W^T(\sum_{p=1}^P(X_pX_p^T-2X_pM_p^T+M_pM_p^T))W)
 \end{aligned}
 $$
@@ -88,7 +85,7 @@ $$J_2(W)=\sum_{p=1}^P\sum_{i=1}^N (\sum_{j\in \Gamma(i)}sgn(w_k^Tx_{p,i})\times 
 
 $$
 \begin{aligned}
-J_2(W)&=\frac{1}{2}\sum_{p=1}^Ptr(W^TX_pSX_p^TW) \\
+J_2(W)&=\frac{1}{2}\sum_{p=1}^Ptr(W^TX_pSX_p^TW) \\\\
 &=\frac{1}{2}tr(W^T(\sum_{p=1}^PX_pSX_p^T)W)
 \end{aligned}
 $$
@@ -101,9 +98,9 @@ $$
 
 $$
 \begin{aligned}
-J(W)&=J_1(W)+2\lambda J_2(W) \\
-&=tr(W^T(\sum_{p=1}^P(X_pX_p^T-2X_pM_p^T+M_pM_p^T))W) \\
-&+\lambda tr(W^T(\sum_{p=1}^PX_pSX_p^T)W) \\
+J(W)&=J_1(W)+2\lambda J_2(W) \\\\
+&=tr(W^T(\sum_{p=1}^P(X_pX_p^T-2X_pM_p^T+M_pM_p^T))W) \\\\
+&+\lambda tr(W^T(\sum_{p=1}^PX_pSX_p^T)W) \\\\
 &=tr(W^TQW)
 \end{aligned}
 $$
@@ -199,10 +196,10 @@ $$b_{p,i}^v=0.5\times (sgn((W^v)^Tx_{p,i}^v)+1^{K\times 1})$$
 
 $$
 \begin{aligned}
-\min_{W^v}J(W^v)&=J_1(W^v)+\lambda_1J_2(W^v)+\lambda_2J_3(W^v) \\
-&=\sum_{v=1}^{V=2}(\beta^v)^r(\sum_{p=1}^P\sum_{i=1}^N ||c_{p,i}-0.5^{K\times 1}-(W^v)^Tx^v_{p,i}||^2 \\
-&-\lambda_1\sum_{p=1}^P\sum_{i=1}^N||b_{p,i}^v-m_p^v||^2) \\ 
-&-\lambda_2\sum_{p=1}^P\sum_{i=1}^N||b_{p,i}^1-b_{p,i}^2||^2 \\ 
+\min_{W^v}J(W^v)&=J_1(W^v)+\lambda_1J_2(W^v)+\lambda_2J_3(W^v) \\\\
+&=\sum_{v=1}^{V=2}(\beta^v)^r(\sum_{p=1}^P\sum_{i=1}^N ||c_{p,i}-0.5^{K\times 1}-(W^v)^Tx^v_{p,i}||^2 \\\\
+&-\lambda_1\sum_{p=1}^P\sum_{i=1}^N||b_{p,i}^v-m_p^v||^2) \\\\ 
+&-\lambda_2\sum_{p=1}^P\sum_{i=1}^N||b_{p,i}^1-b_{p,i}^2||^2 \\\\ 
 s.t. c_{p,i}={0,1}^{K\times 1}, (W^v)^TW^v=I
 \end{aligned}
 $$
@@ -219,9 +216,9 @@ $$
 
 $$
 \begin{aligned}
-\min_{W^v}J(W^v)&=\sum_{v=1}^{V=2}(\beta^v)^r(\sum_{p=1}^P ||C_p-0.5-(W^v)^TX^v_{p}||^2 \\
-&-\lambda_1\sum_{p=1}^P||B_{p}^v-M_p^v||^2) \\ 
-&-\lambda_2\sum_{p=1}^P||B_{p}^1-B_{p}^2||^2 \\ 
+\min_{W^v}J(W^v)&=\sum_{v=1}^{V=2}(\beta^v)^r(\sum_{p=1}^P ||C_p-0.5-(W^v)^TX^v_{p}||^2 \\\\
+&-\lambda_1\sum_{p=1}^P||B_{p}^v-M_p^v||^2) \\\\ 
+&-\lambda_2\sum_{p=1}^P||B_{p}^1-B_{p}^2||^2 \\\\ 
 &s.t. C_{p}={0,1}^{K\times N}, (W^v)^TW^v=I
 \end{aligned}
 $$
@@ -230,9 +227,9 @@ $$
 
 $$
 \begin{aligned}
-\min_{W^v}J(W^v)&=\sum_{v=1}^{V=2}(\beta^v)^r(\sum_{p=1}^P ||C_p-0.5-(W^v)^TX^v_{p}||^2 \\
-&-\lambda_1\sum_{p=1}^P||(W^v)^TX^v_{p}|-M_p^v||^2) \\ 
-&-\lambda_2\sum_{p=1}^P||(W^1)^TX^1_{p}|-(W^2)^TX^2_{p}|||^2 \\ 
+\min_{W^v}J(W^v)&=\sum_{v=1}^{V=2}(\beta^v)^r(\sum_{p=1}^P ||C_p-0.5-(W^v)^TX^v_{p}||^2 \\\\
+&-\lambda_1\sum_{p=1}^P||(W^v)^TX^v_{p}|-M_p^v||^2) \\\\ 
+&-\lambda_2\sum_{p=1}^P||(W^1)^TX^1_{p}|-(W^2)^TX^2_{p}|||^2 \\\\ 
 &s.t. C_{p}={0,1}^{K\times N}, (W^v)^TW^v=I
 \end{aligned}
 $$
@@ -248,10 +245,10 @@ $$
 
 $$
 \begin{aligned}
- J(C_p)&=\sum_{p=1}^P\sum_{v=1}^{V=2}(\beta^v)^r( ||C_p-0.5-(W^v)^TX^v_{p}||^2) \\
- &= \sum_{p=1}^P\sum_{v=1}^{V=2}(\beta^v)^rtr((C_p-0.5-(W^v)^TX^v_{p}|)C_p-0.5-(W^v)^TX^v_{p}|^T) \\ 
-  &= \sum_{p=1}^P\sum_{v=1}^{V=2}(\beta^v)^rtr(C_pC_p^T-2(0.5+(W^v)^TX_p^v)C_p^T \\
-  &+(0.5+(W^v)^TX_p^v)(0.5+(W^v)^TX_p^v)^T) \\ 
+ J(C_p)&=\sum_{p=1}^P\sum_{v=1}^{V=2}(\beta^v)^r( ||C_p-0.5-(W^v)^TX^v_{p}||^2) \\\\
+ &= \sum_{p=1}^P\sum_{v=1}^{V=2}(\beta^v)^rtr((C_p-0.5-(W^v)^TX^v_{p}|)C_p-0.5-(W^v)^TX^v_{p}|^T) \\\\ 
+  &= \sum_{p=1}^P\sum_{v=1}^{V=2}(\beta^v)^rtr(C_pC_p^T-2(0.5+(W^v)^TX_p^v)C_p^T \\\\
+  &+(0.5+(W^v)^TX_p^v)(0.5+(W^v)^TX_p^v)^T) \\\\ 
 
 &s.t. C_{p}={0,1}^{K\times N}
 \end{aligned}
@@ -266,7 +263,7 @@ $$
 整理可得：
 
 $$
-C_p=0.5+\frac{1}{\sum_{v=1}^V(\beta^v)^r}\sum_{v=1}^V(\beta^v)(W^v)^TX_p^v \\ 
+C_p=0.5+\frac{1}{\sum_{v=1}^V(\beta^v)^r}\sum_{v=1}^V(\beta^v)(W^v)^TX_p^v \\\\ 
 s.t. C_p=\{0,1\}^{K\times N}
 $$
 
@@ -274,7 +271,7 @@ $$
 
 $$
 \begin{aligned}
-C_p&=0.5+0.5\times sgn(\frac{1}{\sum_{v=1}^V(\beta^v)^r}\sum_{v=1}^V(\beta^v)(W^v)^TX_p^v )\\ 
+C_p&=0.5+0.5\times sgn(\frac{1}{\sum_{v=1}^V(\beta^v)^r}\sum_{v=1}^V(\beta^v)(W^v)^TX_p^v )\\\\ 
 C_p&=0.5\times sgn(\sum_{v=1}^V(\beta^v)(W^v)^TX_p^v +1)
 \end{aligned}
 $$
@@ -287,11 +284,11 @@ $$
 
 $$
 \begin{aligned}
-J(W^v)=& \sum_{v=1}^V(\beta^v)^r (\sum_{p=1}^P tr( (C_p-0.5)(C_p-0.5)^T \\
-& -2(C_p-0.5)(X_p^v)^TW^v+(W^v)^TX_p^v(X_p^v)^TW^v) \\
-&- \lambda_1\sum_{p=1}^P tr((W^v)^TX_p^v(X_p^v)^TW^v-2(W^v)^TX_p^v(\bar{M}_p^v)^TW^v\\
-&+(W^v)^T\bar{M}_p^v(\bar{M}_p^v)^TW^v))\\
-&-\lambda_2 \sum_{p=1}^P tr((W^v)^TX_p^1(X_p^1)^TW^1-2(W^1)^TX_p^1(X_p^2)^TW^2\\
+J(W^v)=& \sum_{v=1}^V(\beta^v)^r (\sum_{p=1}^P tr( (C_p-0.5)(C_p-0.5)^T \\\\
+& -2(C_p-0.5)(X_p^v)^TW^v+(W^v)^TX_p^v(X_p^v)^TW^v) \\\\
+&- \lambda_1\sum_{p=1}^P tr((W^v)^TX_p^v(X_p^v)^TW^v-2(W^v)^TX_p^v(\bar{M}_p^v)^TW^v\\\\
+&+(W^v)^T\bar{M}_p^v(\bar{M}_p^v)^TW^v))\\\\
+&-\lambda_2 \sum_{p=1}^P tr((W^v)^TX_p^1(X_p^1)^TW^1-2(W^1)^TX_p^1(X_p^2)^TW^2\\\\
 &+(W^1)^TX_p^1(X_p^2)^TW^2)
 \end{aligned}
 $$
@@ -311,7 +308,7 @@ $beta$的更新可以整理成带约束优化问题：
 
 $$
 \begin{aligned}
-&J(\beta^v)=\sum_{v=1}^V(\beta^v)^rg^v \\
+&J(\beta^v)=\sum_{v=1}^V(\beta^v)^rg^v \\\\
 &s.t. \sum_{v=1}^V \beta^v = 1
 \end{aligned}
 $$

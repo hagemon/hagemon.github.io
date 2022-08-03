@@ -1,12 +1,8 @@
----
-title: 'Clipin Log 3. 截屏页面的实现'
-date: 2021-01-09 21:24:06
-tags: [iOS,Clipin]
-published: true
-hideInList: false
-feature: 
-isTop: false
----
++++
+title = 'Clipin Log 3. 截屏页面的实现'
+date = 2021-01-09 21:24:06
++++
+
 ## 实现思路
 
 - 创建和屏幕大小相等的NSWindow，且拥有以下特性：

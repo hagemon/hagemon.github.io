@@ -1,12 +1,7 @@
----
-title: 'Swift5：基于正则表达式实现简单的Markdown即时渲染'
-date: 2021-02-13 23:23:44
-tags: [iOS]
-published: true
-hideInList: false
-feature: 
-isTop: false
----
++++
+title = 'Swift5：基于正则表达式实现简单的Markdown即时渲染'
+date = 2021-02-13 23:23:44
++++
 本文以iOS下的UITextView为例，在MacOS上只要更改NSTextView的相应的接口名同样适用。
 
 # 实现思路

@@ -1,12 +1,8 @@
----
-title: 'Clipin Log 4. 高亮区域的选取&拖拽&调整'
-date: 2021-01-09 21:25:34
-tags: [iOS,Clipin]
-published: true
-hideInList: false
-feature: 
-isTop: false
----
++++
+title = 'Clipin Log 4. 高亮区域的选取&拖拽&调整'
+date = 2021-01-09 21:25:34
++++
+
 # 高亮区域的选取
 
 确定了高亮区域的渲染方式后，我们在ClipWindowController中添加对鼠标事件的监听，用于获取高亮区域。

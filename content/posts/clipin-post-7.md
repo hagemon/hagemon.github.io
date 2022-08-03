@@ -1,12 +1,8 @@
----
-title: 'Clipin Log 7. 提升截屏流畅度'
-date: 2021-02-24 23:23:36
-tags: []
-published: true
-hideInList: false
-feature: 
-isTop: false
----
++++
+title = 'Clipin Log 7. 提升截屏流畅度'
+date = 2021-02-24 23:23:36
++++
+
 # 旧版本
 
 在之前的版本中，我在一个ClipView上对暗色背景和高亮区域绘制：

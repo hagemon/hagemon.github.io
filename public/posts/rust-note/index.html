@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="zh-cn" prefix="og: http://ogp.me/ns#">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  
+  <title>Rust note</title>
+  <meta property="og:title" content="Rust note" />
+  <meta name="twitter:title" content="Rust note" />
+  
+
+  
+
+  <meta name="author" content=""/>
+  <meta property="og:site_name" content="Hagemon&#39;s Log" />
+  <meta property="og:url" content="https://hagemon.github.io/posts/rust-note/" />
+
+  
+  <meta name="twitter:card" content="summary" />
+
+  
+  <meta name="twitter:site" content="@oneFolder_" />
+  <meta name="twitter:creator" content="@oneFolder_" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  
+  
+  
+  <meta name="generator" content="Hugo 0.96.0" />
+  
+    
+  
+  
+
+  <link rel="stylesheet" href="https://hagemon.github.io/css/style.css" />
+  
+  <link rel="stylesheet" href="https://hagemon.github.io/css/custom.css">
+  <link rel='icon' type='image/x-icon' href="https://hagemon.github.io/favicon.ico" />
+  
+  
+  
+
+</head>
+
+<body>
+  <a href="#main" class="skip-link p-screen-reader-text">Skip to content</a>
+  <svg xmlns="http://www.w3.org/2000/svg" style="display: none;" aria-hidden="true"> <symbol id="icon-500px" viewBox="0 0 16 16"><g> <path d="M3.953 10.512a5.24 5.24 0 0 0 6.996 3.141c.625-.262 1.184-.641 1.666-1.122s.859-1.041 1.122-1.666c.272-.647.412-1.331.412-2.037s-.137-1.394-.412-2.037c-.262-.625-.641-1.184-1.122-1.666s-1.041-.859-1.666-1.122a5.226 5.226 0 0 0-2.037-.413c-.716 0-1.431.144-2.066.413-.509.216-1.372.769-1.875 1.291l-.003.003V.984h7.241c.262-.003.262-.372.262-.491 0-.122 0-.487-.266-.491H4.377a.343.343 0 0 0-.344.341v6.066c0 .197.244.338.472.384.444.094.544-.047.653-.197l.016-.019c.166-.247.681-.766.688-.772a4.262 4.262 0 0 1 3.037-1.25c1.147 0 2.222.444 3.028 1.25a4.245 4.245 0 0 1 1.256 3.019 4.236 4.236 0 0 1-1.25 3.019 4.336 4.336 0 0 1-3.047 1.25 4.136 4.136 0 0 1-2.159-.597l.003-3.688c0-.491.213-1.028.572-1.431a2.09 2.09 0 0 1 1.588-.716c.594 0 1.15.225 1.566.634.409.406.637.95.637 1.528a2.179 2.179 0 0 1-2.206 2.197c-.238 0-.672-.106-.691-.109-.25-.075-.356.272-.391.387-.134.441.069.528.109.541.397.125.659.147 1.003.147a3.173 3.173 0 0 0 3.169-3.169c0-1.734-1.422-3.144-3.166-3.144-.856 0-1.659.328-2.263.919-.575.566-.903 1.319-.903 2.069v.019c-.003.094-.003 2.306-.006 3.031l-.003-.003c-.328-.363-.653-.919-.869-1.488-.084-.222-.275-.184-.534-.103-.125.034-.469.141-.391.394zm3.722-.865c0 .106.097.2.156.253l.019.019c.1.097.194.147.281.147a.181.181 0 0 0 .131-.05c.044-.041.537-.544.588-.591l.553.55c.05.056.106.088.172.088.088 0 .184-.053.284-.156.238-.244.119-.375.063-.438l-.559-.559.584-.588c.128-.137.016-.284-.097-.397-.162-.162-.322-.206-.422-.112l-.581.581-.588-.588a.16.16 0 0 0-.113-.047c-.078 0-.172.053-.275.156-.181.181-.219.306-.125.406l.588.584-.584.584c-.053.05-.078.103-.075.156zm1.278-7.931c-.938 0-1.938.191-2.669.506a.207.207 0 0 0-.134.181.753.753 0 0 0 .069.337c.047.116.166.425.4.334a6.689 6.689 0 0 1 2.334-.444 6.35 6.35 0 0 1 2.469.497c.622.263 1.206.644 1.844 1.194a.22.22 0 0 0 .147.059c.125 0 .244-.122.347-.237.169-.191.287-.35.119-.509a6.858 6.858 0 0 0-2.1-1.356 7.326 7.326 0 0 0-2.825-.563zM14.006 13.3c-.113-.113-.209-.178-.294-.203s-.162-.006-.222.053l-.056.056a6.32 6.32 0 0 1-6.938 1.356 6.336 6.336 0 0 1-2.013-1.356 6.046 6.046 0 0 1-1.356-2.012c-.288-.713-.381-1.247-.413-1.422-.003-.016-.006-.028-.006-.037-.041-.206-.231-.222-.503-.178-.112.019-.459.072-.428.319v.006a7.261 7.261 0 0 0 2.04 3.994 7.266 7.266 0 0 0 10.288 0l.059-.059c.069-.084.134-.225-.159-.516z"/> </g></symbol> <symbol id="icon-codepen" viewBox="0 0 16 16"><g> <path d="M14.777 5.751l-7-4.667a.5.5 0 0 0-.555 0l-7 4.667a.501.501 0 0 0-.223.416v4.667c0 .167.084.323.223.416l7 4.667a.5.5 0 0 0 .554 0l7-4.667a.501.501 0 0 0 .223-.416V6.167a.501.501 0 0 0-.223-.416zM7.5 10.232L4.901 8.5 7.5 6.768 10.099 8.5 7.5 10.232zM8 5.899V2.434l5.599 3.732L11 7.898l-3-2zm-1 0l-3 2-2.599-1.732L7 2.435V5.9zM3.099 8.5L1 9.899V7.101L3.099 8.5zM4 9.101l3 2v3.465l-5.599-3.732L4 9.102zm4 2l3-2 2.599 1.732L8 14.565V11.1zM11.901 8.5L14 7.101v2.798L11.901 8.5z"/> </g></symbol> <symbol id="icon-dribbble" viewBox="0 0 16 16"><g> <path d="M8 16c-4.412 0-8-3.588-8-8s3.587-8 8-8c4.412 0 8 3.587 8 8s-3.588 8-8 8zm6.747-6.906c-.234-.075-2.116-.634-4.256-.291a29.7 29.7 0 0 1 1.328 4.872 6.845 6.845 0 0 0 2.928-4.581zM10.669 14.3c-.103-.6-.497-2.688-1.456-5.181-.016.006-.031.009-.044.016-3.856 1.344-5.241 4.016-5.362 4.266a6.807 6.807 0 0 0 6.863.9zm-7.747-1.722c.156-.266 2.031-3.369 5.553-4.509a7.04 7.04 0 0 1 .269-.081 24.04 24.04 0 0 0-.553-1.159c-3.409 1.022-6.722.978-7.022.975-.003.069-.003.138-.003.209 0 1.753.666 3.356 1.756 4.566zM1.313 6.609c.306.003 3.122.016 6.319-.831a43.092 43.092 0 0 0-2.534-3.953 6.854 6.854 0 0 0-3.784 4.784zM6.4 1.366a36.612 36.612 0 0 1 2.55 4c2.431-.909 3.459-2.294 3.581-2.469A6.799 6.799 0 0 0 6.4 1.366zm6.891 2.325c-.144.194-1.291 1.663-3.816 2.694.159.325.313.656.453.991.05.119.1.234.147.353 2.275-.284 4.534.172 4.759.219a6.816 6.816 0 0 0-1.544-4.256z"/> </g></symbol> <symbol id="icon-facebook" viewBox="0 0 16 16"><g> <path d="M9.5 3H12V0H9.5C7.57 0 6 1.57 6 3.5V5H4v3h2v8h3V8h2.5l.5-3H9V3.5c0-.271.229-.5.5-.5z"/> </g></symbol> <symbol id="icon-feed" viewBox="0 0 16 16"><g> <path d="M2.13 11.733c-1.175 0-2.13.958-2.13 2.126 0 1.174.955 2.122 2.13 2.122a2.126 2.126 0 0 0 2.133-2.122 2.133 2.133 0 0 0-2.133-2.126zM.002 5.436v3.067c1.997 0 3.874.781 5.288 2.196a7.45 7.45 0 0 1 2.192 5.302h3.08c0-5.825-4.739-10.564-10.56-10.564zM.006 0v3.068C7.128 3.068 12.924 8.87 12.924 16H16C16 7.18 8.824 0 .006 0z"/> </g></symbol> <symbol id="icon-flickr" viewBox="0 0 16 16"><g> <path d="M0 8.5a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0zm9 0a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/> </g></symbol> <symbol id="icon-github" viewBox="0 0 16 16"><g> <path d="M8 .198a8 8 0 0 0-2.529 15.591c.4.074.547-.174.547-.385 0-.191-.008-.821-.011-1.489-2.226.484-2.695-.944-2.695-.944-.364-.925-.888-1.171-.888-1.171-.726-.497.055-.486.055-.486.803.056 1.226.824 1.226.824.714 1.223 1.872.869 2.328.665.072-.517.279-.87.508-1.07-1.777-.202-3.645-.888-3.645-3.954 0-.873.313-1.587.824-2.147-.083-.202-.357-1.015.077-2.117 0 0 .672-.215 2.201.82A7.672 7.672 0 0 1 8 4.066c.68.003 1.365.092 2.004.269 1.527-1.035 2.198-.82 2.198-.82.435 1.102.162 1.916.079 2.117.513.56.823 1.274.823 2.147 0 3.073-1.872 3.749-3.653 3.947.287.248.543.735.543 1.481 0 1.07-.009 1.932-.009 2.195 0 .213.144.462.55.384A8 8 0 0 0 8.001.196z"/> </g></symbol> <symbol id="icon-gitlab" viewBox="0 0 28 28"><g> <path d="M1.625 11.031L14 26.89.437 17.046a1.092 1.092 0 0 1-.391-1.203l1.578-4.813zm7.219 0h10.313L14.001 26.89zM5.75 1.469l3.094 9.562H1.625l3.094-9.562a.548.548 0 0 1 1.031 0zm20.625 9.562l1.578 4.813a1.09 1.09 0 0 1-.391 1.203l-13.563 9.844 12.375-15.859zm0 0h-7.219l3.094-9.562a.548.548 0 0 1 1.031 0z"/> </g></symbol> <symbol id="icon-google-plus" viewBox="0 0 16 16"><g> <path d="M5.091 7.147v1.747h2.888c-.116.75-.872 2.197-2.888 2.197-1.737 0-3.156-1.441-3.156-3.216s1.419-3.216 3.156-3.216c.991 0 1.65.422 2.028.784L8.5 4.112c-.888-.828-2.037-1.331-3.409-1.331C2.275 2.784 0 5.059 0 7.875s2.275 5.091 5.091 5.091c2.937 0 4.888-2.066 4.888-4.975 0-.334-.037-.591-.081-.844H5.092zM16 7h-1.5V5.5H13V7h-1.5v1.5H13V10h1.5V8.5H16z"/> </g></symbol> <symbol id="icon-instagram" viewBox="0 0 22 22"><g> <path d="M15.445 0H6.554A6.559 6.559 0 0 0 0 6.554v8.891A6.559 6.559 0 0 0 6.554 22h8.891a6.56 6.56 0 0 0 6.554-6.555V6.554A6.557 6.557 0 0 0 15.445 0zm4.342 15.445a4.343 4.343 0 0 1-4.342 4.342H6.554a4.341 4.341 0 0 1-4.341-4.342V6.554a4.34 4.34 0 0 1 4.341-4.341h8.891a4.342 4.342 0 0 1 4.341 4.341l.001 8.891z"/> <path d="M11 5.312A5.693 5.693 0 0 0 5.312 11 5.694 5.694 0 0 0 11 16.688 5.694 5.694 0 0 0 16.688 11 5.693 5.693 0 0 0 11 5.312zm0 9.163a3.475 3.475 0 1 1-.001-6.95 3.475 3.475 0 0 1 .001 6.95zm5.7-10.484a1.363 1.363 0 1 1-1.364 1.364c0-.752.51-1.364 1.364-1.364z"/> </g></symbol> <symbol id="icon-linkedin" viewBox="0 0 16 16"><g> <path d="M6 6h2.767v1.418h.04C9.192 6.727 10.134 6 11.539 6 14.46 6 15 7.818 15 10.183V15h-2.885v-4.27c0-1.018-.021-2.329-1.5-2.329-1.502 0-1.732 1.109-1.732 2.255V15H6V6zM1 6h3v9H1V6zM4 3.5a1.5 1.5 0 1 1-3.001-.001A1.5 1.5 0 0 1 4 3.5z"/> </g></symbol> <symbol id="icon-mail" viewBox="0 0 22 18"><g> <path fill="#000" d="M0 17.225V.776h22v16.447H0v.002zm3.011-1.815h15.978l-5.111-5.115L11 13.179l-2.877-2.883-5.112 5.114zm-1.216-1.275l5.077-5.09L1.795 3.98v10.155zm13.332-5.09l5.079 5.09V3.979l-5.079 5.066zm-4.126 1.588l8.022-8.027-16.045-.001 8.023 8.028z"/> </g></symbol> <symbol id="icon-medium" viewBox="0 0 24 24"><g> <path d="M22.085 4.733L24 2.901V2.5h-6.634l-4.728 11.768L7.259 2.5H.303v.401L2.54 5.594c.218.199.332.49.303.783V16.96c.069.381-.055.773-.323 1.05L0 21.064v.396h7.145v-.401l-2.52-3.049a1.244 1.244 0 0 1-.347-1.05V7.806l6.272 13.659h.729l5.393-13.659v10.881c0 .287 0 .346-.188.534l-1.94 1.877v.402h9.412v-.401l-1.87-1.831a.556.556 0 0 1-.214-.534V5.267a.554.554 0 0 1 .213-.534z"/> </g></symbol> <symbol id="icon-npm" viewBox="0 0 16 16"><g> <path d="M0 0v16h16V0H0zm13 13h-2V5H8v8H3V3h10v10z"/> </g></symbol> <symbol id="icon-pinterest" viewBox="0 0 16 16"><g> <path d="M8 1.069a6.93 6.93 0 0 0-2.525 13.384c-.059-.547-.116-1.391.025-1.988.125-.541.813-3.444.813-3.444s-.206-.416-.206-1.028c0-.963.559-1.684 1.253-1.684.591 0 .878.444.878.975 0 .594-.378 1.484-.575 2.306-.166.691.344 1.253 1.025 1.253 1.231 0 2.178-1.3 2.178-3.175 0-1.659-1.194-2.819-2.894-2.819-1.972 0-3.128 1.478-3.128 3.009 0 .597.228 1.234.516 1.581.056.069.066.128.047.2a95.89 95.89 0 0 1-.194.787c-.031.128-.1.153-.231.094-.866-.403-1.406-1.669-1.406-2.684 0-2.188 1.587-4.194 4.578-4.194 2.403 0 4.272 1.712 4.272 4.003 0 2.388-1.506 4.313-3.597 4.313-.703 0-1.362-.366-1.588-.797 0 0-.347 1.322-.431 1.647-.156.603-.578 1.356-.862 1.816a6.93 6.93 0 0 0 8.984-6.622 6.931 6.931 0 0 0-6.931-6.934z"/> </g></symbol> <symbol id="icon-search" viewBox="0 0 16 16"><g> <path d="M15.504 13.616l-3.79-3.223c-.392-.353-.811-.514-1.149-.499a6 6 0 1 0-.672.672c-.016.338.146.757.499 1.149l3.223 3.79c.552.613 1.453.665 2.003.115s.498-1.452-.115-2.003zM6 10a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/> </g></symbol> <symbol id="icon-strava" viewBox="0 0 24 24"><g> <path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169"/> </g></symbol> <symbol id="icon-tumblr" viewBox="0 0 16 16"><g> <path d="M9.001 7v3.659c0 .928-.012 1.463.086 1.727.098.262.342.534.609.691.354.212.758.318 1.214.318.81 0 1.289-.107 2.09-.633v2.405a9.089 9.089 0 0 1-1.833.639A7.93 7.93 0 0 1 9.369 16a4.9 4.9 0 0 1-1.725-.276 4.195 4.195 0 0 1-1.438-.79c-.398-.343-.672-.706-.826-1.091s-.23-.944-.23-1.676V6.556H3.003V4.29c.628-.204 1.331-.497 1.778-.877a4.386 4.386 0 0 0 1.08-1.374C6.133 1.505 6.32.825 6.422 0h2.579v4H13v3H9.001z"/> </g></symbol> <symbol id="icon-twitter" viewBox="0 0 16 16"><g> <path d="M16 3.538a6.461 6.461 0 0 1-1.884.516 3.301 3.301 0 0 0 1.444-1.816 6.607 6.607 0 0 1-2.084.797 3.28 3.28 0 0 0-2.397-1.034 3.28 3.28 0 0 0-3.197 4.028 9.321 9.321 0 0 1-6.766-3.431 3.284 3.284 0 0 0 1.015 4.381A3.301 3.301 0 0 1 .643 6.57v.041A3.283 3.283 0 0 0 3.277 9.83a3.291 3.291 0 0 1-1.485.057 3.293 3.293 0 0 0 3.066 2.281 6.586 6.586 0 0 1-4.862 1.359 9.286 9.286 0 0 0 5.034 1.475c6.037 0 9.341-5.003 9.341-9.341 0-.144-.003-.284-.009-.425a6.59 6.59 0 0 0 1.637-1.697z"/> </g></symbol> <symbol id="icon-vimeo" viewBox="0 0 16 16"><g> <path d="M15.994 4.281c-.072 1.556-1.159 3.691-3.263 6.397-2.175 2.825-4.016 4.241-5.522 4.241-.931 0-1.722-.859-2.366-2.581-.431-1.578-.859-3.156-1.291-4.734-.478-1.722-.991-2.581-1.541-2.581-.119 0-.538.253-1.256.753l-.753-.969c.791-.694 1.569-1.388 2.334-2.081 1.053-.909 1.844-1.387 2.372-1.438 1.244-.119 2.013.731 2.3 2.553.309 1.966.525 3.188.647 3.666.359 1.631.753 2.447 1.184 2.447.334 0 .838-.528 1.509-1.588.669-1.056 1.028-1.862 1.078-2.416.097-.912-.262-1.372-1.078-1.372a2.98 2.98 0 0 0-1.184.263c.787-2.575 2.287-3.825 4.506-3.753 1.641.044 2.416 1.109 2.322 3.194z"/> </g></symbol> <symbol id="icon-wordpress" viewBox="0 0 16 16"><g> <path d="M2 8c0 2.313 1.38 4.312 3.382 5.259L2.52 5.622A5.693 5.693 0 0 0 2 8zm10.05-.295c0-.722-.266-1.222-.495-1.612-.304-.482-.589-.889-.589-1.371 0-.537.418-1.037 1.008-1.037.027 0 .052.003.078.005A6.064 6.064 0 0 0 8 2.156 6.036 6.036 0 0 0 2.987 4.79c.141.004.274.007.386.007.627 0 1.599-.074 1.599-.074.323-.018.361.444.038.482 0 0-.325.037-.687.055l2.185 6.33 1.313-3.835-.935-2.495a12.304 12.304 0 0 1-.629-.055c-.323-.019-.285-.5.038-.482 0 0 .991.074 1.58.074.627 0 1.599-.074 1.599-.074.323-.018.362.444.038.482 0 0-.326.037-.687.055l2.168 6.282.599-1.947c.259-.809.457-1.389.457-1.889zm-3.945.806l-1.8 5.095a6.148 6.148 0 0 0 3.687-.093.52.52 0 0 1-.043-.081L8.105 8.511zm5.16-3.315c.026.186.04.386.04.601 0 .593-.114 1.259-.456 2.093l-1.833 5.16c1.784-1.013 2.983-2.895 2.983-5.051a5.697 5.697 0 0 0-.735-2.803zM8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm0 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14z"/> </g></symbol> <symbol id="icon-youtube" viewBox="0 0 16 16"><g> <path d="M15.841 4.8s-.156-1.103-.637-1.587c-.609-.637-1.291-.641-1.603-.678-2.237-.163-5.597-.163-5.597-.163h-.006s-3.359 0-5.597.163c-.313.038-.994.041-1.603.678C.317 3.697.164 4.8.164 4.8S.005 6.094.005 7.391v1.213c0 1.294.159 2.591.159 2.591s.156 1.103.634 1.588c.609.637 1.409.616 1.766.684 1.281.122 5.441.159 5.441.159s3.363-.006 5.6-.166c.313-.037.994-.041 1.603-.678.481-.484.637-1.588.637-1.588s.159-1.294.159-2.591V7.39c-.003-1.294-.162-2.591-.162-2.591zm-9.494 5.275V5.578l4.322 2.256-4.322 2.241z"/> </g></symbol></svg>
+  <header class="l-header">
+    
+    <p class="c-title p-title"><a href="https://hagemon.github.io/" class="p-title__link">Hagemon&#39;s Log</a></p>
+    
+    
+  </header>
+
+<nav class="l-nav p-menu">
+  <ul class="p-menu__lists">
+    
+      
+      <li class="p-menu__listitem">
+        <a href="/">Blog</a>
+      </li>
+      
+    
+      
+      <li class="p-menu__listitem">
+        <a href="/about">About</a>
+      </li>
+      
+    
+  </ul>
+</nav>
+
+
+
+  <main id="main" class="l-main">
+
+
+<article class="p-article">
+  <header>
+    <h1>Rust note</h1>
+    
+    <div>
+        <div class="c-meta">
+        
+           Posted on
+<time datetime="2021-10-17T15:26:57Z">
+  Oct 17, 2021
+</time>
+
+        
+        
+        
+        </div>
+      </div>
+      
+    </div>
+    
+  </header>
+  
+  <section id="js-article" class="p-article__body">
+    <h2 id="内存管理">内存管理</h2>
+<p>Rust中没有垃圾回收机制，通过<strong>所有权</strong>和<strong>借用</strong>来保证数据的内存安全。</p>
+<h3 id="所有权ownership">所有权(Ownership)</h3>
+<p>所有权系统在编译时会检查一组规则，当满足这些规则时才会通过编译，同时能保证程序运行的速度。</p>
+<h4 id="作用域界定规则">作用域界定规则</h4>
+<p>Rust中作用域用大括号<code>{}</code>表示，无论是<code>if</code>、<code>else</code>还是<code>match</code>，或是直接的<code>{}</code>都表示一个作用域。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#75715e">// `mascot` is not valid and cannot be used here, because it&#39;s not yet declared.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> mascot <span style="color:#f92672">=</span> String::from(<span style="color:#e6db74">&#34;ferris&#34;</span>);   <span style="color:#75715e">// `mascot` is valid from this point forward.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// do stuff with `mascot`.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// this scope is now over, so `mascot` is no longer valid and cannot be used.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>println!(<span style="color:#e6db74">&#34;{}&#34;</span>, mascot); <span style="color:#75715e">// this will cause an error.
+</span></span></span></code></pre></div><pre tabindex="0"><code>error[E0425]: cannot find value `mascot` in this scope
+     --&gt; src/main.rs:5:20
+      |
+    5 |     println!(&#34;{}&#34;, mascot);
+      |                    ^^^^^^ not found in this scope
+</code></pre><p>在超出作用域后，mascot会被删除，其堆空间中对应的String所拥有的内存也会被释放。</p>
+<h4 id="移动语义">移动语义</h4>
+<p>当一个变量赋值给另一个变量时，会发生<strong>所有权转移</strong>，原变量不再拥有它的所有权，如下例中mascot所拥有的String的所有权被转移到了ferris下，如果此时使用mascot将会报错。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> mascot <span style="color:#f92672">=</span> String::from(<span style="color:#e6db74">&#34;ferris&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> ferris <span style="color:#f92672">=</span> mascot;
+</span></span><span style="display:flex;"><span>    println!(<span style="color:#e6db74">&#34;{}&#34;</span>, mascot) <span style="color:#75715e">// This will cause an error.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><p>当我们在某个作用域使用变量后，如果需要它再别的作用域继续使用，就可以交接所有权：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> ferris; <span style="color:#75715e">// declared outside.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">let</span> mascot <span style="color:#f92672">=</span> String::from(<span style="color:#e6db74">&#34;hello&#34;</span>);
+</span></span><span style="display:flex;"><span>        println!(<span style="color:#e6db74">&#34;{}&#34;</span>, mascot);
+</span></span><span style="display:flex;"><span>        ferris <span style="color:#f92672">=</span> mascot; <span style="color:#75715e">// change ownership.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    }
+</span></span><span style="display:flex;"><span>    println!(<span style="color:#e6db74">&#34;{}&#34;</span>, ferris) <span style="color:#75715e">// use outside.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><h4 id="函数中的所有权">函数中的所有权</h4>
+<p>将变量传递给函数时，也会进行所有权的交接，原变量将不再拥有数据，同时也不能把原变量再次传给函数：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">process</span>(input: String) {}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">caller</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> s <span style="color:#f92672">=</span> String::from(<span style="color:#e6db74">&#34;Hello, world!&#34;</span>);
+</span></span><span style="display:flex;"><span>    process(s); <span style="color:#75715e">// Ownership of the string in `s` moved into `process`
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    process(s); <span style="color:#75715e">// Error! ownership already moved.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    println!(<span style="color:#e6db74">&#34;{}&#34;</span>, s) <span style="color:#75715e">// Error! ownership already moved.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><p>对于实现了<code>Copy</code>特征的简单类型（如<code>u32</code>）会自动进行复制，上面的代码就可以正常进行。当然，我们也可以使用<code>clone()</code>函数将数据拷贝到函数中，但是如果数据类型比较复杂，成本就比较高昂。</p>
+<h3 id="借用borrow">借用(Borrow)</h3>
+<p>Rust中可以通过引用在别的地方使用变量，这点和C++类似：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">let</span> greeting <span style="color:#f92672">=</span> String::from(<span style="color:#e6db74">&#34;hello&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> greeting_reference <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>greeting; <span style="color:#75715e">// We borrow `greeting` but the string data is still owned by `greeting`
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>println!(<span style="color:#e6db74">&#34;Greeting: {}&#34;</span>, greeting); <span style="color:#75715e">// We can still use `greeting`
+</span></span></span></code></pre></div><p>使用函数时，我们可以多次将引用传入函数，这样不会报错，但是它并不能被修改，因为传入普通的引用并没有那样的权限：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">print_greeting</span>(message: <span style="color:#66d9ef">&amp;</span>String) {
+</span></span><span style="display:flex;"><span>  println!(<span style="color:#e6db74">&#34;Greeting: {}&#34;</span>, message);
+</span></span><span style="display:flex;"><span>  message.push_str(<span style="color:#e6db74">&#34;!&#34;</span>); <span style="color:#75715e">// this will cause an error.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  println!(<span style="color:#e6db74">&#34;Greeting: {}&#34;</span>, message);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">let</span> greeting <span style="color:#f92672">=</span> String::from(<span style="color:#e6db74">&#34;Hello&#34;</span>);
+</span></span><span style="display:flex;"><span>  print_greeting(<span style="color:#f92672">&amp;</span>greeting); <span style="color:#75715e">// `print_greeting` takes a `&amp;String` not an owned `String` so we borrow `greeting` with `&amp;`
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  print_greeting(<span style="color:#f92672">&amp;</span>greeting); <span style="color:#75715e">// Since `greeting` didn&#39;t move into `print_greeting` we can use it again
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><p>此时我们可以传入<strong>可变引用</strong>，这样就可以修改它的值了：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> greeting <span style="color:#f92672">=</span> String::from(<span style="color:#e6db74">&#34;hello&#34;</span>);
+</span></span><span style="display:flex;"><span>    change(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> greeting);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">change</span>(text: <span style="color:#66d9ef">&amp;</span><span style="color:#a6e22e">mut</span> String) {
+</span></span><span style="display:flex;"><span>    text.push_str(<span style="color:#e6db74">&#34;, world&#34;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="借用和可变引用">借用和可变引用</h4>
+<p>Rust内存管理的核心就是借用和可变引用，Rust代码必须同时实现以下其中一个引用，但是不能同时实现：</p>
+<ul>
+<li>变量有一个或多个不可变引用(&amp;T)</li>
+<li>变量恰好有一个可变引用(&amp;mut T)</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> value <span style="color:#f92672">=</span> String::from(<span style="color:#e6db74">&#34;hello&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> ref1 <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> value;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> ref2 <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> value;  <span style="color:#75715e">// can&#39;t get a second mutable borrow
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>    println!(<span style="color:#e6db74">&#34;{}, {}&#34;</span>, ref1, ref2);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> value <span style="color:#f92672">=</span> String::from(<span style="color:#e6db74">&#34;hello&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> ref1 <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>value;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> ref2 <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> value;  <span style="color:#75715e">// can&#39;t use borrow and mutable borrow at the same time.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>    println!(<span style="color:#e6db74">&#34;{}, {}&#34;</span>, ref1, ref2);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>这样可以防止Rust出现大量的问题，包括不进行数据争用：</p>
+<ul>
+<li>一个变量在被一个或多个只读引用时，不会被修改</li>
+<li>一个变量在可能会被修改时，不会在别的地方被读写</li>
+</ul>
+<h3 id="引用与生命周期">引用与生命周期</h3>
+<p>当被引用的变量超出生命周期时，引用它的变量也会变得不可用（在C++中变成空指针），此时使用它的话也会带来错误：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> x;
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">let</span> y <span style="color:#f92672">=</span> <span style="color:#ae81ff">42</span>;
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>y; <span style="color:#75715e">// We store a reference to `y` in `x` but `y` is about to be dropped.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    }
+</span></span><span style="display:flex;"><span>    println!(<span style="color:#e6db74">&#34;x: {}&#34;</span>, x); <span style="color:#75715e">// `x` refers to `y` but `y has been dropped!
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><p>此时两个变量的生命周期可以这样表示：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> x;                <span style="color:#75715e">// ---------+-- &#39;a
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    {                     <span style="color:#75715e">//          |
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">let</span> y <span style="color:#f92672">=</span> <span style="color:#ae81ff">42</span>;       <span style="color:#75715e">// -+-- &#39;b  |
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        x <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>y;           <span style="color:#75715e">//  |       |
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    }                     <span style="color:#75715e">// -+       |
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    println!(<span style="color:#e6db74">&#34;x: {}&#34;</span>, x); <span style="color:#75715e">//          |
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><p>编译器通过验证变量<code>x</code>的生命周期是否包含了被引用的变量<code>y</code>的生命周期，此处<code>'b</code>并没有包含<code>'a</code>（反而反过来了），所以编译不通过。</p>
+<h4 id="函数与生命周期">函数与生命周期</h4>
+<p>对于函数来说，并不能知道传进来引用的生命周期，如果函数要根据条件返回其中一个变量时，要确保它们在返回时还有效：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> magic1 <span style="color:#f92672">=</span> String::from(<span style="color:#e6db74">&#34;abracadabra!&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> result;
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">let</span> magic2 <span style="color:#f92672">=</span> String::from(<span style="color:#e6db74">&#34;shazam!&#34;</span>);
+</span></span><span style="display:flex;"><span>        result <span style="color:#f92672">=</span> longest_word(<span style="color:#f92672">&amp;</span>magic1, <span style="color:#f92672">&amp;</span>magic2);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    println!(<span style="color:#e6db74">&#34;The longest magic word is {}&#34;</span>, result);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">longest_word</span>(x: <span style="color:#66d9ef">&amp;</span>String, y: <span style="color:#66d9ef">&amp;</span>String) -&gt; <span style="color:#66d9ef">&amp;</span>String {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> x.len() <span style="color:#f92672">&gt;</span> y.len() {
+</span></span><span style="display:flex;"><span>        x
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>        y
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Rust规定函数在返回引用时，要知道它们的生命周期，并通过一定的方式检测变量是否在返回后，依然在生命周期中（而不是返回一个已经被释放的数据）。</p>
+<p>Rust中声明生命周期的方法为：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">longest_word</span><span style="color:#f92672">&lt;&#39;</span><span style="color:#a6e22e">a</span><span style="color:#f92672">&gt;</span>(x: <span style="color:#66d9ef">&amp;</span><span style="color:#f92672">&#39;</span><span style="color:#a6e22e">a</span> String, y: <span style="color:#66d9ef">&amp;</span><span style="color:#f92672">&#39;</span><span style="color:#a6e22e">a</span> String) -&gt; <span style="color:#66d9ef">&amp;</span><span style="color:#f92672">&#39;</span><span style="color:#a6e22e">a</span> String {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> x.len() <span style="color:#f92672">&gt;</span> y.len() {
+</span></span><span style="display:flex;"><span>        x
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>        y
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>此处的<code>'a</code>可以用任何字符串代替，只是给生命周期起个名字。在确定好生命周期后，rust就能检测出上述代码的错误：<code>magic2</code>的生命周期与<code>magic1</code>并不相同（而我们在定义函数时都预期它们的生命周期为<code>'a'</code>，这样返回时可能会导致错误。</p>
+<h3 id="实验">实验</h3>
+<p>实现copy_and_return函数，将参数插入到向量中，同时返回参数。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#75715e">// 可以直接在指定好value和返回值的生命周期后，返回value
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">copy_and_return</span><span style="color:#f92672">&lt;&#39;</span><span style="color:#a6e22e">a</span><span style="color:#f92672">&gt;</span>(vector: <span style="color:#66d9ef">&amp;</span><span style="color:#a6e22e">mut</span> Vec<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span>, value: <span style="color:#66d9ef">&amp;</span><span style="color:#f92672">&#39;</span><span style="color:#a6e22e">a</span> <span style="color:#66d9ef">str</span>) -&gt; <span style="color:#66d9ef">&amp;</span><span style="color:#f92672">&#39;</span><span style="color:#a6e22e">a</span> <span style="color:#66d9ef">str</span> {
+</span></span><span style="display:flex;"><span>    vector.push(String::from(value));
+</span></span><span style="display:flex;"><span>    value
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> name1 <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Joe&#34;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> name2 <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Chris&#34;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> name3 <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Anne&#34;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> names <span style="color:#f92672">=</span> Vec::new();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    assert_eq!(<span style="color:#e6db74">&#34;Joe&#34;</span>, copy_and_return(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> names, <span style="color:#f92672">&amp;</span>name1));
+</span></span><span style="display:flex;"><span>    assert_eq!(<span style="color:#e6db74">&#34;Chris&#34;</span>, copy_and_return(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> names, <span style="color:#f92672">&amp;</span>name2));
+</span></span><span style="display:flex;"><span>    assert_eq!(<span style="color:#e6db74">&#34;Anne&#34;</span>, copy_and_return(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> names, <span style="color:#f92672">&amp;</span>name3));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    assert_eq!(
+</span></span><span style="display:flex;"><span>        names,
+</span></span><span style="display:flex;"><span>        vec![<span style="color:#e6db74">&#34;Joe&#34;</span>.to_string(), <span style="color:#e6db74">&#34;Chris&#34;</span>.to_string(), <span style="color:#e6db74">&#34;Anne&#34;</span>.to_string()]
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#75715e">// 还可以在插入后返回向量的最后一个值，因为返回了向量相关值，所以也要指定向量的生命周期
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">copy_and_return</span><span style="color:#f92672">&lt;&#39;</span><span style="color:#a6e22e">a</span><span style="color:#f92672">&gt;</span>(vector: <span style="color:#66d9ef">&amp;</span><span style="color:#f92672">&#39;</span><span style="color:#a6e22e">a</span> <span style="color:#a6e22e">mut</span> Vec<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span>, value: <span style="color:#66d9ef">&amp;</span><span style="color:#f92672">&#39;</span><span style="color:#a6e22e">a</span> <span style="color:#66d9ef">str</span>) -&gt; <span style="color:#66d9ef">&amp;</span><span style="color:#f92672">&#39;</span><span style="color:#a6e22e">a</span> String {
+</span></span><span style="display:flex;"><span>    vector.push(String::from(value));
+</span></span><span style="display:flex;"><span>    vector.get(vector.len()<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>).unwrap()
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="使用泛型类型generic-type和特征traits">使用泛型类型(generic type)和特征(traits)</h2>
+<p>使用泛型可以用一个函数来处理多种输入类型的情况，提高数据的易维护性。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Point</span><span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> {
+</span></span><span style="display:flex;"><span>    x: <span style="color:#a6e22e">T</span>,
+</span></span><span style="display:flex;"><span>    y: <span style="color:#a6e22e">T</span>,
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> boolean <span style="color:#f92672">=</span> Point { x: <span style="color:#a6e22e">true</span>, y: <span style="color:#a6e22e">false</span> };
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> integer <span style="color:#f92672">=</span> Point { x: <span style="color:#ae81ff">1</span>, y: <span style="color:#ae81ff">9</span> };
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> float <span style="color:#f92672">=</span> Point { x: <span style="color:#ae81ff">1.7</span>, y: <span style="color:#ae81ff">4.3</span> };
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> string_slice <span style="color:#f92672">=</span> Point { x: <span style="color:#e6db74">&#34;high&#34;</span>, y: <span style="color:#e6db74">&#34;low&#34;</span> };
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>此时<code>x</code>和<code>y</code>都必须是同一类型，若要让两者不同类型，则需要定义两个范型：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Point</span><span style="color:#f92672">&lt;</span>T, U<span style="color:#f92672">&gt;</span> {
+</span></span><span style="display:flex;"><span>    x: <span style="color:#a6e22e">T</span>,
+</span></span><span style="display:flex;"><span>    y: <span style="color:#a6e22e">U</span>,
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> integer_and_boolean <span style="color:#f92672">=</span> Point { x: <span style="color:#ae81ff">5</span>, y: <span style="color:#a6e22e">false</span> };
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> float_and_string <span style="color:#f92672">=</span> Point { x: <span style="color:#ae81ff">1.0</span>, y: <span style="color:#e6db74">&#34;hey&#34;</span> };
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> integer_and_float <span style="color:#f92672">=</span> Point { x: <span style="color:#ae81ff">5</span>, y: <span style="color:#ae81ff">4.0</span> };
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> both_integer <span style="color:#f92672">=</span> Point { x: <span style="color:#ae81ff">10</span>, y: <span style="color:#ae81ff">30</span> }; <span style="color:#75715e">// same type also accepted
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> both_boolean <span style="color:#f92672">=</span> Point { x: <span style="color:#a6e22e">true</span>, y: <span style="color:#a6e22e">true</span> };
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="使用特征traits定义共享行为">使用特征(traits)定义共享行为</h3>
+<p>特征指的是一组类型可实现的通用接口，比如<code>ToString</code>可以将各种未知类型的数据转化为字符串，<code>traits</code>和C++里的<code>interface</code>有些类似。</p>
+<p>我们定义一个<code>Area</code>的特征，来表示对象的面积，定义<code>area</code>函数来制定接口形式：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">trait</span> Area {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">area</span>(<span style="color:#f92672">&amp;</span>self) -&gt; <span style="color:#66d9ef">f64</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>我们创建一些新的类型，并实现<code>Area</code>特征：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Circle</span> {
+</span></span><span style="display:flex;"><span>    radius: <span style="color:#66d9ef">f64</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Rectangle</span> {
+</span></span><span style="display:flex;"><span>    width: <span style="color:#66d9ef">f64</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">height</span>: <span style="color:#66d9ef">f64</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">impl</span> Area <span style="color:#66d9ef">for</span> Circle {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">area</span>(<span style="color:#f92672">&amp;</span>self) -&gt; <span style="color:#66d9ef">f64</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">use</span> std::<span style="color:#66d9ef">f64</span>::consts::PI; <span style="color:#75715e">// use PI
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        PI <span style="color:#f92672">*</span> self.radius.powf(<span style="color:#ae81ff">2.0</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">impl</span> Area <span style="color:#66d9ef">for</span> Rectangle {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">area</span>(<span style="color:#f92672">&amp;</span>self) -&gt; <span style="color:#66d9ef">f64</span> {
+</span></span><span style="display:flex;"><span>        self.width <span style="color:#f92672">*</span> self.height
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> circle <span style="color:#f92672">=</span> Circle { radius: <span style="color:#ae81ff">5.0</span> };
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> rectangle <span style="color:#f92672">=</span> Rectangle {
+</span></span><span style="display:flex;"><span>        width: <span style="color:#ae81ff">10.0</span>,
+</span></span><span style="display:flex;"><span>        height: <span style="color:#ae81ff">20.0</span>,
+</span></span><span style="display:flex;"><span>    };
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    println!(<span style="color:#e6db74">&#34;Circle area: {}&#34;</span>, circle.area());
+</span></span><span style="display:flex;"><span>    println!(<span style="color:#e6db74">&#34;Rectangle area: {}&#34;</span>, rectangle.area());
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="派生derive特征">派生(derive)特征</h3>
+<p>我们在实现自定义类型时，可能需要对类型进行以下操作：</p>
+<ul>
+<li>比较</li>
+<li>输出</li>
+<li>Debug输出</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Point</span> {
+</span></span><span style="display:flex;"><span>    x: <span style="color:#66d9ef">i32</span>,
+</span></span><span style="display:flex;"><span>    y: <span style="color:#66d9ef">i32</span>,
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> p1 <span style="color:#f92672">=</span> Point { x: <span style="color:#ae81ff">1</span>, y: <span style="color:#ae81ff">2</span> };
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> p2 <span style="color:#f92672">=</span> Point { x: <span style="color:#ae81ff">4</span>, y: <span style="color:#f92672">-</span><span style="color:#ae81ff">3</span> };
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> p1 <span style="color:#f92672">==</span> p2 { <span style="color:#75715e">// can&#39;t compare two Point values!
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        println!(<span style="color:#e6db74">&#34;equal!&#34;</span>);
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>        println!(<span style="color:#e6db74">&#34;not equal!&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    println!(<span style="color:#e6db74">&#34;{}&#34;</span>, p1); <span style="color:#75715e">// can&#39;t print using the &#39;{}&#39; format specifier!
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    println!(<span style="color:#e6db74">&#34;{:?}&#34;</span>, p1); <span style="color:#75715e">//  can&#39;t print using the &#39;{:?}&#39; format specifier!
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>此时代码编译失败，因为我们没有实现<code>Debug</code>、<code>Display</code>和<code>PartialEq</code>特征，使用派生特征可以自动实现<code>Debug</code>和<code>PartialEq</code>，但Rust并不提供<code>Display</code>的标准实现：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#75715e">#[derive(Debug, PartialEq)]</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Point</span> {
+</span></span><span style="display:flex;"><span>    x: <span style="color:#66d9ef">i32</span>,
+</span></span><span style="display:flex;"><span>    y: <span style="color:#66d9ef">i32</span>,
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>若需要实现<code>Display</code>特征，我们需要手动实现：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">use</span> std::fmt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">impl</span> fmt::Display <span style="color:#66d9ef">for</span> Point {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">fmt</span>(<span style="color:#f92672">&amp;</span>self, f:<span style="color:#66d9ef">&amp;</span><span style="color:#a6e22e">mut</span> fmt::Formatter<span style="color:#f92672">&lt;&#39;</span>_<span style="color:#f92672">&gt;</span>) -&gt; <span style="color:#a6e22e">fmt</span>::Result {
+</span></span><span style="display:flex;"><span>        write!(f, <span style="color:#e6db74">&#34;({}, {})&#34;</span>, self.x, self.y)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="特征边界和范型函数">特征边界和范型函数</h3>
+<p>当一个类型实现了某个特征后，我们可以把它看作<strong>拥有某特征的类型</strong>，这点可以体现在函数传递中。我们在定义函数的参数列表时，可以将参数指定为<strong>实现了某特征的类型</strong>，然后在函数中调用这个类型所实现的方法（虽然函数可能并不了解它的具体实现）。</p>
+<p>假设我们的Web应用中定义了一个将值序列化为JSON的特征：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">trait</span> AsJson {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">as_json</span>(<span style="color:#f92672">&amp;</span>self) -&gt; String;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>我们的函数接受实现了该特征的类型，并调用<code>as_json</code>方法：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">send_data_as_json</span>(value: <span style="color:#66d9ef">&amp;</span><span style="color:#a6e22e">impl</span> AsJson) {
+</span></span><span style="display:flex;"><span>    println!(<span style="color:#e6db74">&#34;Sending JSON data to server...&#34;</span>);
+</span></span><span style="display:flex;"><span>    println!(<span style="color:#e6db74">&#34;-&gt; {}&#34;</span>, value.as_json());
+</span></span><span style="display:flex;"><span>    println!(<span style="color:#e6db74">&#34;Done!\n&#34;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="迭代器">迭代器</h3>
+<p>Rust中所有的迭代器都会实现标准库中的<code>Iterator</code>特征，其核心部分为：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">trait</span> Iterator {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Item</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">next</span>(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> self) -&gt; Option<span style="color:#f92672">&lt;</span>Self::Item<span style="color:#f92672">&gt;</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>创建迭代器需要两个步骤：</p>
+<ol>
+<li>创建一个结构来保留迭代器的状态。</li>
+<li>实现该结构的迭代器。</li>
+</ol>
+<p>定义迭代器<code>Counter</code>用于对1到任意数字进行计数，这里实现<code>new</code>方法来初始化一个计数器</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Counter</span> {
+</span></span><span style="display:flex;"><span>    length: <span style="color:#66d9ef">usize</span>,
+</span></span><span style="display:flex;"><span>    count: <span style="color:#66d9ef">usize</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">impl</span> Counter {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">new</span>(length: <span style="color:#66d9ef">usize</span>) -&gt; <span style="color:#a6e22e">Counter</span> {
+</span></span><span style="display:flex;"><span>        Counter {
+</span></span><span style="display:flex;"><span>            count: <span style="color:#ae81ff">0</span>,
+</span></span><span style="display:flex;"><span>            length
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>接下来实现<code>Iterator</code>特征，这里将<code>Item</code>定义为<code>usize</code>：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">impl</span> Iterator <span style="color:#66d9ef">for</span> Counter {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Item</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">usize</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">next</span>(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> self) -&gt; Option<span style="color:#f92672">&lt;</span>Self::Item<span style="color:#f92672">&gt;</span> {
+</span></span><span style="display:flex;"><span>        self.count <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> self.count <span style="color:#f92672">&lt;=</span> self.length {
+</span></span><span style="display:flex;"><span>            Some(self.count)
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>            None
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>这样就可以用<code>for in</code>来遍历该对象：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> number <span style="color:#66d9ef">in</span> Counter::new(<span style="color:#ae81ff">10</span>) {
+</span></span><span style="display:flex;"><span>        println!(<span style="color:#e6db74">&#34;{}&#34;</span>, number);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="实现范型类型">实现范型类型</h3>
+<p>实现一个<code>Container</code>结构，让他的value值可以为任意给定的类型。</p>
+<p>使用<code>impl</code>来实现范型函数时，需要在<code>impl</code>和<code>Container</code>后都定义类型<code>&lt;T&gt;</code>：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Container</span><span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> {
+</span></span><span style="display:flex;"><span>    value: <span style="color:#a6e22e">T</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">impl</span><span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> Container<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">new</span>(value: <span style="color:#a6e22e">T</span>) -&gt; <span style="color:#a6e22e">Container</span><span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> {
+</span></span><span style="display:flex;"><span>        Container{ value }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>可以直接用<code>Self</code>返回类型本身</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">impl</span><span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> Container<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">new</span>(value: <span style="color:#a6e22e">T</span>) -&gt; <span style="color:#a6e22e">Self</span> {
+</span></span><span style="display:flex;"><span>        Container{ value }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>验证:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    assert_eq!(Container::new(<span style="color:#ae81ff">42</span>).value, <span style="color:#ae81ff">42</span>);
+</span></span><span style="display:flex;"><span>    assert_eq!(Container::new(<span style="color:#ae81ff">3.14</span>).value, <span style="color:#ae81ff">3.14</span>);
+</span></span><span style="display:flex;"><span>    assert_eq!(Container::new(<span style="color:#e6db74">&#34;Foo&#34;</span>).value, <span style="color:#e6db74">&#34;Foo&#34;</span>);
+</span></span><span style="display:flex;"><span>    assert_eq!(Container::new(String::from(<span style="color:#e6db74">&#34;Bar&#34;</span>)).value, String::from(<span style="color:#e6db74">&#34;Bar&#34;</span>));
+</span></span><span style="display:flex;"><span>    assert_eq!(Container::new(<span style="color:#66d9ef">true</span>).value, <span style="color:#66d9ef">true</span>);
+</span></span><span style="display:flex;"><span>    assert_eq!(Container::new(<span style="color:#f92672">-</span><span style="color:#ae81ff">12</span>).value, <span style="color:#f92672">-</span><span style="color:#ae81ff">12</span>);
+</span></span><span style="display:flex;"><span>    assert_eq!(Container::new(Some(<span style="color:#e6db74">&#34;text&#34;</span>)).value, Some(<span style="color:#e6db74">&#34;text&#34;</span>));
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="实现连续相同数分组的迭代器">实现连续相同数分组的迭代器</h3>
+<ul>
+<li>输入：[ 1, 1, 2, 1, 3, 3 ]</li>
+<li>输出：[ [1, 1], [2], [1], [3, 3] ]</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Groups</span><span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> {
+</span></span><span style="display:flex;"><span>    inner: Vec<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span>,
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">impl</span><span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> Groups<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">new</span>(inner: Vec<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span>) -&gt; <span style="color:#a6e22e">Self</span> {
+</span></span><span style="display:flex;"><span>        Groups { inner }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">impl</span><span style="color:#f92672">&lt;</span>T: PartialEq<span style="color:#f92672">&gt;</span> Iterator <span style="color:#66d9ef">for</span> Groups<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Item</span> <span style="color:#f92672">=</span> Vec<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">next</span>(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> self) -&gt; Option<span style="color:#f92672">&lt;</span>Self::Item<span style="color:#f92672">&gt;</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> self.inner.is_empty() {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> None;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> index<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> item <span style="color:#66d9ef">in</span> <span style="color:#f92672">&amp;</span>self.inner[<span style="color:#ae81ff">1</span><span style="color:#f92672">..</span>] {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> item <span style="color:#f92672">==</span> <span style="color:#f92672">&amp;</span>self.inner[<span style="color:#ae81ff">0</span>] {
+</span></span><span style="display:flex;"><span>                index <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>            } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">let</span> items <span style="color:#f92672">=</span> self.inner.drain(<span style="color:#ae81ff">0</span><span style="color:#f92672">..</span>index).collect();
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        Some(items)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> data <span style="color:#f92672">=</span> vec![<span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">3</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">5</span>];
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// groups:     |-&gt;|----&gt;|-&gt;|-&gt;|---&gt;|-----------&gt;|---&gt;|
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    assert_eq!(
+</span></span><span style="display:flex;"><span>        Groups::new(data).into_iter().collect::<span style="color:#f92672">&lt;</span>Vec<span style="color:#f92672">&lt;</span>Vec<span style="color:#f92672">&lt;</span>_<span style="color:#f92672">&gt;&gt;&gt;</span>(),
+</span></span><span style="display:flex;"><span>        vec![
+</span></span><span style="display:flex;"><span>            vec![<span style="color:#ae81ff">4</span>],
+</span></span><span style="display:flex;"><span>            vec![<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>],
+</span></span><span style="display:flex;"><span>            vec![<span style="color:#ae81ff">2</span>],
+</span></span><span style="display:flex;"><span>            vec![<span style="color:#ae81ff">1</span>],
+</span></span><span style="display:flex;"><span>            vec![<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">3</span>],
+</span></span><span style="display:flex;"><span>            vec![<span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>],
+</span></span><span style="display:flex;"><span>            vec![<span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">5</span>],
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> data2 <span style="color:#f92672">=</span> vec![<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">3</span>];
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// groups:      |-&gt;|----&gt;|----&gt;|----|-&gt;|-----&gt;|-&gt;|
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    assert_eq!(
+</span></span><span style="display:flex;"><span>        Groups::new(data2).into_iter().collect::<span style="color:#f92672">&lt;</span>Vec<span style="color:#f92672">&lt;</span>Vec<span style="color:#f92672">&lt;</span>_<span style="color:#f92672">&gt;&gt;&gt;</span>(),
+</span></span><span style="display:flex;"><span>        vec![
+</span></span><span style="display:flex;"><span>            vec![<span style="color:#ae81ff">1</span>],
+</span></span><span style="display:flex;"><span>            vec![<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>],
+</span></span><span style="display:flex;"><span>            vec![<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>],
+</span></span><span style="display:flex;"><span>            vec![<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>],
+</span></span><span style="display:flex;"><span>            vec![<span style="color:#ae81ff">3</span>],
+</span></span><span style="display:flex;"><span>            vec![<span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">4</span>],
+</span></span><span style="display:flex;"><span>            vec![<span style="color:#ae81ff">3</span>],
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>值得注意的是，这里使用了<code>&amp;self.inner[1..]</code>。直接使用<code>self.inner[1..]</code>会有如下错误：</p>
+<pre tabindex="0"><code>error[E0277]: the size for values of type `[T]` cannot be known at compilation time
+   --&gt; src/main.rs:21:21
+    |
+21  |         for item in self.inner[1..] {
+    |                     ^^^^^^^^^^^^^^^ doesn&#39;t have a size known at compile-time
+    |
+    = help: the trait `Sized` is not implemented for `[T]`
+    = note: required because of the requirements on the impl of `IntoIterator` for `[T]`
+note: required by `into_iter`
+</code></pre><p>个人的理解是，如果这里直接使用<code>self.inner</code>，编译器不能知道这个<code>Group</code>的<code>inner</code>向量的长度（这里的<code>inner</code>可能会是任意<code>Group</code>变量的向量），如果改成这个<code>inner</code>的引用，就可以在编译的时候知道各<code>Group</code>变量的向量的长度。</p>
+
+  </section>
+  <footer>
+    
+    
+
+    
+    <nav class="p-pagination c-pagination">
+      <div class="c-pagination__ctrl">
+        <div class="c-pagination__newer">
+          
+        </div>
+        <div class="c-pagination__older">
+          
+          <a href="https://hagemon.github.io/posts/multimodal-biometric-feature-learning-notes/">Older</a>
+          
+        </div>
+      </div>
+    </nav>
+    
+    
+
+
+    
+
+  </footer>
+</article>
+  </main>
+  <footer class="l-footer">
+    
+<ul class="c-links">
+  
+  
+  <li class="c-links__item">
+    <a href="https://twitter.com/oneFolder_" target="_blank">
+      <svg viewBox="0 0 64 64" class="c-links__icon">
+        <title>twitter</title>
+        <use xlink:href="#icon-twitter"></use>
+      </svg>
+    </a>
+  </li>
+  
+  
+  
+  
+  <li class="c-links__item">
+    <a href="https://github.com/hagemon" target="_blank">
+      <svg viewBox="0 0 64 64" class="c-links__icon">
+        <title>github</title>
+        <use xlink:href="#icon-github"></use>
+      </svg>
+    </a>
+  </li>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</ul>
+
+
+
+    <p class="p-copyright">
+      
+        Hagemon Production
+      
+    </p>
+  </footer>
+
+  <script type="text/javascript" src="https://hagemon.github.io/js/bundle.js" defer></script>
+</body>
+</html>
+

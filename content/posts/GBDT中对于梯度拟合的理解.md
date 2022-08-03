@@ -1,12 +1,9 @@
----
-title: 'GBDT中对于梯度拟合的理解'
-date: 2019-08-20 20:05:27
-tags: [Machine Learning]
-published: true
-hideInList: false
-feature: 
-isTop: false
----
++++
+title = 'GBDT中对于梯度拟合的理解'
+date = 2019-08-20 20:05:27
+math = true
++++
+
 为什么在优化GBDT时，要让当前的学习器去拟合一个负梯度呢？
 
 在梯度提升决策树（Gradient Boosting Decision Tree, GBDT）中，当前学习器的拟合对象是**自定义损失函数$L(y_i,\hat{y}_i^{t-1})$对于上一个学习器的输出$\hat{y}_i^{t-1}$的负梯度**，即

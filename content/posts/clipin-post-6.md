@@ -1,12 +1,8 @@
----
-title: 'Clipin Log 6. 多屏幕支持'
-date: 2021-01-09 21:44:43
-tags: [iOS,Clipin]
-published: true
-hideInList: false
-feature: 
-isTop: false
----
++++
+title = 'Clipin Log 6. 多屏幕支持'
+date = 2021-01-09 21:44:43
++++
+
 ## 多屏幕环境
 
 在多屏幕环境下，各个屏幕的起始坐标`origin`会根据用户在系统偏好设置中对显示器排列的设置而不同，下图直观地表示了多屏幕环境下各屏幕的坐标。

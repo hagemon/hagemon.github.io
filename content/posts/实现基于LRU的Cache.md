@@ -1,12 +1,8 @@
----
-title: '实现基于LRU的Cache'
-date: 2021-02-06 22:58:25
-tags: [iOS,Algorithm]
-published: true
-hideInList: false
-feature: 
-isTop: false
----
++++
+title = '实现基于LRU的Cache'
+date = 2021-02-06 22:58:25
++++
+
 LRU需要满足：
 
 - O(1)时间的读写
