@@ -7,7 +7,41 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Hagemon Production</copyright>
-    <lastBuildDate>Wed, 03 Aug 2022 20:46:25 +0000</lastBuildDate><atom:link href="https://hagemon.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 07 Aug 2022 22:12:43 +0800</lastBuildDate><atom:link href="https://hagemon.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Multi Level GUI Comparison Criteria</title>
+      <link>https://hagemon.github.io/posts/multi-level-gui-comparison-criteria/</link>
+      <pubDate>Sun, 07 Aug 2022 22:12:43 +0800</pubDate>
+      
+      <guid>https://hagemon.github.io/posts/multi-level-gui-comparison-criteria/</guid>
+      <description>Modern Android apps contain a number of dynamically constructed GUIs, which make accurate behavoir modeling more challenging. Baek and Bae proposed a set of multi-level GUI Comparison Criteria(GUICC) ,which provides multiple abstraction levels for GUI model generation.
+A GUI model is a event-driven transitions beteen GUI states, naturally described in a graph formulation. We call a GUI modal as a “GUI graph”.
+Definition. A GUI graph $G$ is a directed graph that consist of distinct GUI states as “ScreenNodes” ($S$ for short), which distinuished by a specific GUI comparison criterion.</description>
+    </item>
+    
+    <item>
+      <title>基于真实bug的GUI自动化测试标准设计</title>
+      <link>https://hagemon.github.io/posts/%E5%9F%BA%E4%BA%8E%E7%9C%9F%E5%AE%9Ebug%E7%9A%84gui%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95%E6%A0%87%E5%87%86%E8%AE%BE%E8%AE%A1/</link>
+      <pubDate>Fri, 05 Aug 2022 22:12:50 +0800</pubDate>
+      
+      <guid>https://hagemon.github.io/posts/%E5%9F%BA%E4%BA%8E%E7%9C%9F%E5%AE%9Ebug%E7%9A%84gui%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95%E6%A0%87%E5%87%86%E8%AE%BE%E8%AE%A1/</guid>
+      <description>论文Benchmarking Automated GUI Testing for Android against Real-World Bugs的学习笔记】
+总览 在自动化GUI软件测试中，有一个关键问题：“测试工具如何有效地、全面地找到实际存在的crash bug（How effectively and thoroughly can these tools find crash bugs in practice?)”。本文的主要围绕这个问题展开工作，制定了一个名为THEMIS的标准来比较自动化GUI测试工具的有效性。
+目前的研究主要聚焦于使用不同的测试工具，对多个app进行测试，比较它们找到crash bug的个数和被测代码的覆盖率。这些方法都是基于软件和测试工具，来对未知的crash bug进行检测，这种检测方法提供的信息很有限，无法很好地解释上述的关键问题。
+本文的核心思想在于：构建包含真实bug（ground-truth）的数据集，并检验测试工具能否在app上检测出这些bug。
+这种做法有以下的好处：
+ 可以更直接、更深入地分析测试工具的有效性。基于未被检测到的真实bug，分析各工具的短板，并可以进一步地总结所有工具存普遍存在的问题，帮助测试工具更好地发展。 增加测试工具的可靠性，分析测试工具在“bug去重”时是否存在策略上的缺陷，使得两个不同的真实bug被判定为相同，从而让结果变得不可靠。  为了达到这个目的，本文基于多个专家的经验，从1,829个开源安卓软件中人为选择了20个开源项目的52个真实bug。这些bug都被标注了“高优先级”等字样，并且影响了软件的主要功能，或是影响的用户范围较广，表明了这些bug的重要程度。
+基于真实bug数据集，本文提出了3个研究问题：
+ RQ1:现有的测试工具是否能够有效、全面地检测到真实的bug。 RQ2:现有的测试工具是否存在共同的短板，使得它们无法发现一些特定的bug。 RQ3:有哪些因素制约了测试工具对真实bug 的检测，如何针对这些因素对测试工具进行改进。  测试工具 为了研究这些研究问题，本文选择了8个流行的测试工具：
+  Monkey：能够随机生成GUI事件（touch、gesture、random texts）和系统事件（volume controls、navigation）。
+  APE：结合随机策略和深度优先搜索策略生成GUI事件序列，同时基于决策树算法，在运行时对生成模型进行不断优化。
+  HUMANOID：基于深度学习，利用神经网络来预测当前GUI状态下，最合适的GUI事件。
+  COMBODROID：利用一系列简短、独立的测试用例，通过分析它们的数据流向和GUI过度关系，结合成为若干个较长的GUI事件。
+  TimeMachine：将GUI的布局定义为状态（state）
+ 若在测试过程中发现一个较好的状态（如调用了之前没有调用过的函数），则认为该状态是一个interesting state，并将其记录。 若当前的状态没什么进展，则将状态恢复到最近的一个较好的状态，并继续开展测试。    Q-TESTING：基于强化学习的思想
+ 当某个GUI状态与上一个相似时，获得较小的reward 当某个GUI状态与上一个差别较大时，获得较大的reward  从而生成较具代表性的GUI事件序列</description>
+    </item>
+    
     <item>
       <title>理解和检测安卓应用中系统设置相关的缺陷</title>
       <link>https://hagemon.github.io/posts/%E7%90%86%E8%A7%A3%E5%92%8C%E6%A3%80%E6%B5%8B%E5%AE%89%E5%8D%93%E5%BA%94%E7%94%A8%E4%B8%AD%E7%B3%BB%E7%BB%9F%E8%AE%BE%E7%BD%AE%E7%9B%B8%E5%85%B3%E7%9A%84%E7%BC%BA%E9%99%B7/</link>
@@ -381,6 +415,15 @@ $$T_t(x)=-\eta\frac{\partial l(y_i,\hat{y}_i^{t-1}+T_t(x))}{\partial \hat{y}_i^{
 Ending 这么一总结，大胆猜测XGBoost使用了泰勒二阶展开，可能就是受了GBDT中使用一阶展开的启发。终于把很多博客都没有说的很清楚的部分记录下来了，当然这里也参考了一些写的很棒的博客和知乎回答，感谢大家的辛勤付出！
 参考资料 梯度下降法的推导
 gbdt的残差为什么用负梯度代替？ - 奥奥奥奥噢利的回答 - 知乎</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://hagemon.github.io/posts/test/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://hagemon.github.io/posts/test/</guid>
+      <description></description>
     </item>
     
   </channel>

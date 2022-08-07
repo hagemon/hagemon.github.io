@@ -4,16 +4,16 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
   
-  <title>Clipin Log 6. 多屏幕支持</title>
-  <meta property="og:title" content="Clipin Log 6. 多屏幕支持" />
-  <meta name="twitter:title" content="Clipin Log 6. 多屏幕支持" />
+  <title>Multi Level GUI Comparison Criteria</title>
+  <meta property="og:title" content="Multi Level GUI Comparison Criteria" />
+  <meta name="twitter:title" content="Multi Level GUI Comparison Criteria" />
   
 
   
 
   <meta name="author" content=""/>
   <meta property="og:site_name" content="Hagemon&#39;s Log" />
-  <meta property="og:url" content="https://hagemon.github.io/posts/clipin-post-6/" />
+  <meta property="og:url" content="https://hagemon.github.io/posts/multi-level-gui-comparison-criteria/" />
 
   
   <meta name="twitter:card" content="summary" />
@@ -38,7 +38,35 @@
   
   <link rel="stylesheet" href="https://hagemon.github.io/css/custom.css">
   <link rel='icon' type='image/x-icon' href="https://hagemon.github.io/favicon.ico" />
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async>
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: {
+      equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"]
+    }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+  MathJax.Hub.Config({
   
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+
   
   
 
@@ -78,14 +106,14 @@
 
 <article class="p-article">
   <header>
-    <h1>Clipin Log 6. 多屏幕支持</h1>
+    <h1>Multi Level GUI Comparison Criteria</h1>
     
     <div>
         <div class="c-meta">
         
            Posted on
-<time datetime="2021-01-09T21:44:43Z">
-  Jan 9, 2021
+<time datetime="2022-08-07T22:12:43&#43;08:00">
+  Aug 7, 2022
 </time>
 
         
@@ -99,82 +127,78 @@
   </header>
   
   <section id="js-article" class="p-article__body">
-    <h2 id="多屏幕环境">多屏幕环境</h2>
-<p>在多屏幕环境下，各个屏幕的起始坐标<code>origin</code>会根据用户在系统偏好设置中对显示器排列的设置而不同，下图直观地表示了多屏幕环境下各屏幕的坐标。</p>
-<p><img src="https://hagemon.github.io/post-images/1613224003347.png" alt=""></p>
-<p>通过<code>screen.visibleFrame</code>可以访问屏幕在此坐标系下的frame。</p>
-<h2 id="实现思路">实现思路</h2>
+    <p>Modern Android apps contain a number of dynamically constructed GUIs, which make accurate behavoir modeling more challenging. <a href="https://dl.acm.org/doi/10.1145/2970276.2970313">Baek and Bae</a> proposed a set of multi-level GUI Comparison Criteria(GUICC) ,which provides multiple abstraction levels for GUI model generation.</p>
+<p>A GUI model is a event-driven transitions beteen GUI states, naturally described in a graph formulation. We call a GUI modal as a “GUI graph”.</p>
+<p><strong>Definition.</strong> A GUI graph $G$ is a directed graph that consist of <strong>distinct</strong> GUI states as “<em><strong>ScreenNodes”</strong></em> ($S$ for short), which distinuished by a specific GUI comparison criterion. Transactions between GUI states are triggerd by events as <em><strong>“EventEdges”</strong></em> ($E$ for short). Thus, $G$ can be dfined as $G=(S, E)$, where $S={s_1, s_2,\dots,s_n}$ and $E={e_1,e_2,\dots,e_n}$.</p>
 <ul>
-<li>在ClipManager.shared.start()中检测所有屏幕并创建控制器</li>
-<li>对于每个控制器，获取对应显示器当前页面图像</li>
-<li>在执行Pin操作时，需要将窗口偏移到正确的位置</li>
+<li>A ScreenNode $S$ represents a GUI state that contains abstracted GUI information of an excution screen.  ScreenNodes are distinct fomr each other based on GUICC.</li>
+<li>A GUI Comparison Criterion (GUICC) represents a specific type of GUI information to determine equivalence or difference between GUI states.</li>
+<li>An EventEdge $E$ represents a single event that can be triggered both by a user (e.g. click event) and a system (e.g. phone calls). Each $E$ links between ScreenNodes.</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-swift" data-lang="swift"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ClipManager</span> {
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// ....    </span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> controllers: [ClipWindowController] = []
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// ....</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">start</span>() {
-</span></span><span style="display:flex;"><span>        NotificationCenter.<span style="color:#66d9ef">default</span>.post(name: NotiNames.pinNormal.name, object: <span style="color:#66d9ef">nil</span>)
-</span></span><span style="display:flex;"><span>        NSApplication.shared.activate(ignoringOtherApps: <span style="color:#66d9ef">true</span>)
-</span></span><span style="display:flex;"><span>        
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> screen <span style="color:#66d9ef">in</span> NSScreen.screens {  <span style="color:#75715e">// 获取所有屏幕</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">let</span> view = ClipView(frame: screen.frame)
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">let</span> clipWindow = ClipWindow(contentRect: screen.frame, contentView: view)
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">let</span> clipWindowController = ClipWindowController(window: clipWindow)
-</span></span><span style="display:flex;"><span>            controllers.append(clipWindowController)
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">self</span>.status = .ready
-</span></span><span style="display:flex;"><span>            clipWindowController.capture(screen)
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// ....</span>
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>在ClipWindowController中获取各屏幕的图像：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-swift" data-lang="swift"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ClipWindowController</span>: NSWindowController {
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">capture</span>(<span style="color:#66d9ef">_</span> screen:NSScreen) {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">guard</span> <span style="color:#66d9ef">let</span> window = <span style="color:#66d9ef">self</span>.window <span style="color:#66d9ef">else</span> { <span style="color:#66d9ef">return</span> }
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">//  获取screen对应的displayID和ID对应的图像</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">guard</span> <span style="color:#66d9ef">let</span> displayID = screen.deviceDescription[NSDeviceDescriptionKey(rawValue: <span style="color:#e6db74">&#34;NSScreenNumber&#34;</span>)] <span style="color:#66d9ef">as</span>? CGDirectDisplayID,
-</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">let</span> cgScreenImage = CGDisplayCreateImage(displayID)
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span> { <span style="color:#66d9ef">return</span> }
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">self</span>.screenImage = NSImage(cgImage: cgScreenImage, size: screen.frame.size)
-</span></span><span style="display:flex;"><span>        window.backgroundColor = NSColor(white: <span style="color:#ae81ff">0</span>, alpha: <span style="color:#ae81ff">0.5</span>)
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">self</span>.clipView = window.contentView <span style="color:#66d9ef">as</span>? ClipView
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">self</span>.showWindow(<span style="color:#66d9ef">nil</span>)
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>在PinManager中修改pin函数，将屏幕起始坐标增加为新的参数，并对pin窗口进行偏移：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-swift" data-lang="swift"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">PinManager</span>: NSObject {
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">pin</span>(rep: NSBitmapImageRep, rect:NSRect, screenOrigin:NSPoint) {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">let</span> image = NSImage(size: rect.size)
-</span></span><span style="display:flex;"><span>        image.addRepresentation(rep)
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">let</span> view = PinView(image: image)
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">let</span> window = PinWindow(rect: rect, contentView: view)
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">let</span> controller = PinWindowController(window: window)
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">self</span>.controllers.append(controller)
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 以屏幕左下角坐标为基准，偏移pin窗口</span>
-</span></span><span style="display:flex;"><span>        window.setFrameOrigin(screenOrigin.offsetBy(dx: rect.origin.x, dy: rect.origin.y))
-</span></span><span style="display:flex;"><span>        controller.showWindow(<span style="color:#66d9ef">nil</span>)
-</span></span><span style="display:flex;"><span>        NotificationCenter.<span style="color:#66d9ef">default</span>.post(name: NotiNames.pinEnd.name, object: <span style="color:#66d9ef">nil</span>)
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>同时在调用pin函数时增加对屏幕起始坐标参数的传入：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-swift" data-lang="swift"><span style="display:flex;"><span><span style="color:#75715e">// ClipWindowController.swift</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">@objc</span> <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">done</span>() {
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">guard</span> <span style="color:#66d9ef">let</span> view = <span style="color:#66d9ef">self</span>.clipView,
-</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">let</span> rect = view.drawingRect
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span> {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span>
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">guard</span> <span style="color:#66d9ef">let</span> bitmapRep = view.bitmapImageRepForCachingDisplay(<span style="color:#66d9ef">in</span>: rect),
-</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">let</span> window = <span style="color:#66d9ef">self</span>.window,
-</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">let</span> screen = window.screen
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span> {<span style="color:#66d9ef">return</span>}
-</span></span><span style="display:flex;"><span>    view.cacheDisplay(<span style="color:#66d9ef">in</span>: rect, to: bitmapRep)
-</span></span><span style="display:flex;"><span>    PinManager.shared.pin(rep: bitmapRep, rect: rect, screenOrigin: screen.visibleFrame.origin)
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>接下来是<a href="https://hagemon.github.io/post/clipin-post-7/">对截屏的一些优化</a></p>
+<p>A model-based testing tool repeatedly excutes test inputs on a running app, and analyzes the excution results to generate and update the GUI model. Specifically, After an event $e$ is executed on a certain screen $s_c$, the GUI graph should be updated based on the observed results. The updating process can be illustrated as following figure:</p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h4ykoz3ussj20ys0k441e.jpg" alt=""></p>
+<p>Graph updating shows two cases:</p>
+<ol>
+<li>The GUI state changes to an existing state or stay the same.</li>
+<li>The GUI state changes to a new state that has a different GUI from other ScreenNodes in the GUI graph.</li>
+</ol>
+<h2 id="preparation">Preparation</h2>
+<p>In order to determine whether a screen after an event execution is different from exsisting GUI state, the author proposed a set of Multi-Level GUI Comparison Criteria.</p>
+<h3 id="information-collection">Information collection</h3>
+<p>The key to representing a GUI state is GUI information, which can be collected via GUI layouts of a screen. The author used <strong>UIAutomator</strong> tool and generated <strong>uidump.xml</strong> for screen analyzing. Specifically, the author automatically parsing the <strong>uidump.xml</strong> files and analyzed the structure of widgets, with thier properties and values, through <strong>dumpsys system diagnostics</strong>.</p>
+<h3 id="information-classification">Information classification</h3>
+<p>After extracting information from apps, we could find <strong>hierarchial relationships</strong> among several types of GUI information. For example, a package includes multiple activities, and an activity includes multiple widget structures.</p>
+<p>On the other hand ,the author filtered out  redundant GUI information that highly depends on the device or environment (e.g. coordinates or screenshots). In addition, the author merged some GUI information. For instance, properties <strong>&lt;clickable&gt;</strong>, <strong>&lt;long-clickable&gt;</strong>, <strong>&lt;checkable&gt;</strong> and <strong>&lt;scrollable&gt;</strong> were meged into an <strong>&lt;executable&gt;</strong> property.</p>
+<h2 id="guicc">GUICC</h2>
+<p>The comparison model has 5 comparison levels (marked as <strong>C-Lv</strong>), each level has 3 types of output which indicates the comparison result:</p>
+<ul>
+<li>T as terminated</li>
+<li>S as same</li>
+<li>N as new</li>
+</ul>
+<p>As <strong>C-Lv</strong> increases from <strong>C-Lv1</strong> to <strong>C-Lv5</strong>, more fine-grained GUI information is used to distinguish GUI states. Users can set a maximum comparison level (<strong>Max C-Lv</strong>), and the whole comparison process would start from <strong>C-Lv1</strong> to <strong>Max C-Lv</strong>. We set <strong>Max C-Lv</strong> as <strong>C-Lv5</strong> in our example.</p>
+<h3 id="c-lv1-compare-package-names">C-Lv1: Compare Package Names</h3>
+<p>The author used <strong>dumpsys</strong> to dump the status of the Android system after event, and parsing <strong>mFocusedApp</strong> information to extracted the package name of the currently focused app. We mark the status under comparison as $s&rsquo;$.</p>
+<p>If the device does not focus on the target application for testing, the comparison engine would return a $T$. This case can be caused by transitions to another app, shutdown, or crashes.</p>
+<h3 id="c-lv2-compare-activity-names">C-Lv2: Compare Activity Names</h3>
+<p>After the comparison in C-Lv1 is passed, the comparison engine performs the comparison of activity names.</p>
+<p>If not all ScreenNodes in GUI Graph have the same activity name to $s&rsquo;$, it would be marked as a newly discovered GUI state and insert into GUI graph. Otherwise the next level of comparison would be taken.</p>
+<h3 id="c-lv3-c-lv4-compare-widget-composition">C-Lv3, C-Lv4: Compare Widget Composition</h3>
+<p>Modern Android apps show dynamic and complicated user interfaces in a single activity, which provide better experience as well as good modularity. Therefore, the activity level comparison is inadequate for effective GUI model generation of real-world apps.</p>
+<p>For instance, an activity consists of multiple widgets, shown as following:</p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h4ykpb133kj20xm0g4gnp.jpg" alt=""></p>
+<p>In order to make comparisons on composition of widgets, the author used UIAutomator to construct a widget hierarchy tree (shown in figure below).</p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h4ykpj22qyj212c0m4mzu.jpg" alt=""></p>
+<p>The author uses a index to indicates the relationship between parent node and child node. For example, the first child node is marked as $0$, and the second as $1$, thus node $M$ in figure can be represented as $[0, 0, 2, 1]$.</p>
+<p>The author then divided widget composition into two categories: <em><strong>layout widgets</strong></em> and <em><strong>executable widgets</strong></em>. Layout widgets are the non-leaf widget nodes in widget tree, while executable widgets are the leaf widget nodes with at least one “true” value in event properties. A special case it that, if a layout widget has an executable property (e.g. ListView is clickable, while its children are not), its child leaf nodes are considered as exucutable widgets.</p>
+<p>Each widget composition is represented as a <em><strong>cumulative index sequence</strong></em> (CIS), which is a part of information in ScreenNode. The following table shows the widget composition for figure 4.</p>
+<table>
+<thead>
+<tr>
+<th>Widget type</th>
+<th>Nodes</th>
+<th>CIS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Layout</td>
+<td>A, B, C, F</td>
+<td>[0]-[0,0]-[0,1]-[0,0,2]</td>
+</tr>
+<tr>
+<td>Executable</td>
+<td>D, G, L, M</td>
+<td>[0,0,0]-[0,1,0]-[0,0,2,0]-[0,0,2,1]</td>
+</tr>
+</tbody>
+</table>
+<p>For <strong>C-Lv3</strong>, the comparison engine compares the difference of CIS between $s&rsquo;$ and existing ScreenNodes.  If the CIS of $s&rsquo;$ is the same as any of existing ScreenNode, it would be regarded as a new GUI state, otherwise the <strong>C-Lv4</strong> would be performed.</p>
+<p><strong>C-Lv4</strong> further compares the event handler (i.e. property like &lt;clickable&gt;) in exucatable widget nodes. If there is no difference between executable widget nodes of $s&rsquo;$ and existing ScreenNodes, <strong>C-Lv5</strong> would be performed.</p>
+<h3 id="c-lv5-compare-contents">C-Lv5: Compare Contents</h3>
+<p>The author used UIAutomator again to extract contents values from related tags such as &lt;text&gt; and &lt;content-desc&gt;. For fast comparison, the abstraction representation of text values are simplified as <strong>the length of text</strong>. Specifically, the comparison engine sum up all length of text values in the current screen.</p>
+<p>In addition, C-Lv5 also performs the comparison that examines the first item of ListView in GUIs, because events like scrolling iteratively changes the visible items of ListView.</p>
+<p>Note that applications should carefully choose the proper GUICC level to avoid potential state explosion problem, i.e. a calculator app would change the text for every user input, which leads to a exponential states increasement if using C-Lv5.</p>
 
   </section>
   <footer>
@@ -186,12 +210,10 @@
       <div class="c-pagination__ctrl">
         <div class="c-pagination__newer">
           
-          <a href="https://hagemon.github.io/posts/swift5&#43;cloudkit&#43;coredata%E5%AE%9E%E7%8E%B0%E5%A4%9A%E7%BB%88%E7%AB%AF%E5%90%8C%E6%AD%A5/">Newer</a>
-          
         </div>
         <div class="c-pagination__older">
           
-          <a href="https://hagemon.github.io/posts/clipin-log-5/">Older</a>
+          <a href="https://hagemon.github.io/posts/%E5%9F%BA%E4%BA%8E%E7%9C%9F%E5%AE%9Ebug%E7%9A%84gui%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95%E6%A0%87%E5%87%86%E8%AE%BE%E8%AE%A1/">Older</a>
           
         </div>
       </div>

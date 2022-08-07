@@ -4,16 +4,16 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
   
-  <title>Clipin Log 6. 多屏幕支持</title>
-  <meta property="og:title" content="Clipin Log 6. 多屏幕支持" />
-  <meta name="twitter:title" content="Clipin Log 6. 多屏幕支持" />
+  <title>Hagemon&#39;s Log</title>
+  <meta property="og:title" content="Hagemon&#39;s Log" />
+  <meta name="twitter:title" content="Hagemon&#39;s Log" />
   
 
   
 
   <meta name="author" content=""/>
   <meta property="og:site_name" content="Hagemon&#39;s Log" />
-  <meta property="og:url" content="https://hagemon.github.io/posts/clipin-post-6/" />
+  <meta property="og:url" content="https://hagemon.github.io/posts/test/" />
 
   
   <meta name="twitter:card" content="summary" />
@@ -78,14 +78,14 @@
 
 <article class="p-article">
   <header>
-    <h1>Clipin Log 6. 多屏幕支持</h1>
+    <h1></h1>
     
     <div>
         <div class="c-meta">
         
            Posted on
-<time datetime="2021-01-09T21:44:43Z">
-  Jan 9, 2021
+<time datetime="0001-01-01T00:00:00Z">
+  Jan 1, 0001
 </time>
 
         
@@ -99,83 +99,7 @@
   </header>
   
   <section id="js-article" class="p-article__body">
-    <h2 id="多屏幕环境">多屏幕环境</h2>
-<p>在多屏幕环境下，各个屏幕的起始坐标<code>origin</code>会根据用户在系统偏好设置中对显示器排列的设置而不同，下图直观地表示了多屏幕环境下各屏幕的坐标。</p>
-<p><img src="https://hagemon.github.io/post-images/1613224003347.png" alt=""></p>
-<p>通过<code>screen.visibleFrame</code>可以访问屏幕在此坐标系下的frame。</p>
-<h2 id="实现思路">实现思路</h2>
-<ul>
-<li>在ClipManager.shared.start()中检测所有屏幕并创建控制器</li>
-<li>对于每个控制器，获取对应显示器当前页面图像</li>
-<li>在执行Pin操作时，需要将窗口偏移到正确的位置</li>
-</ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-swift" data-lang="swift"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ClipManager</span> {
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// ....    </span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> controllers: [ClipWindowController] = []
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// ....</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">start</span>() {
-</span></span><span style="display:flex;"><span>        NotificationCenter.<span style="color:#66d9ef">default</span>.post(name: NotiNames.pinNormal.name, object: <span style="color:#66d9ef">nil</span>)
-</span></span><span style="display:flex;"><span>        NSApplication.shared.activate(ignoringOtherApps: <span style="color:#66d9ef">true</span>)
-</span></span><span style="display:flex;"><span>        
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> screen <span style="color:#66d9ef">in</span> NSScreen.screens {  <span style="color:#75715e">// 获取所有屏幕</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">let</span> view = ClipView(frame: screen.frame)
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">let</span> clipWindow = ClipWindow(contentRect: screen.frame, contentView: view)
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">let</span> clipWindowController = ClipWindowController(window: clipWindow)
-</span></span><span style="display:flex;"><span>            controllers.append(clipWindowController)
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">self</span>.status = .ready
-</span></span><span style="display:flex;"><span>            clipWindowController.capture(screen)
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// ....</span>
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>在ClipWindowController中获取各屏幕的图像：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-swift" data-lang="swift"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ClipWindowController</span>: NSWindowController {
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">capture</span>(<span style="color:#66d9ef">_</span> screen:NSScreen) {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">guard</span> <span style="color:#66d9ef">let</span> window = <span style="color:#66d9ef">self</span>.window <span style="color:#66d9ef">else</span> { <span style="color:#66d9ef">return</span> }
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">//  获取screen对应的displayID和ID对应的图像</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">guard</span> <span style="color:#66d9ef">let</span> displayID = screen.deviceDescription[NSDeviceDescriptionKey(rawValue: <span style="color:#e6db74">&#34;NSScreenNumber&#34;</span>)] <span style="color:#66d9ef">as</span>? CGDirectDisplayID,
-</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">let</span> cgScreenImage = CGDisplayCreateImage(displayID)
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span> { <span style="color:#66d9ef">return</span> }
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">self</span>.screenImage = NSImage(cgImage: cgScreenImage, size: screen.frame.size)
-</span></span><span style="display:flex;"><span>        window.backgroundColor = NSColor(white: <span style="color:#ae81ff">0</span>, alpha: <span style="color:#ae81ff">0.5</span>)
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">self</span>.clipView = window.contentView <span style="color:#66d9ef">as</span>? ClipView
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">self</span>.showWindow(<span style="color:#66d9ef">nil</span>)
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>在PinManager中修改pin函数，将屏幕起始坐标增加为新的参数，并对pin窗口进行偏移：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-swift" data-lang="swift"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">PinManager</span>: NSObject {
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">pin</span>(rep: NSBitmapImageRep, rect:NSRect, screenOrigin:NSPoint) {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">let</span> image = NSImage(size: rect.size)
-</span></span><span style="display:flex;"><span>        image.addRepresentation(rep)
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">let</span> view = PinView(image: image)
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">let</span> window = PinWindow(rect: rect, contentView: view)
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">let</span> controller = PinWindowController(window: window)
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">self</span>.controllers.append(controller)
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 以屏幕左下角坐标为基准，偏移pin窗口</span>
-</span></span><span style="display:flex;"><span>        window.setFrameOrigin(screenOrigin.offsetBy(dx: rect.origin.x, dy: rect.origin.y))
-</span></span><span style="display:flex;"><span>        controller.showWindow(<span style="color:#66d9ef">nil</span>)
-</span></span><span style="display:flex;"><span>        NotificationCenter.<span style="color:#66d9ef">default</span>.post(name: NotiNames.pinEnd.name, object: <span style="color:#66d9ef">nil</span>)
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>同时在调用pin函数时增加对屏幕起始坐标参数的传入：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-swift" data-lang="swift"><span style="display:flex;"><span><span style="color:#75715e">// ClipWindowController.swift</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">@objc</span> <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">done</span>() {
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">guard</span> <span style="color:#66d9ef">let</span> view = <span style="color:#66d9ef">self</span>.clipView,
-</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">let</span> rect = view.drawingRect
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span> {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span>
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">guard</span> <span style="color:#66d9ef">let</span> bitmapRep = view.bitmapImageRepForCachingDisplay(<span style="color:#66d9ef">in</span>: rect),
-</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">let</span> window = <span style="color:#66d9ef">self</span>.window,
-</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">let</span> screen = window.screen
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span> {<span style="color:#66d9ef">return</span>}
-</span></span><span style="display:flex;"><span>    view.cacheDisplay(<span style="color:#66d9ef">in</span>: rect, to: bitmapRep)
-</span></span><span style="display:flex;"><span>    PinManager.shared.pin(rep: bitmapRep, rect: rect, screenOrigin: screen.visibleFrame.origin)
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>接下来是<a href="https://hagemon.github.io/post/clipin-post-7/">对截屏的一些优化</a></p>
-
+    
   </section>
   <footer>
     
@@ -186,12 +110,10 @@
       <div class="c-pagination__ctrl">
         <div class="c-pagination__newer">
           
-          <a href="https://hagemon.github.io/posts/swift5&#43;cloudkit&#43;coredata%E5%AE%9E%E7%8E%B0%E5%A4%9A%E7%BB%88%E7%AB%AF%E5%90%8C%E6%AD%A5/">Newer</a>
+          <a href="https://hagemon.github.io/posts/gbdt%E4%B8%AD%E5%AF%B9%E4%BA%8E%E6%A2%AF%E5%BA%A6%E6%8B%9F%E5%90%88%E7%9A%84%E7%90%86%E8%A7%A3/">Newer</a>
           
         </div>
         <div class="c-pagination__older">
-          
-          <a href="https://hagemon.github.io/posts/clipin-log-5/">Older</a>
           
         </div>
       </div>
