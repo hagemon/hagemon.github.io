@@ -1,4 +1,0 @@
-[submodule "hugo_theme_pickles"]
-    path = themes/hugo_theme_pickles
-    url = git@github.com:mismith0227/hugo_theme_pickles.git
-    ignore = dirty

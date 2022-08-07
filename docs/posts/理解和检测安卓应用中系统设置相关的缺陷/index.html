@@ -205,7 +205,7 @@
 <li>人工筛除其中的第三方库（这些库的demo上架了商店），最终筛选出<strong>180</strong>个项目。</li>
 <li>对收集到的项目，用箱型图描述了Star和Issue个数的分布，并统计它们的安装次数和项目类别。结果显示，收集到的项目覆盖了多个热门程度和软件类别。</li>
 </ul>
-<p><img src="Understanding%20and%20Finding%20System%20Setting-Related%20D%203cb9d82937bc4e59817e38daa356bd9a/Untitled.png" alt="Untitled"></p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h4yl6v6xjnj213k0mmtbp.jpg" alt=""></p>
 </li>
 <li>
 <p>问题报告（Bug Reports）收集</p>
@@ -376,13 +376,13 @@
 <p>回调函数实现不当：</p>
 <p>当系统设置发生改变时，程序会调用相应的回调函数，如果这些回调函数中没有处理好相应的逻辑，可能会引发错误。</p>
 <p>如AnkiDroid中，当用户请求存储权限的时候，屏幕右上角菜单中的按钮会消失，在用户完成请求后，应该要重新绘制这个按钮。</p>
-<p><img src="Understanding%20and%20Finding%20System%20Setting-Related%20D%203cb9d82937bc4e59817e38daa356bd9a/Untitled%201.png" alt="Untitled"></p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h4yl6wu6fpj20uw090abf.jpg" alt=""></p>
 </li>
 <li>
 <p>缺少对设置的检查：</p>
 <p>当某些设置影响到软件的功能时，开发者应该在实现这些功能时检查这些设置的状态，否则当设置变更时，软件并不会发生相应改变。</p>
 <p>如NextCloud中，自动上传功能是否开启取决于系统是否进入省电模式。而安卓系统中省电模式拥有白名单功能，在白名单内的软件并不会受省电模式关闭的影响。而NextCloud只判断了系统是否进入省电模式，而没有判断软件是否在白名单内。因此即使软件在白名单中，还是无法开启自动上传功能：</p>
-<p><img src="Understanding%20and%20Finding%20System%20Setting-Related%20D%203cb9d82937bc4e59817e38daa356bd9a/Untitled%202.png" alt="Untitled"></p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h4yl6wlz3nj20sm09wmyi.jpg" alt=""></p>
 </li>
 <li>
 <p>没有适配用户界面：</p>
@@ -398,7 +398,7 @@
 <p>没有考虑安卓版本：</p>
 <p>不同版本的安卓系统拥有不同的机制，比如某些版本中，对于一些功能可能会有额外的权限要求，如果没有加以控制会引发程序崩溃。</p>
 <p>比如OpenLauncher中，当勿扰模式开启时会引发崩溃，因为在Nougat版本中，开启勿扰模式时会调用AudioManager的方法，而在调用该方法前需要获得ACCESS_NOTIFICATION_POLICY权限，故此时需要提前检查安卓的版本来考虑是否获取权限。</p>
-<p><img src="Understanding%20and%20Finding%20System%20Setting-Related%20D%203cb9d82937bc4e59817e38daa356bd9a/Untitled%203.png" alt="Untitled"></p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h4yl6weledj20vm08ita1.jpg" alt=""></p>
 </li>
 </ol>
 <!-- raw HTML omitted -->
@@ -454,7 +454,7 @@
 <li>懒修改（Lazy setting mutation）：在执行$e_c$后，只在必要的时候执行$e_u$，比如关闭了软件权限后，仅在软件再次申请权限时允许。这种行为也是符合安卓用户体验设计规范的。</li>
 </ol>
 <p><strong>若对于$E&rsquo;$中的某个$e&rsquo;_i$，存在$e_i&rsquo;.w$不在$l&rsquo;_i$中，则判定其存在设置缺陷。</strong></p>
-<p><img src="Understanding%20and%20Finding%20System%20Setting-Related%20D%203cb9d82937bc4e59817e38daa356bd9a/Untitled%204.png" alt="Untitled"></p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h4yl6w5f0ij210w0byjss.jpg" alt=""></p>
 </li>
 <li>
 <p>规则2：只将$e_c$插入到$E$中，用于验证在设置改变后，两个GUI序列是否能有期望的差异。如使用langid（一种语言区分工具）来判断在改变系统语言后，软件的语言是否发生改变。</p>
@@ -462,7 +462,7 @@
 </ul>
 <h3 id="setdroid的设计和实现">SETDROID的设计和实现</h3>
 <p>本文设计了一个自动化GUI测试工具SETDROID，主要包含4个模块：</p>
-<p><img src="Understanding%20and%20Finding%20System%20Setting-Related%20D%203cb9d82937bc4e59817e38daa356bd9a/Untitled%205.png" alt="Untitled"></p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h4yl6vy84aj211o0fsdi0.jpg" alt=""></p>
 <ol>
 <li>
 <p>测试执行器（test executer）</p>
@@ -482,7 +482,7 @@
 <li>只有2%的设置缺陷是由于多个设置改变而引发的（其中主要是屏幕旋转和其它设置同时改变时，会引发问题）</li>
 </ol>
 <p>所以在该模块中，注入器随机在运行过程中注入单个事件$&lt;e_c,e_u&gt;$，如果没有产生影响，则过段时间后再随机注入，直到事件序列结束。具体注入的事件如表所示，这些事件都是根据经验选取得出的：</p>
-<p><img src="Understanding%20and%20Finding%20System%20Setting-Related%20D%203cb9d82937bc4e59817e38daa356bd9a/Untitled%206.png" alt="Untitled"></p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h4yl6vqipuj21380qitee.jpg" alt=""></p>
 </li>
 <li>
 <p>测试输出检查器（oracle checker）</p>
@@ -517,7 +517,7 @@
 </li>
 <li>
 <p><strong>缺陷的多样性</strong>：SETDROID在多个软件中，检测到了多种类型的设置缺陷，以及多种缺陷后果。</p>
-<p><img src="Understanding%20and%20Finding%20System%20Setting-Related%20D%203cb9d82937bc4e59817e38daa356bd9a/Untitled%207.png" alt="Untitled"></p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h4yl6vfvfij21000lw42q.jpg" alt=""></p>
 </li>
 <li>
 <p><strong>实用性</strong>：在工业软件中，SETDROID检测出了17个设置缺陷，并且全部被对应的公司修复，这些缺陷也是不同模块引发的不同结果。</p>
