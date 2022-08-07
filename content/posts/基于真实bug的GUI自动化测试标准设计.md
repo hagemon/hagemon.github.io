@@ -285,7 +285,7 @@ HUMANOID和Q-TESTING基于深度神经网络来指导事件序列的生成，TIM
 
 本文发现，GUI状态抽象的方式，能够很大程度上影响工具的bug检测能力：粒度越细的工具，能够找到的bug越多。
 
-举例来说，TIMEMACHINE和Q-TESTING没有检测到WordPress和NextCloud的bug，这是由于它们的状态抽象准则比较粗糙（分别是C-Lv3的变体和介于C-Lv2与C-Lv3之间的粒度）。因此，TIMEMACHINE无法找到一些可能引发问题的状态，作为它的interesting state（会被保存的状态）；而Q-TESTING在区分状态时，只将两个不同使用场景的页面定义为不同的状态。具体的状态抽象粒度可以看[这篇文章](https://hagemon.github.io)。
+举例来说，TIMEMACHINE和Q-TESTING没有检测到WordPress和NextCloud的bug，这是由于它们的状态抽象准则比较粗糙（分别是C-Lv3的变体和介于C-Lv2与C-Lv3之间的粒度）。因此，TIMEMACHINE无法找到一些可能引发问题的状态，作为它的interesting state（会被保存的状态）；而Q-TESTING在区分状态时，只将两个不同使用场景的页面定义为不同的状态。具体的状态抽象粒度可以看[这篇文章](https://hagemon.github.io/posts/multi-level-gui-comparison-criteria/)。
 
 而上述的这些无法被粗粒度方法检测的bug，在APE、HUMANOID和COMBODROID中都可以被检测到。HUMANOID和COMBODROID都使用了洗粒度的C-Lv4准则，而APE进一步提出了一个对状态抽象的动态优化策略。
 
