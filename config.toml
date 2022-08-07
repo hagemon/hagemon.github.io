@@ -21,6 +21,7 @@ enableGitInfo = true
   github = "hagemon"
   custom_css = ["/css/custom.css"]
   favicon = "/favicon.ico"
+  mathjax = true
 
 
 [[menu.main]]
