@@ -7,11 +7,31 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Hagemon Production</copyright>
-    <lastBuildDate>Sun, 17 Oct 2021 15:26:57 +0000</lastBuildDate><atom:link href="https://hagemon.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 03 Aug 2022 20:46:25 +0000</lastBuildDate><atom:link href="https://hagemon.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>理解和检测安卓应用中系统设置相关的缺陷</title>
+      <link>https://hagemon.github.io/posts/%E7%90%86%E8%A7%A3%E5%92%8C%E6%A3%80%E6%B5%8B%E5%AE%89%E5%8D%93%E5%BA%94%E7%94%A8%E4%B8%AD%E7%B3%BB%E7%BB%9F%E8%AE%BE%E7%BD%AE%E7%9B%B8%E5%85%B3%E7%9A%84%E7%BC%BA%E9%99%B7/</link>
+      <pubDate>Wed, 03 Aug 2022 20:46:25 +0000</pubDate>
+      
+      <guid>https://hagemon.github.io/posts/%E7%90%86%E8%A7%A3%E5%92%8C%E6%A3%80%E6%B5%8B%E5%AE%89%E5%8D%93%E5%BA%94%E7%94%A8%E4%B8%AD%E7%B3%BB%E7%BB%9F%E8%AE%BE%E7%BD%AE%E7%9B%B8%E5%85%B3%E7%9A%84%E7%BC%BA%E9%99%B7/</guid>
+      <description>本文是论文Understanding and Finding System Setting-Related Defects in Android Apps的总结笔记
+总览 安卓系统提供了很多用户可以更改的系统配置，比如网络连接、飞行模式、静音、系统语言等。这些系统配置的变更，可能会影响到app的表现形式。但如果app对这些变更处理不当，可能使ap存在缺陷（简称为设置缺陷）。这些缺陷可能引发UI错误、功能失效甚至是崩溃，从而影响用户体验。而目前的软件测试方法并不能系统地找到这些设置缺陷。
+本文主要从两个方面研究设置缺陷：一方面，本文收集了180个开源安卓app的1074个设置缺陷，并探究它们的影响（impact）、根本原因（root causes）和后果（consequence）。另一方面，构建了一个端到端的测试工具（SetDroid）对26个流行的开源项目进行测试，并找到了42个设置缺陷（33个被确认，21个被修复）。同时，对5个流行的工业软件开展测试，找到了17个设置缺陷（全部被确认和修复）。
+本文的核心思想是，所有的软件应该针对系统设置的变化，自动地做出相应的改变，并且：
+ 系统设置还原后，能够恢复到原来的状态。 在不还原的情况下，能够体现出不同设置下的差异。  以实际的app为例，来解释设置缺陷是如何引发错误的：
+  Wordpress
+ 当用户在发表一篇博客时开启飞行模式，则发送的操作会一直保持在等待状态，即使飞行模式已经被关闭且网络恢复了。 在飞行模式下发送草稿后，app将会在下一次开启时崩溃。    NextCloud
+在用户开启了系统的省电模式后，它的自动上传功能会变得无法使用，即使用户已经把app加入了省电模式的白名单。
+  目前的方法中，大多没有系统地研究这些缺陷，而是专注于某些特定的系统设置（如权限、屏幕方向）。另外，一些SOTA的通用测试技术只在app内部做测试，很少考虑到系统设置的影响；或是只研究引发程序崩溃的缺陷，而没有探测那些不会引发崩溃的缺陷（non-crash defects）。所以本文的工作亮点为：
+ 针对大部分的系统设置进行研究 考虑系统设置对app的影响 不仅检测引发崩溃的缺陷，还检测不会引发崩溃的缺陷  为了达到这些目的，本文主要针对三个研究问题进行探究和分析：
+ RQ1（impact）：设置缺陷是否会广泛影响app的使用？ RQ2（root cause）：引起这些缺陷的主要原因有哪些？ RQ3（consequences）：这些缺陷主要引发什么后果？这些后果是以什么形式展示的？  经验研究方法 收集和总结设置类别 本文根据安卓文档和主流的安卓系统，总结了9个主要的设置类别，并使用一些常见的关键词来描述它们。这些关键词从一些bug报告和安卓SDK API中提炼而来，具体关键词如表所示：
+   Setting Categories Keywords Description     Network and connect Bluetooth, WLAN, NFC, internet, network, hot-spot, mobile, wifi, airplane 管理设备的网络模式（Wi-Fi、移动数据或飞行模式）或是和别的设备的连接（蓝牙）   Location and security location, device only, phone only, GPS, high accuracy, screen lock, fingerprint 管理设备的安全设置（如何解锁）、定位及对应的三种定位方式（使用网络和GPS、只使用网络、只是用GPS）   Sound vibrate, ringtone, do not disturb, silent 管理设备的声音（如禁音状态）   Battery power save, battery 管理省电模式，或为各app加入省电模式白名单   Display orientation, vertical, horizontal, split screen, Multi-window, screen resolution, brightness, landscape, portrait, rotate 管理设备的显示，如亮度、字体和屏幕方向   Apps and notifications permission, disable, notification 管理运行时的权限、以及app是否能够给用户发送通知   Developer developer option, keep activity 模拟特定环境的告诫设置，如强制right to left布局方向   Accessibility accessibility, talkback, text-to-speech, color correction, color inversion, high contrast text 辅助功能，如调整对比度、打开屏幕阅读器   Other settings setting, preference, date, time, time zone, hour format, date&amp;amp;time, reading mode, car mode, one-handed mode, dark mode, game mode, night mode, theme, language 改变语言、系统时间、输入方式、系统时间格式、主题等    收集设置缺陷的bug reports 收集设置缺陷的bug reports分为三个阶段：</description>
+    </item>
+    
     <item>
       <title>About Me</title>
       <link>https://hagemon.github.io/about/</link>
-      <pubDate>Sun, 31 Jul 2022 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 13 Mar 2022 00:00:00 +0000</pubDate>
       
       <guid>https://hagemon.github.io/about/</guid>
       <description>👾 Hagemon 喜欢干净，热爱自由。

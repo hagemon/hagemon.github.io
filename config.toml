@@ -5,6 +5,7 @@ Title = "Hagemon's Log"
 copyright = "Hagemon Production"
 
 theme = "hugo_theme_pickles"
+publishDir = "docs"
 
 # enable get info from git commits, such as file modification time.
 # so we don't have to manually update it.
