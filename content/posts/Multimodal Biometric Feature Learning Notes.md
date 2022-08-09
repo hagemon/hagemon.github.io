@@ -2,6 +2,7 @@
 title = 'Multimodal Biometric Feature Learning Notes'
 date = 2021-06-10 18:51:25
 math = true
+tags = ['Algorithm']
 +++
 
 生物识别可以安全快速地鉴别个体，具体可以通过指关节纹（Finger Knuckle Print，FKP）、指纹（Finger Print)、掌纹（Palm Print）等。由于疫情影响，FKP识别成为一个不易传播疾病的识别方式。

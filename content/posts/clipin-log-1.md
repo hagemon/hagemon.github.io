@@ -1,6 +1,7 @@
 +++
 title = 'Clipin Log 1. 基于Status Bar的应用&监听快捷键'
 date = 2021-01-09 20:53:34
+tags = ['iOS dev']
 +++
 
 # 创建一个基于Status Bar的应用

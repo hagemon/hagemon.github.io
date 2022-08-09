@@ -1,6 +1,7 @@
 +++
 title = '实现基于LRU的Cache'
 date = 2021-02-06 22:58:25
+tags = ['Algorithm']
 +++
 
 LRU需要满足：

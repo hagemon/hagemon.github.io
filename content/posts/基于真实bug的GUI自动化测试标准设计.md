@@ -2,9 +2,10 @@
 title = "基于真实bug的GUI自动化测试标准设计"
 date = 2022-08-05T22:12:50+08:00
 math = true
+tags = ['Software Analyze and Testing']
 +++
 
-论文[Benchmarking Automated GUI Testing for Android against Real-World Bugs](https://tingsu.github.io/files/fse21-themis.pdf)的学习笔记】
+论文[Benchmarking Automated GUI Testing for Android against Real-World Bugs](https://tingsu.github.io/files/fse21-themis.pdf)的学习笔记，作者是Ting Su老师。
 
 ## 总览
 

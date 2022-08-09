@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Algorithm on Hagemon&#39;s Log</title>
+    <link>https://hagemon.github.io/tags/algorithm/</link>
+    <description>Recent content in Algorithm on Hagemon&#39;s Log</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Hagemon Production</copyright>
+    <lastBuildDate>Thu, 10 Jun 2021 18:51:25 +0000</lastBuildDate><atom:link href="https://hagemon.github.io/tags/algorithm/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Multimodal Biometric Feature Learning Notes</title>
+      <link>https://hagemon.github.io/posts/multimodal-biometric-feature-learning-notes/</link>
+      <pubDate>Thu, 10 Jun 2021 18:51:25 +0000</pubDate>
+      
+      <guid>https://hagemon.github.io/posts/multimodal-biometric-feature-learning-notes/</guid>
+      <description>生物识别可以安全快速地鉴别个体，具体可以通过指关节纹（Finger Knuckle Print，FKP）、指纹（Finger Print)、掌纹（Palm Print）等。由于疫情影响，FKP识别成为一个不易传播疾病的识别方式。
+LEARNING DISCRIMINATIVE FINGER-KNUCKLE-PRINT DESCRIPTOR （ICASSP 2019）方向信息(Direction information)是识别FKP图像的一个关键特征，大多现有的方法仍然使用这人工设计的特征，这些特征需要很多的先验知识。这篇文章为FKP的特征学习，提出了一种基于方向的二值特征学习方法(Discriminative Direction Binary Feature Learning, DDBFL)。主要贡献有：
+ 设计了一种基于Gabor过滤器卷积的特征Direction Convolution Difference Vector(DCDV) 使用投影函数将特征二值化，并保持同类样本的紧密性(compact)和异类样本的差异性(separable) 将特征进行分块统计，组成最终的FKP特征算子(Feature Descriptor)  Gabor Filter Gabor滤波器使用了图像频域中的信息来提取图像的纹理特征，由一个二维高斯函数和二维三角函数叠加而成，本文使用了Gabor滤波器的实数部分
+$$ G(x,y,\theta,\sigma, \beta)=\frac{1}{2\pi \sigma\beta}\exp{-\pi(\frac{x&amp;rsquo;^2}{\sigma^2}+\frac{y&amp;rsquo;^2}{\beta^2})}\cos({2\pi \mu x&amp;rsquo;}) $$
+其中
+$$ \begin{aligned} x&amp;rsquo;=(x-x_0)\cos\theta+(y-y_0)\sin\theta \\ y&amp;rsquo;=-(x-x_0)\sin \theta + (y-y_0)\cos \theta \end{aligned} $$
+$(x_0,y_0)$为核的中心，$\mu$是径向频率（我取1/3），$\sigma$和$\beta$为$x,y$标准差，这里取1。
+DCDV 在本文中，当选定了一个方向$\theta$后，根据核的大小便可以计算出每个方向的Gabor核，并在图像上进行卷积操作，得到每一个像素在该方向的特征值。本文从$[0,\pi]$选择了12个方向，为每个像素计算了12个特征值，将12个特征值$c_1,c_2,\dots,c_{12}$的相邻差组成向量，即DCDV： $$DCDV=[c_{12}-c_{11},c_{11}-c_{10},\dots,c_2-c_1,c_1-c_{12}]$$ DCDV可以很好的表示图像中出现的多个主要方向特征，若相邻的两个卷积结果异号，说明此处包含着方向信息。同时，DCVC的均值为零，所以不需要做归一化。
+DDBFL 特征的二值表示是一个具有鲁棒性的表示方法，若原始特征值具有一定动荡性，它的二值表示还是能相对稳定一些的，如$[0.8,0.9]$的动荡，在二值表示后还是会归为$1$。本文使用一个投影矩阵$W\in R^{k\times d}$将$d$维的DCVC投影至$k$维的DDBFL，具体计算如下： $$b_{p,i,k}=\frac{1}{2}(sgn(w_k^T x_{p,i})+1)$$ 表示第i个样本第p个像素的第k维二值特征。
+Objective 优化目标主要从两个角度：
+ 增加特征的差异性，使特征之间长得不一样，更具辨识度，即特征的方差最大化。 使同类样本接近，异类样本远离 于是可以将优化目标初步表示为：  $$ \begin{aligned} \max_{w_k}J(w_k)&amp;amp;=\max_{w_k}J_1(w_k)+2\lambda J_2(w_k) \\ &amp;amp;=\max_{w_k}\sum_{p=1}^P \sum_{i=1}^N ||b_{p,i,k}-\mu_{p,k}||^2 \\ &amp;amp;+2\lambda\sum_{p=1}^P\sum_{i=1}^N (\sum_{j\in \Gamma(i)}||b_{p,i,k}-b_{p,j,k}||^2 -\sum_{j\notin \Gamma(i)}||b_{p,i,k}-b_{p,j,k}||^2 ) \end{aligned} $$</description>
+    </item>
+    
+    <item>
+      <title>优化问题中的矩阵运算</title>
+      <link>https://hagemon.github.io/posts/%E4%BC%98%E5%8C%96%E9%97%AE%E9%A2%98%E4%B8%AD%E7%9A%84%E7%9F%A9%E9%98%B5%E8%BF%90%E7%AE%97/</link>
+      <pubDate>Thu, 03 Jun 2021 21:54:00 +0000</pubDate>
+      
+      <guid>https://hagemon.github.io/posts/%E4%BC%98%E5%8C%96%E9%97%AE%E9%A2%98%E4%B8%AD%E7%9A%84%E7%9F%A9%E9%98%B5%E8%BF%90%E7%AE%97/</guid>
+      <description>在一些非深度学习的方法中，目标函数由样本、权重的矩阵形式组成。假设样本集合矩阵为$X$，样本均值矩阵为$M$，权重矩阵为$W$，映射后的特征为$W^TX$，要令映射后的特征方差最大，则损失函数表示为：
+$$\max_{W}||W^TX-W^TM||^2$$
+L2 Norm与矩阵的迹 优化目标中带有L2 Norm的情况下求导计算比较复杂，可以将其转化为矩阵的迹的形式。假设有矩阵$A$：
+$$A=\begin{pmatrix} a_1&amp;amp;a_2&amp;amp;a_3\\ b_1&amp;amp;b_2&amp;amp;b_3\\ c_1&amp;amp;c_2&amp;amp;c_3 \end{pmatrix}$$
+则$A$的L2 Norm为
+$$||A||^2=a_1^2+a_2^2+a_3^2+b_1^2+\cdots+c_3^2$$
+而$A^TA$的主对角线为
+$$A^TA=\begin{pmatrix} a_1^2+a_2^2+a_3&amp;amp;\cdots&amp;amp;\cdots\\ \cdots&amp;amp;b_1^2+b_2^2+b_3&amp;amp;\cdots\\ \cdots&amp;amp;\cdots&amp;amp;c_1^2+c_2^2+c_3 \end{pmatrix}$$
+则可以将L2 Norm转化为矩阵的迹形式：
+$$||A||^2=trace(A^TA)$$
+并利用以下规则求导：
+$$\frac{trace(A^TA)}{\partial A}=2A$$
+最后令导数为0来计算参数矩阵。</description>
+    </item>
+    
+    <item>
+      <title>实现基于LRU的Cache</title>
+      <link>https://hagemon.github.io/posts/%E5%AE%9E%E7%8E%B0%E5%9F%BA%E4%BA%8Elru%E7%9A%84cache/</link>
+      <pubDate>Sat, 06 Feb 2021 22:58:25 +0000</pubDate>
+      
+      <guid>https://hagemon.github.io/posts/%E5%AE%9E%E7%8E%B0%E5%9F%BA%E4%BA%8Elru%E7%9A%84cache/</guid>
+      <description>LRU需要满足：
+ O(1)时间的读写 将最久未被使用的数据剔除 剔除操作在写入的时候进行  要满足这些条件，需要具备的数据结构特点：
+ 哈希表：O(1)读取 链表：最近被使用的在表头  所以使用双向链表+哈希表的组合作为cache结构。
+Python简易实现 使用Python快速实现上述功能，包括数据结点、双向链表和Cache的实现。
+数据结点 class Node:  def __init__(self, key, val):  self.next = None  self.prev = None  self.key = key  self.val = val 双向链表 class BidirectionalList:  def __init__(self):  self.head = None  self.tail = None   # 添加结点到链表头  def add_node(self, node):  # 链表为空时设置头尾节点  if not self.head:  self.head = node  self.</description>
+    </item>
+    
+    <item>
+      <title>优化方法总结</title>
+      <link>https://hagemon.github.io/posts/%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/</link>
+      <pubDate>Sat, 24 Aug 2019 11:47:27 +0000</pubDate>
+      
+      <guid>https://hagemon.github.io/posts/%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/</guid>
+      <description>总结一下机器学习中常见的各种优化器。
+Batch Gradient Descent(BGD) BGD对整个数据集计算梯度，当数据集很大时所需要的计算资源就很大，如果目标函数是凸函数，则可以找到全局最优解，否则找到局部最优解。
+Stochastic Gradient Descent (SGD) 和BGD相反，SGD一次只使用一个样本来对参数进行更新，速度很快，但是可能由于数据集中的噪声导致其每次更新并不一定能往最优的方向更新，准确度有所下降。并且因为更新频繁，导致损失函数会有很大的动荡
+Mini-batch Stochastic Gradient Descent (MSGD) MSGD是SGD和BGD的一个折中，每次使用一个小批量的数据来更新权重（批大小一般取50-256）。这样可以降低梯度更新时的方差，相对于SGD，有更稳定的效果；相对于BGD，又更加地高效。
+但是MSGD需要对学习率有一个合理的设定，否则不能保证很好的收敛。当学习率太大时可能会导致震荡比较大，学习率小时会导致其被困在局部最优解。
+当数据较为稀疏时，即每个样本中很多的特征取值为0或接近0。由于学习率对于所有的参数都是一致的，对于稀疏特征对应的参数，每次更新的幅度就很小。
+Momentum 当曲面的某个方向比别的方向更陡时，SGD会倾向于往更陡的方向更新（因为负梯度的方向），而不是往一个更优的方向更新。
+动量随机梯度下降在更新梯度的时候增加了一个动量项，表示上一次更新动量的改变值：
+$$v_t=\gamma v_{t-1}+\eta\nabla_\theta f(\theta)$$
+$$\theta_t=\theta_{t-1}-v_t$$
+对于梯度的不同维度（即梯度向量的某个分量），每一次的更新都会有一定的积累。具体来说，梯度的每一次更新包括两部分，一是当前的梯度$\nabla_\theta f(\theta)$，另一个是之前所有更新的加权和$\gamma v_{t-1}$。由于$0&amp;lt;\gamma&amp;lt;1$的存在，之前的更新$v_1, v_2, v_3\dots$在$v_t$中所占的权重会不断减小，且下降的速度是指数级的。
+若$v_{t-1}^{(i)}$是正值，表示梯度在往偏向这个分量的方向移动。定义$v_0=0$，则$v_1$就是第一次的梯度值。若梯度在某个分量上不断提供正值，那么这个分量的增幅就会越来越快，这就和自由落体运动中的加速度一样。若梯度不断提供负值，则其增幅就会不断减少，甚至会往负方向增加。若梯度的提供的值在正负间摇摆，即出现振荡的现象，则它们的动量部分会相互抵消，在此维度的更新步伐就会减缓。
+回到曲面某个方向比别的方向更陡的情况，举个例子，就好像我们的损失函数的曲面是一根水管内部的面，如果我们的水管自然下垂到地面，那么沿着水流的方向就会比较能快速到达地面（也就是函数的最低点），然而因为两侧的水管壁比较陡峭，SGD方法就会倾向于在水管壁之间左右横跳。如果使用了Momentum，那么左右横跳的时候会抵消动量，让该方向的变换减小，而由于同时在一点点的往水流方向前进，水流方向的梯度变化就会不断增加，从而更快到达最低点。
+按经验来说$\gamma=0.9$
+Nesterov Accelerated Gradient NAG不仅做了梯度的累积，而且还考虑到了未来可能方向上的情况，从而可以在将要遇到损失上升的地方时减缓速度。
+NAG在计算梯度变化时，使用的是预估的梯度，也就是假设参数会往当前的累积量的方向变化
+$v_t=\gamma v_{t-1}+\eta\nabla_\theta f(\theta-\gamma v_{t-1})$
+Adagrad Ada系的梯度更新方法，主要目的是对不同重要性的特征对应的权重，进行不同程度的更新。主旨思想是对低频特征的权重进行较大的更新，对高频特征的权重进行较小的更新，这样使得各个特征的影响力稍微平衡一些。其表现形式为：
+$$\theta_{i,t}=\theta_{i,t-1}-\frac{\eta}{\sqrt{G_{ii}+\epsilon}}\nabla_{\theta_i}f(\theta)$$
+其中$G$是一个主对角矩阵，$G_{ii}$表示参数的第i个分量在t之前的梯度平方和。当$G_{ii}$较小的时候，即之前梯度变换较少的特征，会逐渐增加其步长，反之减少步长。
+Adagrad的优势是免去了超参数$\eta$的调节，在经验情况下$\eta=0.01$
+但是在分母不断积累的过程中，其学习率就会收缩，最终变得非常小。
+Adadelta Adadelta对Adagrad的问题进行了改进，将分母转变为梯度的均方根，这样得到的就是更新过程中权重的平均变化。同时把学习率$\eta$换成了梯度值增量的均方根，所以也不用设置学习率了。对于均方根的更新，它设定为：
+$$E[g^2]t=\gamma E[g^2]{t-1}+(1-\gamma)g_t^2$$
+权重更新表示为：
+$$\Delta \theta_t=-\frac{E[\Delta\theta^2]_{t-1}}{E[g^2]_t}$$
+一般把$\gamma=0.9$
+RMSprop RMSprop表示为：
+$$v_t=\gamma v_{t-1}+(1-\gamma)g_t^2$$
+$$\Delta w_t=-\frac{\eta}{\sqrt{v_t+\epsilon}}g_t$$
+注意到这里计算新的梯度变化量的时候使用了平方，当梯度朝不同方向动荡的时候，这个值一直会保持很大，相当于考虑了变化的大小，而不动荡的梯度方向就会产生很小的值。这在计算权重改变值的时候能发挥作用，当一个梯度变化动荡的时候分母值会很大，导致权重变化就减少了，就减少了该方向的动荡程度。
+Adam Adam结合了RMSprop和Momentum。RMSprop减弱了在震荡方向上的梯度变换，但是降低了该方向的搜索能力；Momentum则很好的累积了之前的梯度变换，在梯度方向变换不大的情况下能促使梯度往更优的方向变化。Adam综合了这两者的特性，有如下的定义：
+$$v_t=\beta_1 v_{t-1}+(1-\beta_1)*g_t$$
+$$s_t=\beta_2 s_{t-1}+(1-\beta_2)*g_t^2$$
+$$\Delta w_t=-\eta \frac{v_t}{\sqrt{s_t+\epsilon}}*g_t$$</description>
+    </item>
+    
+    <item>
+      <title>蓄水池算法</title>
+      <link>https://hagemon.github.io/posts/%E8%93%84%E6%B0%B4%E6%B1%A0%E7%AE%97%E6%B3%95/</link>
+      <pubDate>Fri, 23 Aug 2019 11:47:27 +0000</pubDate>
+      
+      <guid>https://hagemon.github.io/posts/%E8%93%84%E6%B0%B4%E6%B1%A0%E7%AE%97%E6%B3%95/</guid>
+      <description>在长度未知的数据流中，要如何采样k个样本，使得这k个样本被采样的概率是相同的？
+面试中被问到的一个问题，当时没有很好地理解题目。仔细一想这个问题的应用还是很广泛的，比如要在大量级的点击事件数据流中采样点击事件，从而从事件中获得一些特征，那么为了保证采样的公平性，使得获得的特征更加客观，就需要采样时所有的样本被获取的概率是一样的。
+问题描述 设定一个长度为k的数组，目的是为了保证这k个数据在数据流不断流入的情况下，他们被选中到这个数组里的概率是一样的。
+对于前k个流入的数据，都会被直接选中，所以直接放到数组里，它们的概率是1。
+为了保证数据流抽样的概率相等，数组中的数据随时可能被替换，即我们要保证新来的数据n被选中的概率和池子里的数据保留的概率都是$\frac{k}{n}$。
+对于前k个数据，他们在数据量小于k时会一直存在于数组中，若数据量一旦大于k，则它们有可能被替换。当第k+1个数据流入时，新数据被采样到数组里的概率是$\frac{k}{k+1}$，这也是一旦数组中某个元素被选中，它就以这个概率被替换；那么数组中某个元素被选中的概率自然是$\frac{1}{k}$，所以某个元素被选中且替换的概率是$\frac{1}{k}*\frac{k}{k+1}=\frac{1}{k+1}$，则它留下来的概率是$\frac{k}{k+1}$。同理，当第k+2个数据流入时，它被留下来的概率是$\frac{k+1}{k+2}$。那么当有n个数据流入时，它依然还在数组中的概率是：
+$$1*\frac{k}{k+1}\frac{k+1}{k+2}\cdots\frac{n-1}{n}=\frac{k}{n}$$
+对于k之后的数据j，它被选中到数组里的概率是$\frac{k}{j}$，若它被选中了，则它不被下一个数据替换的概率是$1-\frac{k}{j+1}*\frac{1}{k}=\frac{j}{j+1}$，同理，若其没有被替换，则第j+2个数据流入时没有被替换的概率是$\frac{j+1}{j+2}$，那么它被保留的概率是：
+$$\frac{k}{j}\frac{j}{j+1}\cdots*\frac{n-1}{n}=\frac{k}{n}$$
+所以所有数据被保留的概率都是$\frac{k}{n}$。
+对于实现来说，当有一个新数据时，在当前数据长度的范围内随机选择一个数m，若它小于等于k，则数组中m位置的数字会被新数字替换。
+参考资料 [用Python写算法 | 蓄水池算法实现随机抽样](</description>
+    </item>
+    
+    <item>
+      <title>GBDT中对于梯度拟合的理解</title>
+      <link>https://hagemon.github.io/posts/gbdt%E4%B8%AD%E5%AF%B9%E4%BA%8E%E6%A2%AF%E5%BA%A6%E6%8B%9F%E5%90%88%E7%9A%84%E7%90%86%E8%A7%A3/</link>
+      <pubDate>Tue, 20 Aug 2019 20:05:27 +0000</pubDate>
+      
+      <guid>https://hagemon.github.io/posts/gbdt%E4%B8%AD%E5%AF%B9%E4%BA%8E%E6%A2%AF%E5%BA%A6%E6%8B%9F%E5%90%88%E7%9A%84%E7%90%86%E8%A7%A3/</guid>
+      <description>为什么在优化GBDT时，要让当前的学习器去拟合一个负梯度呢？
+在梯度提升决策树（Gradient Boosting Decision Tree, GBDT）中，当前学习器的拟合对象是自定义损失函数$L(y_i,\hat{y}_i^{t-1})$对于上一个学习器的输出$\hat{y}_i^{t-1}$的负梯度，即
+$$-\frac{\partial{L(y_i,\hat{y}_i^{t-1})}}{\partial{\hat{y}_i^{t-1}}}$$
+在自定义损失函数为均方误差函数时，这个负梯度恰好是学习器和标签之间的残差
+$$-\frac{\partial{(y_i-\hat{y}_i^{t-1})^2}}{\partial{\hat{y}_i^{t-1}}}=2(y_i-\hat{y}_i^{t-1})$$
+很多文章并没有对为什么要拟合负梯度这个问题给出一个详细的解释，很多人解释说是为了能够应对自定义的损失函数才使用了负梯度来代替残差。但是实际上，恰恰是因为使用了负梯度来拟合当前学习器的输出，才导致了在特殊情况下（使用均方误差作为损失函数的情况），学习器拟合的是残差。
+所以为什么使用的是负梯度，而不是别的什么值呢？个人觉得这和梯度下降的原理十分的类似，我们从梯度下降开始说起。
+梯度下降法的原理 在我们最早接触的高等数学里，假设有一个固定参数$\theta$的函数$f(x;\theta )=\theta_1 x^2+\theta_2x$，我们要求得这个函数的最小值，则要对$f(x)$关于变量$x$求导，找到导数为0的点，即在变量空间中找到一个值使得函数最小。
+后来我们接触了机器学习，我们要求解的目标从自变量$x$变成了我们模型的参数$\theta$，目的也从在变量空间中找$x$变成了在参数空间中找到一个$\theta$，使得对于所有的训练数据$x$，我们的目标函数（也就是损失函数）值能最小。
+我们经常使用的一个方法就是梯度下降法，它的形式为：
+$$\theta_{t}=\theta_{t-1}-\eta\frac{\partial f(\theta_{t-1})}{\partial \theta_{t-1}}$$
+我在这里增加了一个时间下标，主要是为了区分更新前后的$\theta$。
+其实梯度下降是由泰勒一阶展开推导而来的，或者也可以从导数的定义来解释（这里以单变量为例，所以是导数，推广到多变量就可以变成梯度）
+假设当前的参数为$\theta_{t-1}$，我们要求解的下一个参数为$\theta_{t}$，那么当两者之间的距离很小的时候，就可以通过导数的概念得出以下的式子：
+$$\frac{f(\theta_{t})-f(\theta_{t-1})}{\theta_{t}-\theta_{t-1}}= f’(\theta_{t-1})$$
+整理一下，可得
+$$f(\theta_{t})-f(\theta_{t-1})=(\theta_{t}-\theta_{t-1})f&amp;rsquo;(\theta_{t-1})$$
+其实这个公式整理一下就是泰勒一阶展开，这里的$(\theta_{t}-\theta_{t-1})$是一个向量，表示我们的参数向量，我们可以把它改写成标量*单位向量的形式：
+$$(\theta_{t}-\theta_{t-1})=\eta e$$
+我们优化的目标是让更新参数后的函数值比更新前的函数值小，即
+$$f(\theta_{t})-f(\theta_{t-1})=\eta ef&amp;rsquo;(\theta_{t-1})&amp;lt;0$$
+在不考虑标量$\eta$时，要使$ef&amp;rsquo;(\theta_t)$最小，则需要让单位向量$e$和导数的方向相反，那么则有
+$$e=-\frac{f&amp;rsquo;(\theta_{t-1})}{||f&amp;rsquo;(\theta_{t-1})||}$$
+其中分母因为是标量，可以并入到$\eta$中，则有
+$\theta_{t}-\theta_{t-1}=\eta f&amp;rsquo;(\theta_{t-1})$
+即
+$$\theta_{t}=\theta_{t-1}-\eta\frac{\partial f(\theta_{}t-1)}{\partial \theta_{t-1}}$$
+GBDT 现在考虑GBDT里的情况。在梯度下降法中，我们的目的是为了在参数空间中找到一个参数，使得损失函数最小；而在GBDT中，我们的目的是为了在函数空间（也就是所有可能的树序列组成的空间）中，找到一个函数（某一个树序列）使得损失函数（“标签”与“树序列输出之和”的差异）最小。所以我们可以把GBDT和梯度下降做一个类比。
+$f(\theta_{t})$可以类比为加入当前树之后的损失函数$l(y_i,\hat{y}i^{t-1}+T_t(x))$ ，$f(\theta{t-1})$类比为之前的损失函数$l(y_i,\hat{y}i^{t-1})$，那么梯度下降中的参数$\theta$就可以类比为GBDT中累加的学习器$F_m$,$\theta{t}$和$\theta_{t-1}$分别类比为加入当前树和没加入当前树的两个学习器$F_m(x)$和$F_{m-1}(x)$，且有
+$$F_{m-1}(x)-F_m(x)=T_t(x)$$
+这次我们从泰勒展开的角度来讲，关于$\hat{y}_i^{t-1}$的函数$l(y_i,\hat{y}_i^{t-1}+T_t(x))$在$T_t(x)$处的泰勒一阶展开为：
+$$l(y_i,\hat{y}_i^{t-1}+T_t(x))=l(y_i,\hat{y}i^{t-1})+(F{m-1}(x)-F_m(x))\frac{\partial l(y_i,\hat{y}_i^{t-1}+T_t(x))}{\partial \hat{y}_i^{t-1}}$$
+这个式子其实也可以类比上一节中的式子：
+$$f(\theta_{t})-f(\theta_{t-1})=(\theta_{t}-\theta_{t-1})f&amp;rsquo;(\theta_{t-1})$$
+其实二者是一样的形式，所以我们也可以把最终梯度下降的表达式改写成GBDT的形式，有兴趣的话可以自己推一遍，其实形式上是一样的，只是换了个空间而已。
+$$F_{m}=F_{m-1}-\eta\frac{\partial l(y_i,\hat{y}_i^{t-1}+T_t(x))}{\partial \hat{y}_i^{t-1}}$$
+即
+$$T_t(x)=-\eta\frac{\partial l(y_i,\hat{y}_i^{t-1}+T_t(x))}{\partial \hat{y}_i^{t-1}}$$
+这也就是为什么我们要让新的树去拟合负梯度了。
+Ending 这么一总结，大胆猜测XGBoost使用了泰勒二阶展开，可能就是受了GBDT中使用一阶展开的启发。终于把很多博客都没有说的很清楚的部分记录下来了，当然这里也参考了一些写的很棒的博客和知乎回答，感谢大家的辛勤付出！
+参考资料 梯度下降法的推导
+gbdt的残差为什么用负梯度代替？ - 奥奥奥奥噢利的回答 - 知乎</description>
+    </item>
+    
+  </channel>
+</rss>

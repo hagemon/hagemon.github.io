@@ -1,10 +1,12 @@
-{{ partial "header.html" . }}
+<!-- {{ partial "header.html" . }} -->
 
-{{ range $index, $page := (.Paginate (where (where .Site.RegularPages "Type" "posts") ".Params.hidden" "!=" "true" ) .Site.Params.paginate ).Pages }}
+<!-- {{ range $index, $page := (.Paginate (where (where .Site.RegularPages "Type" "posts") ".Params.hidden" "!=" "true" ) .Site.Params.paginate ).Pages }}
   {{if ne $index 0 }}
     {{ end }}
   {{ .Render "li" }}
-{{ end }}
+{{ end }} -->
 
-{{ partial "pagination.html" .Paginator }} {{ partial "siteinfo.html" . }}
-{{ partial "footer.html" . }}
+<!-- {{ partial "pagination.html" .Paginator }} {{ partial "siteinfo.html" . }} -->
+<!-- {{ partial "footer.html" . }} -->
+
+{{ .Render "single"}}

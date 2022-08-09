@@ -1,6 +1,7 @@
 +++
 title = 'Clipin Log 3. 截屏页面的实现'
 date = 2021-01-09 21:24:06
+tags = ['iOS dev']
 +++
 
 ## 实现思路

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rust on Hagemon&#39;s Log</title>
+    <link>https://hagemon.github.io/tags/rust/</link>
+    <description>Recent content in Rust on Hagemon&#39;s Log</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Hagemon Production</copyright>
+    <lastBuildDate>Sun, 17 Oct 2021 15:26:57 +0000</lastBuildDate><atom:link href="https://hagemon.github.io/tags/rust/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Rust note</title>
+      <link>https://hagemon.github.io/posts/rust-note/</link>
+      <pubDate>Sun, 17 Oct 2021 15:26:57 +0000</pubDate>
+      
+      <guid>https://hagemon.github.io/posts/rust-note/</guid>
+      <description>内存管理 Rust中没有垃圾回收机制，通过所有权和借用来保证数据的内存安全。
+所有权(Ownership) 所有权系统在编译时会检查一组规则，当满足这些规则时才会通过编译，同时能保证程序运行的速度。
+作用域界定规则 Rust中作用域用大括号{}表示，无论是if、else还是match，或是直接的{}都表示一个作用域。
+// `mascot` is not valid and cannot be used here, because it&amp;#39;s not yet declared. {  let mascot = String::from(&amp;#34;ferris&amp;#34;); // `mascot` is valid from this point forward.  // do stuff with `mascot`. } // this scope is now over, so `mascot` is no longer valid and cannot be used. println!(&amp;#34;{}&amp;#34;, mascot); // this will cause an error. error[E0425]: cannot find value `mascot` in this scope --&amp;gt; src/main.</description>
+    </item>
+    
+  </channel>
+</rss>

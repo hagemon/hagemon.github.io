@@ -2,6 +2,7 @@
 title = 'GBDT中对于梯度拟合的理解'
 date = 2019-08-20 20:05:27
 math = true
+tags = ['Algorithm']
 +++
 
 为什么在优化GBDT时，要让当前的学习器去拟合一个负梯度呢？

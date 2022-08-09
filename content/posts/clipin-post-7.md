@@ -1,6 +1,7 @@
 +++
 title = 'Clipin Log 7. 提升截屏流畅度'
 date = 2021-02-24 23:23:36
+tags = ['iOS dev']
 +++
 
 # 旧版本

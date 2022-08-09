@@ -1,6 +1,7 @@
 +++
 title = 'Clipin Log 2. 截屏管理器'
 date = 2021-01-09 21:13:22
+tags = ['iOS dev']
 +++
 
 Manager/ClipManager.swift

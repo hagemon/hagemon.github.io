@@ -1,6 +1,7 @@
 +++
 title = 'Clipin Log 6. 多屏幕支持'
 date = 2021-01-09 21:44:43
+tags = ['iOS dev']
 +++
 
 ## 多屏幕环境

@@ -2,6 +2,7 @@
 title = "Multi Level GUI Comparison Criteria"
 date = 2022-08-07T22:12:43+08:00
 math = true
+tags = ['Software Analyze and Testing']
 +++
 
 Modern Android apps contain a number of dynamically constructed GUIs, which make accurate behavoir modeling more challenging. [Baek and Bae](https://dl.acm.org/doi/10.1145/2970276.2970313) proposed a set of multi-level GUI Comparison Criteria(GUICC) ,which provides multiple abstraction levels for GUI model generation.

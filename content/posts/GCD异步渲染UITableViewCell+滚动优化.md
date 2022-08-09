@@ -1,6 +1,7 @@
 +++
 title = 'GCD异步渲染UITableViewCell+滚动优化'
 date = 2021-02-25 22:16:05
+tags = ['iOS dev']
 +++
 
 在基于feed流的应用中，有两个需要重点解决的问题：

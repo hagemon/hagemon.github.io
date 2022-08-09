@@ -1,6 +1,7 @@
 +++
 title = 'Swift5+CloudKit+CoreData实现多终端同步'
 date = 2021-02-04 22:42:18
+tags = ['iOS dev']
 +++
 CloudKit和CoreData的配置已经有很多资料了，这里不阐述。
 

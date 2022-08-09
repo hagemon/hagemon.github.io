@@ -6,6 +6,52 @@
     <description>Recent content in Tags on Hagemon&#39;s Log</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <copyright>Hagemon Production</copyright><atom:link href="https://hagemon.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>Hagemon Production</copyright>
+    <lastBuildDate>Mon, 08 Aug 2022 21:52:15 +0800</lastBuildDate><atom:link href="https://hagemon.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Software Analyze and Testing</title>
+      <link>https://hagemon.github.io/tags/software-analyze-and-testing/</link>
+      <pubDate>Mon, 08 Aug 2022 21:52:15 +0800</pubDate>
+      
+      <guid>https://hagemon.github.io/tags/software-analyze-and-testing/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Rust</title>
+      <link>https://hagemon.github.io/tags/rust/</link>
+      <pubDate>Sun, 17 Oct 2021 15:26:57 +0000</pubDate>
+      
+      <guid>https://hagemon.github.io/tags/rust/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Algorithm</title>
+      <link>https://hagemon.github.io/tags/algorithm/</link>
+      <pubDate>Thu, 10 Jun 2021 18:51:25 +0000</pubDate>
+      
+      <guid>https://hagemon.github.io/tags/algorithm/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Security</title>
+      <link>https://hagemon.github.io/tags/security/</link>
+      <pubDate>Thu, 10 Jun 2021 16:50:16 +0000</pubDate>
+      
+      <guid>https://hagemon.github.io/tags/security/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>iOS dev</title>
+      <link>https://hagemon.github.io/tags/ios-dev/</link>
+      <pubDate>Sun, 28 Feb 2021 22:07:38 +0000</pubDate>
+      
+      <guid>https://hagemon.github.io/tags/ios-dev/</guid>
+      <description></description>
+    </item>
+    
   </channel>
 </rss>

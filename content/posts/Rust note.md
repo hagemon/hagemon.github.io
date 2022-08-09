@@ -1,6 +1,7 @@
 +++
 title = 'Rust note'
 date = 2021-10-17 15:26:57
+tags = ['Rust']
 +++
 ## 内存管理
 

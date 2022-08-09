@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>iOS dev on Hagemon&#39;s Log</title>
+    <link>https://hagemon.github.io/tags/ios-dev/</link>
+    <description>Recent content in iOS dev on Hagemon&#39;s Log</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Hagemon Production</copyright>
+    <lastBuildDate>Sun, 28 Feb 2021 22:07:38 +0000</lastBuildDate><atom:link href="https://hagemon.github.io/tags/ios-dev/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Swift实现简单的图像缓存</title>
+      <link>https://hagemon.github.io/posts/swift%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E5%9B%BE%E5%83%8F%E7%BC%93%E5%AD%98/</link>
+      <pubDate>Sun, 28 Feb 2021 22:07:38 +0000</pubDate>
+      
+      <guid>https://hagemon.github.io/posts/swift%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E5%9B%BE%E5%83%8F%E7%BC%93%E5%AD%98/</guid>
+      <description>在iOS App中，为了增加用户的体验感、减少网络的请求、增加App的性能，我们在获取图像之后通常会将其进行缓存，我学习了从零开始打造一个iOS图片加载框架，写了一个简单的基于Swift的图像缓存。
+图片加载 我们从最简单的场景开始，在ViewController中实现download方法，通过URLSession下载一个图片并显示到ImageView上：
+func download() {  let url = URL(string: &amp;#34;https://user-gold-cdn.xitu.io/2019/3/25/169b406dfc5fe46e&amp;#34;)  let session = URLSession.shared  let task = session.dataTask(with: url!, completionHandler: { [weak self]  data, res, error in  guard error == nil,  let data = data  else { return }  let image = UIImage(data: data)  guard let strongSelf = self else {return}  DispatchQueue.main.async {  strongSelf.imageView.image = image  }  })  task.</description>
+    </item>
+    
+    <item>
+      <title>GCD异步渲染UITableViewCell&#43;滚动优化</title>
+      <link>https://hagemon.github.io/posts/gcd%E5%BC%82%E6%AD%A5%E6%B8%B2%E6%9F%93uitableviewcell&#43;%E6%BB%9A%E5%8A%A8%E4%BC%98%E5%8C%96/</link>
+      <pubDate>Thu, 25 Feb 2021 22:16:05 +0000</pubDate>
+      
+      <guid>https://hagemon.github.io/posts/gcd%E5%BC%82%E6%AD%A5%E6%B8%B2%E6%9F%93uitableviewcell&#43;%E6%BB%9A%E5%8A%A8%E4%BC%98%E5%8C%96/</guid>
+      <description>在基于feed流的应用中，有两个需要重点解决的问题：
+ 异步进行耗时的数据加载 滚动时控制加载任务以保持滚动流畅  设定一个简单的场景：
+ 基于UITableViewCell 每个cell都拥有一个UIImageView 在UIImageView上绘制圆角头像 绘制100个cell并进行高频率的滚动  我们可以使用Instrument和XCode的Debugger里观察这些指标：
+ Average Frame Time 是否离屏渲染  简单实现 最简单的实现方式是为每一个cell上的UIImageView设置cornerRadius，但是会存在离屏渲染，且AFT很长。 其实现在直接用png并设置cornerRadius并不会被离屏渲染，这里为了展示效果特地把layer栅格化一下😅
+class TableViewController: UITableViewController {   override func viewDidLoad() {  super.viewDidLoad()  }   override func numberOfSections(in tableView: UITableView) -&amp;gt; Int {  return 1  }   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -&amp;gt; Int {  return 100  }    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -&amp;gt; UITableViewCell {  let cell = tableView.</description>
+    </item>
+    
+    <item>
+      <title>Clipin Log 7. 提升截屏流畅度</title>
+      <link>https://hagemon.github.io/posts/clipin-post-7/</link>
+      <pubDate>Wed, 24 Feb 2021 23:23:36 +0000</pubDate>
+      
+      <guid>https://hagemon.github.io/posts/clipin-post-7/</guid>
+      <description>旧版本 在之前的版本中，我在一个ClipView上对暗色背景和高亮区域绘制：
+override func draw(_ dirtyRect: NSRect) {   super.draw(dirtyRect)   // Drawing code here.  guard let image = self.image, let drawingRect = self.drawingRect else {  return  }  image.draw(in: self.bounds, operation: .sourceOver, fraction: 0.5) // 绘制背景  var rect = NSIntersectionRect(drawingRect, self.bounds) // 取高亮区域和页面的交集区域  rect = NSIntegralRect(rect) // 区域取整，为了防止抖动问题   // 取屏幕图像中高亮区域部分渲染在view上，使用.sourceOver操作  // 由于source图像是alpha为1，所以渲染结果即是区域图像本身  image.draw(in: rect, from: rect, operation: .sourceOver, fraction: 1.</description>
+    </item>
+    
+    <item>
+      <title>Swift5：基于正则表达式实现简单的Markdown即时渲染</title>
+      <link>https://hagemon.github.io/posts/swift5%E5%9F%BA%E4%BA%8E%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84markdown%E5%8D%B3%E6%97%B6%E6%B8%B2%E6%9F%93/</link>
+      <pubDate>Sat, 13 Feb 2021 23:23:44 +0000</pubDate>
+      
+      <guid>https://hagemon.github.io/posts/swift5%E5%9F%BA%E4%BA%8E%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84markdown%E5%8D%B3%E6%97%B6%E6%B8%B2%E6%9F%93/</guid>
+      <description>本文以iOS下的UITextView为例，在MacOS上只要更改NSTextView的相应的接口名同样适用。
+实现思路 我在实现过程中尝试了局部实时渲染和全局实时渲染的方式，由于学艺不精，暂时没有找到很好的方法进行局部实时渲染，这里介绍一下我对于两种方法的思路。
+局部实时渲染 最早的思路是根据用户的输入位置对应的段落，更新NSMutableAttributedString，具体步骤如下：
+ 监听textViewDidChange 找到光标对应的段落 根据段落内容，基于正则表达式分析并对应文字的attribute  但是按照这种思路，在替换文字是会导致attribute的混乱。attribute的形式是属性:Range的形式，在更新了文本以后，所有的文本range位置都会发生变化。我暂时没有找到一个很方便的方法来局部更新NSMutableAttributedString的属性。
+全局实时渲染 全局实时渲染指在监听文本变化后更新整个文本的attribute，这样会带来一些性能的损失，但是更易于实现。主要的思路如下：
+ 监听textViewDidChange 重新解析所有文字的attribute并更新  我们首先需要封装一个正则表达式的工具RE。
+正则表达式工具RE RE的主要功能包括：
+ 匹配并获取Regex对应的内容 替换Regex所匹配的内容 匹配并获取Regex对应的内容及其范围(NSRange)  首先封装一个RE返回的结构体
+struct Parsed {  var content: String  var range: NSRange } class RE: NSObject {  static func regularExpression(validateString:String, inRegex regex:String) -&amp;gt; [String]{  // 匹配并获取内容  do {  let re: NSRegularExpression = try NSRegularExpression(pattern: regex, options: [])  let matches = re.</description>
+    </item>
+    
+    <item>
+      <title>Swift5&#43;CloudKit&#43;CoreData实现多终端同步</title>
+      <link>https://hagemon.github.io/posts/swift5&#43;cloudkit&#43;coredata%E5%AE%9E%E7%8E%B0%E5%A4%9A%E7%BB%88%E7%AB%AF%E5%90%8C%E6%AD%A5/</link>
+      <pubDate>Thu, 04 Feb 2021 22:42:18 +0000</pubDate>
+      
+      <guid>https://hagemon.github.io/posts/swift5&#43;cloudkit&#43;coredata%E5%AE%9E%E7%8E%B0%E5%A4%9A%E7%BB%88%E7%AB%AF%E5%90%8C%E6%AD%A5/</guid>
+      <description>CloudKit和CoreData的配置已经有很多资料了，这里不阐述。
+Preparation 在基于CoreData和CloudKit的项目中，会在AppDelegate中自动生成container：
+lazy var persistentContainer: NSPersistentContainer = {   let container = NSPersistentContainer(name: &amp;#34;Model&amp;#34;)   // get the default store description  guard let description = container.persistentStoreDescriptions.first else {  fatalError(&amp;#34;Could not retrieve a persistent store description.&amp;#34;)  }   // initialize the CloudKit schema  let id = &amp;#34;iCloud.your.id&amp;#34;  // 获取基于CloudKit的Options  let options = NSPersistentCloudKitContainerOptions(containerIdentifier: id)  description.cloudKitContainerOptions = options  // 用于跟踪merge的记录  description.</description>
+    </item>
+    
+    <item>
+      <title>Clipin Log 6. 多屏幕支持</title>
+      <link>https://hagemon.github.io/posts/clipin-post-6/</link>
+      <pubDate>Sat, 09 Jan 2021 21:44:43 +0000</pubDate>
+      
+      <guid>https://hagemon.github.io/posts/clipin-post-6/</guid>
+      <description>多屏幕环境 在多屏幕环境下，各个屏幕的起始坐标origin会根据用户在系统偏好设置中对显示器排列的设置而不同，下图直观地表示了多屏幕环境下各屏幕的坐标。
+通过screen.visibleFrame可以访问屏幕在此坐标系下的frame。
+实现思路  在ClipManager.shared.start()中检测所有屏幕并创建控制器 对于每个控制器，获取对应显示器当前页面图像 在执行Pin操作时，需要将窗口偏移到正确的位置  class ClipManager { 	// ....   var controllers: [ClipWindowController] = []  // ....  func start() {  NotificationCenter.default.post(name: NotiNames.pinNormal.name, object: nil)  NSApplication.shared.activate(ignoringOtherApps: true)   for screen in NSScreen.screens { // 获取所有屏幕  let view = ClipView(frame: screen.frame)  let clipWindow = ClipWindow(contentRect: screen.frame, contentView: view)  let clipWindowController = ClipWindowController(window: clipWindow)  controllers.append(clipWindowController)  self.status = .</description>
+    </item>
+    
+    <item>
+      <title>Clipin Log 5. 单屏幕Pin实现</title>
+      <link>https://hagemon.github.io/posts/clipin-log-5/</link>
+      <pubDate>Sat, 09 Jan 2021 21:41:18 +0000</pubDate>
+      
+      <guid>https://hagemon.github.io/posts/clipin-log-5/</guid>
+      <description>Pin功能的触发时机是在ClipManager的select状态下点击回车时，所以在ClipWindowController的done中，将bitmapRep和对应的rect作为参数，执行Pin操作
+class ClipWindowController: NSWindowController { 	// ....  @objc func done() {  guard let view = self.clipView,  let rect = view.drawingRect  else {  return  }  guard let bitmapRep = view.bitmapImageRepForCachingDisplay(in: rect) else {return}  view.cacheDisplay(in: rect, to: bitmapRep)   // 利用bitmapRep进行Pin操作  PinManager.shared.pin(rep: bitmapRep, rect: rect)  }  	// ....  } PinManager单例 主要完成将图像作为一个新的窗口，并放置在屏幕顶层的操作，这里称为pin操作。源码里还实现了一些保存图像的函数，后续会在小工具中使用。
+pin函数初始化了页面、窗口和控制器并显示窗口，在处理结束后发送pinEnd通知。
+class PinManager: NSObject {  static let shared = PinManager()  var controllers: [PinWindowController] = []   func pin(rep: NSBitmapImageRep, rect:NSRect) {  let image = NSImage(size: rect.</description>
+    </item>
+    
+    <item>
+      <title>Clipin Log 4. 高亮区域的选取&amp;拖拽&amp;调整</title>
+      <link>https://hagemon.github.io/posts/clipin-log-4/</link>
+      <pubDate>Sat, 09 Jan 2021 21:25:34 +0000</pubDate>
+      
+      <guid>https://hagemon.github.io/posts/clipin-log-4/</guid>
+      <description>高亮区域的选取 确定了高亮区域的渲染方式后，我们在ClipWindowController中添加对鼠标事件的监听，用于获取高亮区域。
+在ClipWindowController中设置一些变量，用来记录用户操作过程中的一些NSPoint和NSRect：
+class ClipWindowController: NSWindowController {    var clipView: ClipView?  var screenImage: NSImage?   var lastRect: NSRect? // 上一个完整的区域，用于保存拖拽或调整前的区域  var highlightRect: NSRect? // 当前高亮的区域，通过鼠标操作动态更新  var startPoint: NSPoint? // 上一个完整区域的origin  var lastPoint: NSPoint? // 上一次更新区域时鼠标的位置   // functions .... } 实现思路：  鼠标落下时状态变为start，并记录落下位置为高亮区域的startPoint 鼠标拖拽时通过当前位置和startPoint创建新的Rect，用于更新highlightRect  其中用到mouseDown、mouseUp、mouseDrag这三个事件监听：
+override func mouseDown(with event: NSEvent) {  let location = event.locationInWindow  switch ClipManager.shared.status {  case .</description>
+    </item>
+    
+    <item>
+      <title>Clipin Log 3. 截屏页面的实现</title>
+      <link>https://hagemon.github.io/posts/clipin-log-3/</link>
+      <pubDate>Sat, 09 Jan 2021 21:24:06 +0000</pubDate>
+      
+      <guid>https://hagemon.github.io/posts/clipin-log-3/</guid>
+      <description>实现思路  创建和屏幕大小相等的NSWindow，且拥有以下特性：  borderless contentview透明背景 level在其余窗口之上   捕捉高亮区域 重载NSWindow.contentView中的draw方法，渲染高亮区域的图像覆盖背景 按下ESC退出Clip 按下Enter完成对高亮区域图像的获取 用NSWindowController控制以上行为  实现过程 创建NSWindowController，NSWindow，NSView对应的子类。
+在ClipManager.shared.start()中创建控制器、窗口和页面的对象并建立关系：
+func start() { 	guard let screen = NSScreen.main else { return } // 单显示器环境 	NSApplication.shared.activate(ignoringOtherApps: true) // 在触发快捷键后激活App，使开启的窗口能够变为key window  let view = ClipView(frame: screen.frame)  let clipWindow = ClipWindow(contentRect: screen.frame, contentView: view)  let clipWindowController = ClipWindowController(window: clipWindow)  self.controllers.append(clipWindowController) // 将其加入当前保存的控制器中  self.status = .ready  clipWindowController.capture(screen) } ClipWindow的条件在初始化时既可以满足：</description>
+    </item>
+    
+    <item>
+      <title>Clipin Log 2. 截屏管理器</title>
+      <link>https://hagemon.github.io/posts/clipin-log-2/</link>
+      <pubDate>Sat, 09 Jan 2021 21:13:22 +0000</pubDate>
+      
+      <guid>https://hagemon.github.io/posts/clipin-log-2/</guid>
+      <description>Manager/ClipManager.swift
+截屏状态 enum ClipStatus {  case off // 未开启  case ready // 就绪  case start // 开始选择区域  case select // 已选择区域  case adjust // 调整区域大小  case drag // 拖拽区域 } 截屏的状态转移可以表述为下图
+单例 使用单例来控制Clip的操作：
+import Cocoa  class ClipManager {   static let shared = ClipManager() // 单例  var status: ClipStatus = .off // Clip初始状态 	var controllers: [ClipWindowController] = [] // 保存当前打开的所有控制器   private init() {  NotificationCenter.</description>
+    </item>
+    
+    <item>
+      <title>Clipin Log 1. 基于Status Bar的应用&amp;监听快捷键</title>
+      <link>https://hagemon.github.io/posts/clipin-log-1/</link>
+      <pubDate>Sat, 09 Jan 2021 20:53:34 +0000</pubDate>
+      
+      <guid>https://hagemon.github.io/posts/clipin-log-1/</guid>
+      <description>创建一个基于Status Bar的应用 基于Status Bar的应用不需要设置额外的UI，所以不需要使用StoryBoard，只要在AppDelegate中配置好相应的StatusBarItem即可。
+Storyboard 由于是基于Status Bar的应用，所以在Storyboard中将页面相关的组件都删除了，保留了Menu相关的组件。
+配置info.plist 在info.plist中添加名为Application is agent (UIElement)的key，并将value值设置为YES。这样App就不会在Dock中显示
+AppDelegate 在AppDelegate中创建StatusBar按钮并配置对应的action
+import Cocoa  @main class AppDelegate: NSObject, NSApplicationDelegate {   let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.squareLength)   func applicationDidFinishLaunching(_ aNotification: Notification) {  guard let button = self.statusItem.button else { return }  button.image = NSImage(named: NSImage.Name(&amp;#34;StatusBarIcon&amp;#34;)) // StatusBarIcon is in Assets.xcassets  button.action = #selector(showMenu)  }   func applicationWillTerminate(_ aNotification: Notification) {  // Insert code here to tear down your application  }   @objc func showMenu() {//to be do} } 监听快捷键 基于HotKey实现对全剧快捷键的监听，HotKey底层使用了Carbon的RegisterEventHotKey接口：</description>
+    </item>
+    
+    <item>
+      <title>Clipin Log 0. Mac OS上截图&amp;保留小工具的开发记录</title>
+      <link>https://hagemon.github.io/posts/clipin-log-0/</link>
+      <pubDate>Sat, 09 Jan 2021 20:50:05 +0000</pubDate>
+      
+      <guid>https://hagemon.github.io/posts/clipin-log-0/</guid>
+      <description>源码地址：https://github.com/hagemon/Clipin
+源码的版本为Swift 5.0。
+我们将截图操作称为Clip，将截图钉在屏幕上的操作称为Pin。
+该工具可以临时将一些需要对照的信息保持在屏幕最上方，（或许）能提高工作效率。
+该工具在很大程度上参考了Snip的源码，且集成了HotKey开源库监听快捷键。
+本文章是作者在开发该工具过程中的记录，由简入繁地介绍该工具的创建过程，如文中有纰漏或是不健康的代码，还请各位赐教。😋
+本工具还会持续地开发和维护，该文章也会不断地更新和修改。
+项目架构介绍 根据作者个人的习惯，将项目分为以下几个模块：
+ Util：一些工具类、函数、枚举和扩展 Manager：管理Clip、Pin操作过程的单例管理器 Clip：Clip功能相关的Controller和View Pin：Pin功能相关的Controller和View  Status bar应用的相关配置和快捷键监听等功能在AppDelegate.swift中实现。
+首先进入Status Bar应用&amp;amp;监听快捷键。</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -25,11 +25,16 @@ enableGitInfo = true
 
 
 [[menu.main]]
-    name = "Blog"
+    name = "About"
     url = "/"
     weight = 1
 
 [[menu.main]]
-    name = "About"
-    url = "/about"
+    name = "Blog"
+    url = "/posts"
     weight = 2
+
+[[menu.main]]
+    name = "Tags"
+    url = "/tags"
+    weight = 3

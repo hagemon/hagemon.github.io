@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Software Analyze and Testing on Hagemon&#39;s Log</title>
+    <link>https://hagemon.github.io/tags/software-analyze-and-testing/</link>
+    <description>Recent content in Software Analyze and Testing on Hagemon&#39;s Log</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Hagemon Production</copyright>
+    <lastBuildDate>Mon, 08 Aug 2022 21:52:15 +0800</lastBuildDate><atom:link href="https://hagemon.github.io/tags/software-analyze-and-testing/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>基于自动化功能性模糊测试的安卓软件非崩溃bug检测</title>
+      <link>https://hagemon.github.io/posts/%E5%9F%BA%E4%BA%8E%E8%87%AA%E5%8A%A8%E5%8C%96%E5%8A%9F%E8%83%BD%E6%80%A7%E6%A8%A1%E7%B3%8A%E6%B5%8B%E8%AF%95%E7%9A%84%E5%AE%89%E5%8D%93%E8%BD%AF%E4%BB%B6%E9%9D%9E%E5%B4%A9%E6%BA%83bug%E6%A3%80%E6%B5%8B/</link>
+      <pubDate>Mon, 08 Aug 2022 21:52:15 +0800</pubDate>
+      
+      <guid>https://hagemon.github.io/posts/%E5%9F%BA%E4%BA%8E%E8%87%AA%E5%8A%A8%E5%8C%96%E5%8A%9F%E8%83%BD%E6%80%A7%E6%A8%A1%E7%B3%8A%E6%B5%8B%E8%AF%95%E7%9A%84%E5%AE%89%E5%8D%93%E8%BD%AF%E4%BB%B6%E9%9D%9E%E5%B4%A9%E6%BA%83bug%E6%A3%80%E6%B5%8B/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Multi Level GUI Comparison Criteria</title>
+      <link>https://hagemon.github.io/posts/multi-level-gui-comparison-criteria/</link>
+      <pubDate>Sun, 07 Aug 2022 22:12:43 +0800</pubDate>
+      
+      <guid>https://hagemon.github.io/posts/multi-level-gui-comparison-criteria/</guid>
+      <description>Modern Android apps contain a number of dynamically constructed GUIs, which make accurate behavoir modeling more challenging. Baek and Bae proposed a set of multi-level GUI Comparison Criteria(GUICC) ,which provides multiple abstraction levels for GUI model generation.
+A GUI model is a event-driven transitions beteen GUI states, naturally described in a graph formulation. We call a GUI modal as a “GUI graph”.
+Definition. A GUI graph $G$ is a directed graph that consist of distinct GUI states as “ScreenNodes” ($S$ for short), which distinuished by a specific GUI comparison criterion.</description>
+    </item>
+    
+    <item>
+      <title>基于真实bug的GUI自动化测试标准设计</title>
+      <link>https://hagemon.github.io/posts/%E5%9F%BA%E4%BA%8E%E7%9C%9F%E5%AE%9Ebug%E7%9A%84gui%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95%E6%A0%87%E5%87%86%E8%AE%BE%E8%AE%A1/</link>
+      <pubDate>Fri, 05 Aug 2022 22:12:50 +0800</pubDate>
+      
+      <guid>https://hagemon.github.io/posts/%E5%9F%BA%E4%BA%8E%E7%9C%9F%E5%AE%9Ebug%E7%9A%84gui%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95%E6%A0%87%E5%87%86%E8%AE%BE%E8%AE%A1/</guid>
+      <description>论文Benchmarking Automated GUI Testing for Android against Real-World Bugs的学习笔记，作者是Ting Su老师。
+总览 在自动化GUI软件测试中，有一个关键问题：“测试工具如何有效地、全面地找到实际存在的crash bug（How effectively and thoroughly can these tools find crash bugs in practice?)”。本文的主要围绕这个问题展开工作，制定了一个名为THEMIS的标准来比较自动化GUI测试工具的有效性。
+目前的研究主要聚焦于使用不同的测试工具，对多个app进行测试，比较它们找到crash bug的个数和被测代码的覆盖率。这些方法都是基于软件和测试工具，来对未知的crash bug进行检测，这种检测方法提供的信息很有限，无法很好地解释上述的关键问题。
+本文的核心思想在于：构建包含真实bug（ground-truth）的数据集，并检验测试工具能否在app上检测出这些bug。
+这种做法有以下的好处：
+ 可以更直接、更深入地分析测试工具的有效性。基于未被检测到的真实bug，分析各工具的短板，并可以进一步地总结所有工具存普遍存在的问题，帮助测试工具更好地发展。 增加测试工具的可靠性，分析测试工具在“bug去重”时是否存在策略上的缺陷，使得两个不同的真实bug被判定为相同，从而让结果变得不可靠。  为了达到这个目的，本文基于多个专家的经验，从1,829个开源安卓软件中人为选择了20个开源项目的52个真实bug。这些bug都被标注了“高优先级”等字样，并且影响了软件的主要功能，或是影响的用户范围较广，表明了这些bug的重要程度。
+基于真实bug数据集，本文提出了3个研究问题：
+ RQ1:现有的测试工具是否能够有效、全面地检测到真实的bug。 RQ2:现有的测试工具是否存在共同的短板，使得它们无法发现一些特定的bug。 RQ3:有哪些因素制约了测试工具对真实bug 的检测，如何针对这些因素对测试工具进行改进。  测试工具 为了研究这些研究问题，本文选择了8个流行的测试工具：
+  Monkey：能够随机生成GUI事件（touch、gesture、random texts）和系统事件（volume controls、navigation）。
+  APE：结合随机策略和深度优先搜索策略生成GUI事件序列，同时基于决策树算法，在运行时对生成模型进行不断优化。
+  HUMANOID：基于深度学习，利用神经网络来预测当前GUI状态下，最合适的GUI事件。
+  COMBODROID：利用一系列简短、独立的测试用例，通过分析它们的数据流向和GUI过度关系，结合成为若干个较长的GUI事件。
+  TimeMachine：将GUI的布局定义为状态（state）
+ 若在测试过程中发现一个较好的状态（如调用了之前没有调用过的函数），则认为该状态是一个interesting state，并将其记录。 若当前的状态没什么进展，则将状态恢复到最近的一个较好的状态，并继续开展测试。    Q-TESTING：基于强化学习的思想
+ 当某个GUI状态与上一个相似时，获得较小的reward 当某个GUI状态与上一个差别较大时，获得较大的reward  从而生成较具代表性的GUI事件序列</description>
+    </item>
+    
+    <item>
+      <title>理解和检测安卓应用中系统设置相关的缺陷</title>
+      <link>https://hagemon.github.io/posts/%E7%90%86%E8%A7%A3%E5%92%8C%E6%A3%80%E6%B5%8B%E5%AE%89%E5%8D%93%E5%BA%94%E7%94%A8%E4%B8%AD%E7%B3%BB%E7%BB%9F%E8%AE%BE%E7%BD%AE%E7%9B%B8%E5%85%B3%E7%9A%84%E7%BC%BA%E9%99%B7/</link>
+      <pubDate>Wed, 03 Aug 2022 20:46:25 +0000</pubDate>
+      
+      <guid>https://hagemon.github.io/posts/%E7%90%86%E8%A7%A3%E5%92%8C%E6%A3%80%E6%B5%8B%E5%AE%89%E5%8D%93%E5%BA%94%E7%94%A8%E4%B8%AD%E7%B3%BB%E7%BB%9F%E8%AE%BE%E7%BD%AE%E7%9B%B8%E5%85%B3%E7%9A%84%E7%BC%BA%E9%99%B7/</guid>
+      <description>本文是论文Understanding and Finding System Setting-Related Defects in Android Apps的总结笔记，作者是Jingling Sun。
+总览 安卓系统提供了很多用户可以更改的系统配置，比如网络连接、飞行模式、静音、系统语言等。这些系统配置的变更，可能会影响到app的表现形式。但如果app对这些变更处理不当，可能使ap存在缺陷（简称为设置缺陷）。这些缺陷可能引发UI错误、功能失效甚至是崩溃，从而影响用户体验。而目前的软件测试方法并不能系统地找到这些设置缺陷。
+本文主要从两个方面研究设置缺陷：一方面，本文收集了180个开源安卓app的1074个设置缺陷，并探究它们的影响（impact）、根本原因（root causes）和后果（consequence）。另一方面，构建了一个端到端的测试工具（SetDroid）对26个流行的开源项目进行测试，并找到了42个设置缺陷（33个被确认，21个被修复）。同时，对5个流行的工业软件开展测试，找到了17个设置缺陷（全部被确认和修复）。
+本文的核心思想是，所有的软件应该针对系统设置的变化，自动地做出相应的改变，并且：
+ 系统设置还原后，能够恢复到原来的状态。 在不还原的情况下，能够体现出不同设置下的差异。  以实际的app为例，来解释设置缺陷是如何引发错误的：
+  Wordpress
+ 当用户在发表一篇博客时开启飞行模式，则发送的操作会一直保持在等待状态，即使飞行模式已经被关闭且网络恢复了。 在飞行模式下发送草稿后，app将会在下一次开启时崩溃。    NextCloud
+在用户开启了系统的省电模式后，它的自动上传功能会变得无法使用，即使用户已经把app加入了省电模式的白名单。
+  目前的方法中，大多没有系统地研究这些缺陷，而是专注于某些特定的系统设置（如权限、屏幕方向）。另外，一些SOTA的通用测试技术只在app内部做测试，很少考虑到系统设置的影响；或是只研究引发程序崩溃的缺陷，而没有探测那些不会引发崩溃的缺陷（non-crash defects）。所以本文的工作亮点为：
+ 针对大部分的系统设置进行研究 考虑系统设置对app的影响 不仅检测引发崩溃的缺陷，还检测不会引发崩溃的缺陷  为了达到这些目的，本文主要针对三个研究问题进行探究和分析：
+ RQ1（impact）：设置缺陷是否会广泛影响app的使用？ RQ2（root cause）：引起这些缺陷的主要原因有哪些？ RQ3（consequences）：这些缺陷主要引发什么后果？这些后果是以什么形式展示的？  经验研究方法 收集和总结设置类别 本文根据安卓文档和主流的安卓系统，总结了9个主要的设置类别，并使用一些常见的关键词来描述它们。这些关键词从一些bug报告和安卓SDK API中提炼而来，具体关键词如表所示：
+   Setting Categories Keywords Description     Network and connect Bluetooth, WLAN, NFC, internet, network, hot-spot, mobile, wifi, airplane 管理设备的网络模式（Wi-Fi、移动数据或飞行模式）或是和别的设备的连接（蓝牙）   Location and security location, device only, phone only, GPS, high accuracy, screen lock, fingerprint 管理设备的安全设置（如何解锁）、定位及对应的三种定位方式（使用网络和GPS、只使用网络、只是用GPS）   Sound vibrate, ringtone, do not disturb, silent 管理设备的声音（如禁音状态）   Battery power save, battery 管理省电模式，或为各app加入省电模式白名单   Display orientation, vertical, horizontal, split screen, Multi-window, screen resolution, brightness, landscape, portrait, rotate 管理设备的显示，如亮度、字体和屏幕方向   Apps and notifications permission, disable, notification 管理运行时的权限、以及app是否能够给用户发送通知   Developer developer option, keep activity 模拟特定环境的告诫设置，如强制right to left布局方向   Accessibility accessibility, talkback, text-to-speech, color correction, color inversion, high contrast text 辅助功能，如调整对比度、打开屏幕阅读器   Other settings setting, preference, date, time, time zone, hour format, date&amp;amp;time, reading mode, car mode, one-handed mode, dark mode, game mode, night mode, theme, language 改变语言、系统时间、输入方式、系统时间格式、主题等    收集设置缺陷的bug reports 收集设置缺陷的bug reports分为三个阶段：</description>
+    </item>
+    
+  </channel>
+</rss>
