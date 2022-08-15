@@ -9,14 +9,14 @@ tags = ['Software Analyze and Testing']
 
 ## 概述
 
-目前的测试工具大多用于检测引起崩溃（crash）的bug，而缺乏一个自动化检测非崩溃性bug（non-crashing bugs）的方法。引发这些问题的原因通常是软件的实现逻辑有误，从而导致GUI的显示没有达到预期。
+目前的测试工具大多用于检测引起崩溃（crash）的bug，而缺乏一个自动化检测非崩溃性bug（non-crashing bugs）的方法。引发这些非崩溃性bug的主要原因通常是软件的实现逻辑有误，从而导致GUI的显示没有达到预期。
 
-要解决非崩溃的功能性问题，主要面临两个挑战：
+目前要解决非崩溃的功能性问题，主要面临两个挑战：
 
 1. 需要大量的经验和人力。
 2. 缺少test oracles以实现自动化测试。
 
-本文基于**蜕变测试**（metamorphic testing）的思想，提出了一种**独立页面模糊测试**（independent view fuzzing）来解决这个问题。其核心思想利用了页面之间的独立性，在随机生成的种子测试用例（seed tests，下文简称seeds）上，额外增加一系列独立的事件，从而构建变种测试用例（mutated tests，下文简称mutants）。
+本文基于**蜕变测试**（metamorphic testing）的思想，提出了一种**独立页面模糊测试**（independent view fuzzing）来解决这个问题。其核心思想利用了**页面之间的独立性**，在随机生成的种子测试用例（seed tests，下文简称seeds）上，额外增加一系列独立的事件，从而构建变种测试用例（mutated tests，下文简称mutants）。对于mutants来说，其表现应该与seeds具有一致性，蜕变测试方法通过检验这种一次性来判断软件是否有功能性问题。
 
 所谓页面独立性，指的是对于同一个父组件上平行的组件（如ListView中并排的按钮），或不属于同一个父组件的组件（如ListView的按钮和导航栏的按钮）在功能上应该相互独立。对于其中一个组件的操作不会影响其它组件的正常功能。本文称其为独立页面属性（Independent View Properties）。
 
