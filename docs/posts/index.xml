@@ -7,7 +7,24 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Hagemon Production</copyright>
-    <lastBuildDate>Mon, 08 Aug 2022 21:52:15 +0800</lastBuildDate><atom:link href="https://hagemon.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 29 Aug 2022 11:37:24 +0800</lastBuildDate><atom:link href="https://hagemon.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>机器学习测试综述</title>
+      <link>https://hagemon.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E6%B5%8B%E8%AF%95%E7%BB%BC%E8%BF%B0/</link>
+      <pubDate>Mon, 29 Aug 2022 11:37:24 +0800</pubDate>
+      
+      <guid>https://hagemon.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E6%B5%8B%E8%AF%95%E7%BB%BC%E8%BF%B0/</guid>
+      <description>论文《Machine Learning Testing: Survey, Landscapes and Horizons》的笔记，作者是Jie M Zhang老师，主要了解近年来对机器学习系统测试方面的研究重点。这篇文章可以作为目录，浏览机器学习测试方面的一些经典文章。
+概述 机器学习应用在各个行业扮演着越来越重要的角色。这些应用在自动驾驶、医疗等关乎人身安全的行业中也有着比较广泛的使用场景，这很自然地引起人们对其准确性、鲁棒性、隐私性、效率和公平性等因素的思考，于是越来越多的学者开始针对机器学习系统或应用的测试开展研究。目前比较著名的机器学习测试工具有：
+ DeepXplore：深度学习的白盒测试工具 Themis：检测机器学习系统的公平性  实际上，机器学习应用的测试有许多和传统软件测试类似的特性，这些特性在传统软件测试中已经得到充分的研究，但机器学习应用的统计学属性（包含不确定性）给相应的测试工作带来了额外的挑战：
+ 数据敏感：机器学习系统是一个数据驱动的系统，它的表现会随着新数据的输入、训练而不断变化，然而传统软件并不会因为数据输入而改变它的行为。 Oracle问题：机器学习系统的测试总是缺少期望的输出（如测试集的label）来判断系统是否存在问题。 涌现特性（Emergent Properties）：当系统中的各个组件单独存在时，它们很难发挥作用。只有将它视为一个整体时，在各个组件协同工作的情况下才能有好的效果，这让我们无法通过拆解系统的手段来定位问题，增加了测试的难度。 错误传播：当系统的一个部分出现问题时，它可能会将这个问题扩散到系统的其它部分，从而难以发现问题所在。  本文对机器学习测试问题进行了全面的阐述，主要包括四个角度：
+ 测试属性（testing properties）：如准确率、鲁棒性、公平性等 测试组件（testing components）：如数据、程序和框架 测试工作流（testing workflow）：如测试用例生成、测试执行和测试评估 应用场景（application scenarios）：如自动驾驶、机器翻译等  另外，本文还统计了各种研究问题的分布情况，并就传统软件测试与机器学习应用测试技术的交叉展开了定位及未来研究方向分析。
+机器学习测试介绍 本节对机器学习测试做出定义和分析，介绍测试工作流（how to test）、测试目标（what to test）和测试组件（where to test）的概念。
+定义 软件中存在的问题（bug）指的是软件当前的状况和所期待的状况有所偏差，本文对机器学习的bug和机器学习测试做出以下定义：
+ ML Bug：指在机器学习应用中，任何使当前状态与期待中状态（required conditions）有所不一致的影响因素（machine learning items）。 ML Testing：指任何找到ML bugs的方法（testing activities）。  定义中包含三个重要的概念：
+ required conditions：包括准确率、鲁棒性和隐私性等，在机器学习系统中可能以不同的形式存在，这些是我们测试的目标，本文定义为测试属性（testing properties） machine learning items：包括输入数据、程序和框架，这些是我们测试时可能出现问题的地方，本文定义为测试组件（testing components） testing activities：包括测试用例生成、oracle的鉴定、测试充分性的评估和bug的分类诊断，这些是我们的测试手段，本文定义为测试工作流（testing workflow）  和传统软件测试不同，机器学习系统测试除了要对程序本身进行检查，还需要对输入数据进行检查，这也增加了测试工作的多样性。</description>
+    </item>
+    
     <item>
       <title>基于自动化功能性模糊测试的安卓软件非崩溃bug检测</title>
       <link>https://hagemon.github.io/posts/%E5%9F%BA%E4%BA%8E%E8%87%AA%E5%8A%A8%E5%8C%96%E5%8A%9F%E8%83%BD%E6%80%A7%E6%A8%A1%E7%B3%8A%E6%B5%8B%E8%AF%95%E7%9A%84%E5%AE%89%E5%8D%93%E8%BD%AF%E4%BB%B6%E9%9D%9E%E5%B4%A9%E6%BA%83bug%E6%A3%80%E6%B5%8B/</link>
