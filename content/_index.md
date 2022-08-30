@@ -15,8 +15,8 @@ Email: ooonefolder@gmail.com or yizele@foxmail.com
 
 ### Research Interests
 
+- Trustworthy AI System
 - Software Analyze and Testing
-- Trustworthy AI system
 - Software Supply Chain
 
 #### 🤖️ Machine Learning
