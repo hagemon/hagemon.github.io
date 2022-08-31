@@ -408,7 +408,7 @@ $$</p>
 <li><strong>层级别的覆盖率</strong>（Layer-level coverage）：
 <ul>
 <li><a href="https://tingsu.github.io/files/ase18-deepgauge.pdf">Ma等人</a>提出了层级别的覆盖率准则，考虑了最高激活的神经元以及他们的联合（或者序列）来表述深度神经网络的行为。在MNIST和IMageNet上，层级别的覆盖率和神经元覆盖率相结合，能够达到更好的测试效果。</li>
-<li>Ma等人后续的两个工作<a href="https://arxiv.org/pdf/1806.07723.pdf">组合式测试</a>（combinatorial testing）和<a href="http://xujuefei.com/felix_saner19_deepct.pdf">Deepct</a>进一步提出了组合式测试覆盖率，*通过检查每一层内神经元交互的比例？*确认了神经元组合式的激活值状态。</li>
+<li>Ma等人提出的<a href="http://xujuefei.com/felix_saner19_deepct.pdf">DeepCT</a>进一步提出了组合式测试覆盖率，基于每一层内神经元的k-way组合，计算每个组合的激活完整性和数量，从而定义相应的覆盖率。</li>
 <li><a href="https://arxiv.org/pdf/1902.06320.pdf">Sekhon和Fleming</a>定义了一种准则，用于寻找满足以下条件的的测试用例：
 <ul>
 <li>在同一层中，所有神经元对包含所有可能的输出值的组合</li>
