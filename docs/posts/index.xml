@@ -7,7 +7,43 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Hagemon Production</copyright>
-    <lastBuildDate>Mon, 29 Aug 2022 11:37:24 +0800</lastBuildDate><atom:link href="https://hagemon.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 03 Sep 2022 16:10:21 +0800</lastBuildDate><atom:link href="https://hagemon.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Understanding Concolic Testing</title>
+      <link>https://hagemon.github.io/posts/understanding-concolic-testing/</link>
+      <pubDate>Sat, 03 Sep 2022 16:10:21 +0800</pubDate>
+      
+      <guid>https://hagemon.github.io/posts/understanding-concolic-testing/</guid>
+      <description>under construction.</description>
+    </item>
+    
+    <item>
+      <title>Neuron Coverage for Adequacy Testing</title>
+      <link>https://hagemon.github.io/posts/neuron-coverage-for-adequacy-testing/</link>
+      <pubDate>Sat, 03 Sep 2022 16:09:59 +0800</pubDate>
+      
+      <guid>https://hagemon.github.io/posts/neuron-coverage-for-adequacy-testing/</guid>
+      <description>神经覆盖率的概念首先在DeepXplore的论文《DeepXplore: Automated Whitebox Testing of Deep Learning Systems》中被提及，其核心思想是输入数据中被激活的神经元个数占总神经元个数的比例。Lei Ma在此基础上做出了一些改进，提出DeepGauge、Combinatorial Testing和DeepCT。
+DeepXplore 深度学习系统被广泛应用在一些安全相关的场景中（如自动驾驶），系统在一些边界情况下（corner cases）的准确性和可预测性是十分重要的。大多深度学习系统依赖于标注的数据，从而在一些边界情况下容易暴露问题，从而引发严重的后果。
+于是有以下两个问题需要考虑：
+ 是否有一个标准，可以衡量输入数据的全面性，从而推断模型是否可以考虑到所发生的各种情况。 如何在不需要大量的带标签数据的情况下，可以找到深度学习系统的错误行为。  为了解决这些问题，作者做出了以下几点尝试：
+ 提出神经元覆盖率的概念，用于衡量深度学习系统的逻辑覆盖程度。 基于交叉引用的思想，利用多个相同功能的深度学习模型，在没有标注数据的情况下以投票的形式找到可能存在错误行为的模型。 基于深度学习系统的输出的可微性，构建生成测试数据的联合优化方法，通过链式法则对输入数据$x$进行梯度提升更新，可以在最大化神经元覆盖率的同时让模型表现出尽可能多的行为。  神经元覆盖率（Neuron coverage） 测试数据集合在神经网络中激活的神经元个数占总神经元个数的比例，被称为该测试数据集合的神经元覆盖率。其中，一旦某个神经元对于某个输入的激活值大于某个值，则认为该神经元被激活。
+假设神经网络的神经元集合为$N={n_1,n_2,\dots}$，测试集集合为$T={x_1,x_2,\dots}$，$out(n,x)$表示神经元$n$在对数据$x$进行运算后的输出结果，$t$为神经元被激活的阈值，则神经元覆盖率可以被表示为：
+$$ NCov(T,x)=\frac{|n|\forall x\in T,out(n,x)&amp;gt;t|}{N} $$
+梯度 与深度学习系统中优化模型的方式不同，作者固定神经元的参数$\theta$，通过计算神经元输出$y$相对于输入$x$的梯度：
+$$ G=\nabla_x f(\theta,x)=\partial y/\partial x $$
+优化目标 最大化不同行为 最大化不同行为指的是生成的数据集可以让每一个模型都尽可能地预测出多种结果。假设有$n$个深度神经网络$F_{k\in 1\dots n}:x\rightarrow y$，若输入$x$在所有的深度神经网络中都可以预测出正确的结果，我们的目的就是在修改$x$后让至少一个深度神经网络有不同的分类结果。
+令$F_k(x)[c]$表示第$k$个神经网络将$x$分类为$c$的概率，选择任一神经网络$F_j$，则最大化不同行为的优化目标表示为：
+$$ obj_1(x)=\sum_{k\ne j}F_k(x)[c]-\lambda_1\cdot F_j(x)[c] $$
+即对于类别$c$，在最小化$F_j$对其分类的概率的同时，最大化其余所有神经网络对其的分类概率。
+最大化神经元覆盖率 对于那些激活值小于$t$的神经元，希望它们的值可以大于$t$，于是在优化目标中加上：
+$$ obj_2(x)=\lambda_2\cdot f_n(x) $$
+联合优化目标 将两个优化目标合并，得到联合优化目标：
+$$ obj_{joint}(x)=\sum_{k\ne j}F_k(x)[c]-\lambda_1\cdot F_j(x)[c]+\lambda_2\cdot f_n(x) $$
+其中，$n$是每个iteration中随机选择的非激活神经元。
+特定域约束 对于特定的问题，数值的范围需要有特定的约束。如图像数据的范围只能在0到255之间。具体来说，输入的更新可以表示为$x_{i+1}=x_i+s\cdot g$，其中$g$为梯度值。作者需要保证在这个更新之后的数据仍然满足约束条件：</description>
+    </item>
+    
     <item>
       <title>机器学习测试综述</title>
       <link>https://hagemon.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E6%B5%8B%E8%AF%95%E7%BB%BC%E8%BF%B0/</link>

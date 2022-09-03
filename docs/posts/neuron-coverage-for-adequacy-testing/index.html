@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="zh-cn" prefix="og: http://ogp.me/ns#">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  
+  <title>Neuron Coverage for Adequacy Testing</title>
+  <meta property="og:title" content="Neuron Coverage for Adequacy Testing" />
+  <meta name="twitter:title" content="Neuron Coverage for Adequacy Testing" />
+  
+
+  
+
+  <meta name="author" content=""/>
+  <meta property="og:site_name" content="Hagemon&#39;s Log" />
+  <meta property="og:url" content="https://hagemon.github.io/posts/neuron-coverage-for-adequacy-testing/" />
+
+  
+  <meta name="twitter:card" content="summary" />
+
+  
+  <meta name="twitter:site" content="@oneFolder_" />
+  <meta name="twitter:creator" content="@oneFolder_" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  
+  
+  
+  <meta name="generator" content="Hugo 0.96.0" />
+  
+    
+  
+  
+
+  <link rel="stylesheet" href="https://hagemon.github.io/css/style.css" />
+  
+  <link rel="stylesheet" href="https://hagemon.github.io/css/custom.css">
+  <link rel='icon' type='image/x-icon' href="https://hagemon.github.io/favicon.ico" />
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async>
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: {
+      equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"]
+    }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+
+  
+  
+
+</head>
+
+<body>
+  <a href="#main" class="skip-link p-screen-reader-text">Skip to content</a>
+  <svg xmlns="http://www.w3.org/2000/svg" style="display: none;" aria-hidden="true"> <symbol id="icon-500px" viewBox="0 0 16 16"><g> <path d="M3.953 10.512a5.24 5.24 0 0 0 6.996 3.141c.625-.262 1.184-.641 1.666-1.122s.859-1.041 1.122-1.666c.272-.647.412-1.331.412-2.037s-.137-1.394-.412-2.037c-.262-.625-.641-1.184-1.122-1.666s-1.041-.859-1.666-1.122a5.226 5.226 0 0 0-2.037-.413c-.716 0-1.431.144-2.066.413-.509.216-1.372.769-1.875 1.291l-.003.003V.984h7.241c.262-.003.262-.372.262-.491 0-.122 0-.487-.266-.491H4.377a.343.343 0 0 0-.344.341v6.066c0 .197.244.338.472.384.444.094.544-.047.653-.197l.016-.019c.166-.247.681-.766.688-.772a4.262 4.262 0 0 1 3.037-1.25c1.147 0 2.222.444 3.028 1.25a4.245 4.245 0 0 1 1.256 3.019 4.236 4.236 0 0 1-1.25 3.019 4.336 4.336 0 0 1-3.047 1.25 4.136 4.136 0 0 1-2.159-.597l.003-3.688c0-.491.213-1.028.572-1.431a2.09 2.09 0 0 1 1.588-.716c.594 0 1.15.225 1.566.634.409.406.637.95.637 1.528a2.179 2.179 0 0 1-2.206 2.197c-.238 0-.672-.106-.691-.109-.25-.075-.356.272-.391.387-.134.441.069.528.109.541.397.125.659.147 1.003.147a3.173 3.173 0 0 0 3.169-3.169c0-1.734-1.422-3.144-3.166-3.144-.856 0-1.659.328-2.263.919-.575.566-.903 1.319-.903 2.069v.019c-.003.094-.003 2.306-.006 3.031l-.003-.003c-.328-.363-.653-.919-.869-1.488-.084-.222-.275-.184-.534-.103-.125.034-.469.141-.391.394zm3.722-.865c0 .106.097.2.156.253l.019.019c.1.097.194.147.281.147a.181.181 0 0 0 .131-.05c.044-.041.537-.544.588-.591l.553.55c.05.056.106.088.172.088.088 0 .184-.053.284-.156.238-.244.119-.375.063-.438l-.559-.559.584-.588c.128-.137.016-.284-.097-.397-.162-.162-.322-.206-.422-.112l-.581.581-.588-.588a.16.16 0 0 0-.113-.047c-.078 0-.172.053-.275.156-.181.181-.219.306-.125.406l.588.584-.584.584c-.053.05-.078.103-.075.156zm1.278-7.931c-.938 0-1.938.191-2.669.506a.207.207 0 0 0-.134.181.753.753 0 0 0 .069.337c.047.116.166.425.4.334a6.689 6.689 0 0 1 2.334-.444 6.35 6.35 0 0 1 2.469.497c.622.263 1.206.644 1.844 1.194a.22.22 0 0 0 .147.059c.125 0 .244-.122.347-.237.169-.191.287-.35.119-.509a6.858 6.858 0 0 0-2.1-1.356 7.326 7.326 0 0 0-2.825-.563zM14.006 13.3c-.113-.113-.209-.178-.294-.203s-.162-.006-.222.053l-.056.056a6.32 6.32 0 0 1-6.938 1.356 6.336 6.336 0 0 1-2.013-1.356 6.046 6.046 0 0 1-1.356-2.012c-.288-.713-.381-1.247-.413-1.422-.003-.016-.006-.028-.006-.037-.041-.206-.231-.222-.503-.178-.112.019-.459.072-.428.319v.006a7.261 7.261 0 0 0 2.04 3.994 7.266 7.266 0 0 0 10.288 0l.059-.059c.069-.084.134-.225-.159-.516z"/> </g></symbol> <symbol id="icon-codepen" viewBox="0 0 16 16"><g> <path d="M14.777 5.751l-7-4.667a.5.5 0 0 0-.555 0l-7 4.667a.501.501 0 0 0-.223.416v4.667c0 .167.084.323.223.416l7 4.667a.5.5 0 0 0 .554 0l7-4.667a.501.501 0 0 0 .223-.416V6.167a.501.501 0 0 0-.223-.416zM7.5 10.232L4.901 8.5 7.5 6.768 10.099 8.5 7.5 10.232zM8 5.899V2.434l5.599 3.732L11 7.898l-3-2zm-1 0l-3 2-2.599-1.732L7 2.435V5.9zM3.099 8.5L1 9.899V7.101L3.099 8.5zM4 9.101l3 2v3.465l-5.599-3.732L4 9.102zm4 2l3-2 2.599 1.732L8 14.565V11.1zM11.901 8.5L14 7.101v2.798L11.901 8.5z"/> </g></symbol> <symbol id="icon-dribbble" viewBox="0 0 16 16"><g> <path d="M8 16c-4.412 0-8-3.588-8-8s3.587-8 8-8c4.412 0 8 3.587 8 8s-3.588 8-8 8zm6.747-6.906c-.234-.075-2.116-.634-4.256-.291a29.7 29.7 0 0 1 1.328 4.872 6.845 6.845 0 0 0 2.928-4.581zM10.669 14.3c-.103-.6-.497-2.688-1.456-5.181-.016.006-.031.009-.044.016-3.856 1.344-5.241 4.016-5.362 4.266a6.807 6.807 0 0 0 6.863.9zm-7.747-1.722c.156-.266 2.031-3.369 5.553-4.509a7.04 7.04 0 0 1 .269-.081 24.04 24.04 0 0 0-.553-1.159c-3.409 1.022-6.722.978-7.022.975-.003.069-.003.138-.003.209 0 1.753.666 3.356 1.756 4.566zM1.313 6.609c.306.003 3.122.016 6.319-.831a43.092 43.092 0 0 0-2.534-3.953 6.854 6.854 0 0 0-3.784 4.784zM6.4 1.366a36.612 36.612 0 0 1 2.55 4c2.431-.909 3.459-2.294 3.581-2.469A6.799 6.799 0 0 0 6.4 1.366zm6.891 2.325c-.144.194-1.291 1.663-3.816 2.694.159.325.313.656.453.991.05.119.1.234.147.353 2.275-.284 4.534.172 4.759.219a6.816 6.816 0 0 0-1.544-4.256z"/> </g></symbol> <symbol id="icon-facebook" viewBox="0 0 16 16"><g> <path d="M9.5 3H12V0H9.5C7.57 0 6 1.57 6 3.5V5H4v3h2v8h3V8h2.5l.5-3H9V3.5c0-.271.229-.5.5-.5z"/> </g></symbol> <symbol id="icon-feed" viewBox="0 0 16 16"><g> <path d="M2.13 11.733c-1.175 0-2.13.958-2.13 2.126 0 1.174.955 2.122 2.13 2.122a2.126 2.126 0 0 0 2.133-2.122 2.133 2.133 0 0 0-2.133-2.126zM.002 5.436v3.067c1.997 0 3.874.781 5.288 2.196a7.45 7.45 0 0 1 2.192 5.302h3.08c0-5.825-4.739-10.564-10.56-10.564zM.006 0v3.068C7.128 3.068 12.924 8.87 12.924 16H16C16 7.18 8.824 0 .006 0z"/> </g></symbol> <symbol id="icon-flickr" viewBox="0 0 16 16"><g> <path d="M0 8.5a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0zm9 0a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/> </g></symbol> <symbol id="icon-github" viewBox="0 0 16 16"><g> <path d="M8 .198a8 8 0 0 0-2.529 15.591c.4.074.547-.174.547-.385 0-.191-.008-.821-.011-1.489-2.226.484-2.695-.944-2.695-.944-.364-.925-.888-1.171-.888-1.171-.726-.497.055-.486.055-.486.803.056 1.226.824 1.226.824.714 1.223 1.872.869 2.328.665.072-.517.279-.87.508-1.07-1.777-.202-3.645-.888-3.645-3.954 0-.873.313-1.587.824-2.147-.083-.202-.357-1.015.077-2.117 0 0 .672-.215 2.201.82A7.672 7.672 0 0 1 8 4.066c.68.003 1.365.092 2.004.269 1.527-1.035 2.198-.82 2.198-.82.435 1.102.162 1.916.079 2.117.513.56.823 1.274.823 2.147 0 3.073-1.872 3.749-3.653 3.947.287.248.543.735.543 1.481 0 1.07-.009 1.932-.009 2.195 0 .213.144.462.55.384A8 8 0 0 0 8.001.196z"/> </g></symbol> <symbol id="icon-gitlab" viewBox="0 0 28 28"><g> <path d="M1.625 11.031L14 26.89.437 17.046a1.092 1.092 0 0 1-.391-1.203l1.578-4.813zm7.219 0h10.313L14.001 26.89zM5.75 1.469l3.094 9.562H1.625l3.094-9.562a.548.548 0 0 1 1.031 0zm20.625 9.562l1.578 4.813a1.09 1.09 0 0 1-.391 1.203l-13.563 9.844 12.375-15.859zm0 0h-7.219l3.094-9.562a.548.548 0 0 1 1.031 0z"/> </g></symbol> <symbol id="icon-google-plus" viewBox="0 0 16 16"><g> <path d="M5.091 7.147v1.747h2.888c-.116.75-.872 2.197-2.888 2.197-1.737 0-3.156-1.441-3.156-3.216s1.419-3.216 3.156-3.216c.991 0 1.65.422 2.028.784L8.5 4.112c-.888-.828-2.037-1.331-3.409-1.331C2.275 2.784 0 5.059 0 7.875s2.275 5.091 5.091 5.091c2.937 0 4.888-2.066 4.888-4.975 0-.334-.037-.591-.081-.844H5.092zM16 7h-1.5V5.5H13V7h-1.5v1.5H13V10h1.5V8.5H16z"/> </g></symbol> <symbol id="icon-instagram" viewBox="0 0 22 22"><g> <path d="M15.445 0H6.554A6.559 6.559 0 0 0 0 6.554v8.891A6.559 6.559 0 0 0 6.554 22h8.891a6.56 6.56 0 0 0 6.554-6.555V6.554A6.557 6.557 0 0 0 15.445 0zm4.342 15.445a4.343 4.343 0 0 1-4.342 4.342H6.554a4.341 4.341 0 0 1-4.341-4.342V6.554a4.34 4.34 0 0 1 4.341-4.341h8.891a4.342 4.342 0 0 1 4.341 4.341l.001 8.891z"/> <path d="M11 5.312A5.693 5.693 0 0 0 5.312 11 5.694 5.694 0 0 0 11 16.688 5.694 5.694 0 0 0 16.688 11 5.693 5.693 0 0 0 11 5.312zm0 9.163a3.475 3.475 0 1 1-.001-6.95 3.475 3.475 0 0 1 .001 6.95zm5.7-10.484a1.363 1.363 0 1 1-1.364 1.364c0-.752.51-1.364 1.364-1.364z"/> </g></symbol> <symbol id="icon-linkedin" viewBox="0 0 16 16"><g> <path d="M6 6h2.767v1.418h.04C9.192 6.727 10.134 6 11.539 6 14.46 6 15 7.818 15 10.183V15h-2.885v-4.27c0-1.018-.021-2.329-1.5-2.329-1.502 0-1.732 1.109-1.732 2.255V15H6V6zM1 6h3v9H1V6zM4 3.5a1.5 1.5 0 1 1-3.001-.001A1.5 1.5 0 0 1 4 3.5z"/> </g></symbol> <symbol id="icon-mail" viewBox="0 0 22 18"><g> <path fill="#000" d="M0 17.225V.776h22v16.447H0v.002zm3.011-1.815h15.978l-5.111-5.115L11 13.179l-2.877-2.883-5.112 5.114zm-1.216-1.275l5.077-5.09L1.795 3.98v10.155zm13.332-5.09l5.079 5.09V3.979l-5.079 5.066zm-4.126 1.588l8.022-8.027-16.045-.001 8.023 8.028z"/> </g></symbol> <symbol id="icon-medium" viewBox="0 0 24 24"><g> <path d="M22.085 4.733L24 2.901V2.5h-6.634l-4.728 11.768L7.259 2.5H.303v.401L2.54 5.594c.218.199.332.49.303.783V16.96c.069.381-.055.773-.323 1.05L0 21.064v.396h7.145v-.401l-2.52-3.049a1.244 1.244 0 0 1-.347-1.05V7.806l6.272 13.659h.729l5.393-13.659v10.881c0 .287 0 .346-.188.534l-1.94 1.877v.402h9.412v-.401l-1.87-1.831a.556.556 0 0 1-.214-.534V5.267a.554.554 0 0 1 .213-.534z"/> </g></symbol> <symbol id="icon-npm" viewBox="0 0 16 16"><g> <path d="M0 0v16h16V0H0zm13 13h-2V5H8v8H3V3h10v10z"/> </g></symbol> <symbol id="icon-pinterest" viewBox="0 0 16 16"><g> <path d="M8 1.069a6.93 6.93 0 0 0-2.525 13.384c-.059-.547-.116-1.391.025-1.988.125-.541.813-3.444.813-3.444s-.206-.416-.206-1.028c0-.963.559-1.684 1.253-1.684.591 0 .878.444.878.975 0 .594-.378 1.484-.575 2.306-.166.691.344 1.253 1.025 1.253 1.231 0 2.178-1.3 2.178-3.175 0-1.659-1.194-2.819-2.894-2.819-1.972 0-3.128 1.478-3.128 3.009 0 .597.228 1.234.516 1.581.056.069.066.128.047.2a95.89 95.89 0 0 1-.194.787c-.031.128-.1.153-.231.094-.866-.403-1.406-1.669-1.406-2.684 0-2.188 1.587-4.194 4.578-4.194 2.403 0 4.272 1.712 4.272 4.003 0 2.388-1.506 4.313-3.597 4.313-.703 0-1.362-.366-1.588-.797 0 0-.347 1.322-.431 1.647-.156.603-.578 1.356-.862 1.816a6.93 6.93 0 0 0 8.984-6.622 6.931 6.931 0 0 0-6.931-6.934z"/> </g></symbol> <symbol id="icon-search" viewBox="0 0 16 16"><g> <path d="M15.504 13.616l-3.79-3.223c-.392-.353-.811-.514-1.149-.499a6 6 0 1 0-.672.672c-.016.338.146.757.499 1.149l3.223 3.79c.552.613 1.453.665 2.003.115s.498-1.452-.115-2.003zM6 10a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/> </g></symbol> <symbol id="icon-strava" viewBox="0 0 24 24"><g> <path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169"/> </g></symbol> <symbol id="icon-tumblr" viewBox="0 0 16 16"><g> <path d="M9.001 7v3.659c0 .928-.012 1.463.086 1.727.098.262.342.534.609.691.354.212.758.318 1.214.318.81 0 1.289-.107 2.09-.633v2.405a9.089 9.089 0 0 1-1.833.639A7.93 7.93 0 0 1 9.369 16a4.9 4.9 0 0 1-1.725-.276 4.195 4.195 0 0 1-1.438-.79c-.398-.343-.672-.706-.826-1.091s-.23-.944-.23-1.676V6.556H3.003V4.29c.628-.204 1.331-.497 1.778-.877a4.386 4.386 0 0 0 1.08-1.374C6.133 1.505 6.32.825 6.422 0h2.579v4H13v3H9.001z"/> </g></symbol> <symbol id="icon-twitter" viewBox="0 0 16 16"><g> <path d="M16 3.538a6.461 6.461 0 0 1-1.884.516 3.301 3.301 0 0 0 1.444-1.816 6.607 6.607 0 0 1-2.084.797 3.28 3.28 0 0 0-2.397-1.034 3.28 3.28 0 0 0-3.197 4.028 9.321 9.321 0 0 1-6.766-3.431 3.284 3.284 0 0 0 1.015 4.381A3.301 3.301 0 0 1 .643 6.57v.041A3.283 3.283 0 0 0 3.277 9.83a3.291 3.291 0 0 1-1.485.057 3.293 3.293 0 0 0 3.066 2.281 6.586 6.586 0 0 1-4.862 1.359 9.286 9.286 0 0 0 5.034 1.475c6.037 0 9.341-5.003 9.341-9.341 0-.144-.003-.284-.009-.425a6.59 6.59 0 0 0 1.637-1.697z"/> </g></symbol> <symbol id="icon-vimeo" viewBox="0 0 16 16"><g> <path d="M15.994 4.281c-.072 1.556-1.159 3.691-3.263 6.397-2.175 2.825-4.016 4.241-5.522 4.241-.931 0-1.722-.859-2.366-2.581-.431-1.578-.859-3.156-1.291-4.734-.478-1.722-.991-2.581-1.541-2.581-.119 0-.538.253-1.256.753l-.753-.969c.791-.694 1.569-1.388 2.334-2.081 1.053-.909 1.844-1.387 2.372-1.438 1.244-.119 2.013.731 2.3 2.553.309 1.966.525 3.188.647 3.666.359 1.631.753 2.447 1.184 2.447.334 0 .838-.528 1.509-1.588.669-1.056 1.028-1.862 1.078-2.416.097-.912-.262-1.372-1.078-1.372a2.98 2.98 0 0 0-1.184.263c.787-2.575 2.287-3.825 4.506-3.753 1.641.044 2.416 1.109 2.322 3.194z"/> </g></symbol> <symbol id="icon-wordpress" viewBox="0 0 16 16"><g> <path d="M2 8c0 2.313 1.38 4.312 3.382 5.259L2.52 5.622A5.693 5.693 0 0 0 2 8zm10.05-.295c0-.722-.266-1.222-.495-1.612-.304-.482-.589-.889-.589-1.371 0-.537.418-1.037 1.008-1.037.027 0 .052.003.078.005A6.064 6.064 0 0 0 8 2.156 6.036 6.036 0 0 0 2.987 4.79c.141.004.274.007.386.007.627 0 1.599-.074 1.599-.074.323-.018.361.444.038.482 0 0-.325.037-.687.055l2.185 6.33 1.313-3.835-.935-2.495a12.304 12.304 0 0 1-.629-.055c-.323-.019-.285-.5.038-.482 0 0 .991.074 1.58.074.627 0 1.599-.074 1.599-.074.323-.018.362.444.038.482 0 0-.326.037-.687.055l2.168 6.282.599-1.947c.259-.809.457-1.389.457-1.889zm-3.945.806l-1.8 5.095a6.148 6.148 0 0 0 3.687-.093.52.52 0 0 1-.043-.081L8.105 8.511zm5.16-3.315c.026.186.04.386.04.601 0 .593-.114 1.259-.456 2.093l-1.833 5.16c1.784-1.013 2.983-2.895 2.983-5.051a5.697 5.697 0 0 0-.735-2.803zM8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm0 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14z"/> </g></symbol> <symbol id="icon-youtube" viewBox="0 0 16 16"><g> <path d="M15.841 4.8s-.156-1.103-.637-1.587c-.609-.637-1.291-.641-1.603-.678-2.237-.163-5.597-.163-5.597-.163h-.006s-3.359 0-5.597.163c-.313.038-.994.041-1.603.678C.317 3.697.164 4.8.164 4.8S.005 6.094.005 7.391v1.213c0 1.294.159 2.591.159 2.591s.156 1.103.634 1.588c.609.637 1.409.616 1.766.684 1.281.122 5.441.159 5.441.159s3.363-.006 5.6-.166c.313-.037.994-.041 1.603-.678.481-.484.637-1.588.637-1.588s.159-1.294.159-2.591V7.39c-.003-1.294-.162-2.591-.162-2.591zm-9.494 5.275V5.578l4.322 2.256-4.322 2.241z"/> </g></symbol></svg>
+  <header class="l-header">
+    
+    <p class="c-title p-title"><a href="https://hagemon.github.io/" class="p-title__link">Hagemon&#39;s Log</a></p>
+    
+    
+  </header>
+
+<nav class="l-nav p-menu">
+  <ul class="p-menu__lists">
+    
+      
+      <li class="p-menu__listitem">
+        <a href="/">About</a>
+      </li>
+      
+    
+      
+      <li class="p-menu__listitem">
+        <a href="/posts">Blog</a>
+      </li>
+      
+    
+      
+      <li class="p-menu__listitem">
+        <a href="/tags">Tags</a>
+      </li>
+      
+    
+  </ul>
+</nav>
+
+
+  <main id="main" class="l-main">
+
+
+<article class="p-article">
+  <header>
+    <h1>Neuron Coverage for Adequacy Testing</h1>
+    
+    <div>
+        <div class="c-meta">
+        
+           Posted on
+<time datetime="2022-09-03T16:09:59&#43;08:00">
+  Sep 3, 2022
+</time>
+
+        
+        
+        
+        </div>
+      </div>
+      
+    </div>
+    
+  </header>
+  
+  <section id="js-article" class="p-article__body">
+    <p>神经覆盖率的概念首先在DeepXplore的论文《<strong>DeepXplore: Automated Whitebox Testing of Deep Learning Systems</strong>》中被提及，其核心思想是输入数据中被激活的神经元个数占总神经元个数的比例。Lei Ma在此基础上做出了一些改进，提出DeepGauge、Combinatorial Testing和DeepCT。</p>
+<h1 id="deepxplore">DeepXplore</h1>
+<p>深度学习系统被广泛应用在一些安全相关的场景中（如自动驾驶），系统在一些边界情况下（corner cases）的准确性和可预测性是十分重要的。大多深度学习系统依赖于标注的数据，从而在一些边界情况下容易暴露问题，从而引发严重的后果。</p>
+<p>于是有以下两个问题需要考虑：</p>
+<ol>
+<li>是否有一个标准，可以衡量输入数据的全面性，从而推断模型是否可以考虑到所发生的各种情况。</li>
+<li>如何在不需要大量的带标签数据的情况下，可以找到深度学习系统的错误行为。</li>
+</ol>
+<p>为了解决这些问题，作者做出了以下几点尝试：</p>
+<ol>
+<li>提出神经元覆盖率的概念，用于衡量深度学习系统的逻辑覆盖程度。</li>
+<li>基于交叉引用的思想，利用多个相同功能的深度学习模型，在没有标注数据的情况下以投票的形式找到可能存在错误行为的模型。</li>
+<li>基于深度学习系统的输出的可微性，构建生成测试数据的联合优化方法，通过链式法则对输入数据$x$进行梯度提升更新，可以在<strong>最大化神经元覆盖率的同时让模型表现出尽可能多的行为</strong>。</li>
+</ol>
+<h2 id="神经元覆盖率neuron-coverage">神经元覆盖率（Neuron coverage）</h2>
+<p>测试数据集合在神经网络中激活的神经元个数占总神经元个数的比例，被称为该测试数据集合的神经元覆盖率。其中，一旦某个神经元对于某个输入的激活值大于某个值，则认为该神经元被激活。</p>
+<p>假设神经网络的神经元集合为$N={n_1,n_2,\dots}$，测试集集合为$T={x_1,x_2,\dots}$，$out(n,x)$表示神经元$n$在对数据$x$进行运算后的输出结果，$t$为神经元被激活的阈值，则神经元覆盖率可以被表示为：</p>
+<p>$$
+NCov(T,x)=\frac{|n|\forall x\in T,out(n,x)&gt;t|}{N}
+$$</p>
+<h2 id="梯度">梯度</h2>
+<p>与深度学习系统中优化模型的方式不同，作者固定神经元的参数$\theta$，通过计算神经元输出$y$相对于输入$x$的梯度：</p>
+<p>$$
+G=\nabla_x f(\theta,x)=\partial y/\partial x
+$$</p>
+<h2 id="优化目标">优化目标</h2>
+<h3 id="最大化不同行为">最大化不同行为</h3>
+<p>最大化不同行为指的是生成的数据集可以让每一个模型都尽可能地预测出多种结果。假设有$n$个深度神经网络$F_{k\in 1\dots n}:x\rightarrow y$，若输入$x$在所有的深度神经网络中都可以预测出正确的结果，我们的目的就是在修改$x$后让至少一个深度神经网络有不同的分类结果。</p>
+<p>令$F_k(x)[c]$表示第$k$个神经网络将$x$分类为$c$的概率，选择任一神经网络$F_j$，则最大化不同行为的优化目标表示为：</p>
+<p>$$
+obj_1(x)=\sum_{k\ne j}F_k(x)[c]-\lambda_1\cdot F_j(x)[c]
+$$</p>
+<p>即对于类别$c$，在最小化$F_j$对其分类的概率的同时，最大化其余所有神经网络对其的分类概率。</p>
+<h3 id="最大化神经元覆盖率">最大化神经元覆盖率</h3>
+<p>对于那些激活值小于$t$的神经元，希望它们的值可以大于$t$，于是在优化目标中加上：</p>
+<p>$$
+obj_2(x)=\lambda_2\cdot f_n(x)
+$$</p>
+<h3 id="联合优化目标">联合优化目标</h3>
+<p>将两个优化目标合并，得到联合优化目标：</p>
+<p>$$
+obj_{joint}(x)=\sum_{k\ne j}F_k(x)[c]-\lambda_1\cdot F_j(x)[c]+\lambda_2\cdot f_n(x)
+$$</p>
+<p>其中，$n$是每个iteration中随机选择的非激活神经元。</p>
+<h3 id="特定域约束">特定域约束</h3>
+<p>对于特定的问题，数值的范围需要有特定的约束。如图像数据的范围只能在0到255之间。具体来说，输入的更新可以表示为$x_{i+1}=x_i+s\cdot g$，其中$g$为梯度值。作者需要保证在这个更新之后的数据仍然满足约束条件：</p>
+<ul>
+<li>对于离散特征来说，在更新时需要将$g$四舍五入为整数</li>
+<li>对于图像特征，有以下三种约束：
+<ol>
+<li>用于模拟不同亮度光亮的光照效果，为所有像素增加或减少一个特定的值。</li>
+<li>使用一个小方块模拟遮挡效果。</li>
+<li>使用多个黑色小方块模拟脏镜头效果。</li>
+</ol>
+</li>
+<li>对于安卓应用数据集Drebin，只增加manifest file的特征，而不改变代码本身。</li>
+</ul>
+<h3 id="算法流程">算法流程</h3>
+<p>算法流程可以用以下python伪代码表示：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>gen_test <span style="color:#f92672">=</span> [] <span style="color:#75715e"># 初始化生成的测试集为空</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> seed_set<span style="color:#f92672">.</span>get():  <span style="color:#75715e"># 无限获取x</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 对于seed，所有分类器dnns应该都正确分类为类别c</span>
+</span></span><span style="display:flex;"><span>		c <span style="color:#f92672">=</span> dnns[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>predict(x)
+</span></span><span style="display:flex;"><span>		d <span style="color:#f92672">=</span> random_pick(dnns)  <span style="color:#75715e"># 随机选取dnn</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">while</span> <span style="color:#66d9ef">True</span>:
+</span></span><span style="display:flex;"><span>				obj1 <span style="color:#f92672">=</span> obj_func_1(x, d, c, l1)  <span style="color:#75715e"># l1为lambda1</span>
+</span></span><span style="display:flex;"><span>				obj2 <span style="color:#f92672">=</span> obj_func_2(x, dnns, inactive_neurons)
+</span></span><span style="display:flex;"><span>        obj <span style="color:#f92672">=</span> obj1 <span style="color:#f92672">+</span> l2<span style="color:#f92672">*</span>obj2
+</span></span><span style="display:flex;"><span>        grad <span style="color:#f92672">=</span> get_grad(obj, x)  <span style="color:#75715e"># 求obj相对于x的偏导数</span>
+</span></span><span style="display:flex;"><span>        grad <span style="color:#f92672">=</span> apply_constraint(grad)  <span style="color:#75715e"># 执行特定域约束规则</span>
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> x <span style="color:#f92672">+</span> s <span style="color:#f92672">*</span> grad
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> d<span style="color:#f92672">.</span>predict(x) <span style="color:#f92672">!=</span> (dnns<span style="color:#f92672">-</span>d)<span style="color:#f92672">.</span>predict(x):
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 随机选取的dnn与其它dnn预测结果不同，可以作为新的数据</span>
+</span></span><span style="display:flex;"><span>            gen_test<span style="color:#f92672">.</span>append(x)
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 更新神经元激活状态</span>
+</span></span><span style="display:flex;"><span>            inactive_neurons <span style="color:#f92672">=</span> update_neurons(inactive_neurons)
+</span></span><span style="display:flex;"><span>						<span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> SATISFIED(inactive_neurons):
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 如果当前状态满足条件</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> gen_test
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">obj_func_1</span>(x, d, c, l1):
+</span></span><span style="display:flex;"><span>    rest <span style="color:#f92672">=</span> dnns<span style="color:#f92672">-</span>d
+</span></span><span style="display:flex;"><span>    loss <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> d <span style="color:#f92672">in</span> rest:
+</span></span><span style="display:flex;"><span>        loss <span style="color:#f92672">+=</span> prob(dnn, c, x)  <span style="color:#75715e"># 获取x被分类为c的概率</span>
+</span></span><span style="display:flex;"><span>    loss <span style="color:#f92672">-=</span> l1 <span style="color:#f92672">*</span> prob(d, c, x)  <span style="color:#75715e"># 获取x被d分类为c的概率</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> loss
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">obj_func_2</span>(x, dnns, inactive_neurons):
+</span></span><span style="display:flex;"><span>    loss <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> d <span style="color:#f92672">in</span> dnns:
+</span></span><span style="display:flex;"><span>        n <span style="color:#f92672">=</span> random_pick(inactive_neurons)
+</span></span><span style="display:flex;"><span>        loss <span style="color:#f92672">+=</span> n<span style="color:#f92672">.</span>foward(x)  <span style="color:#75715e"># 获取神经元n对x的输出</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> loss
+</span></span></code></pre></div><h1 id="deepgauge">DeepGauge</h1>
+<p>DeepGauge提出了多个层级的测试覆盖率标准，来检测系统的错误行为。作者认为深度学习系统与传统软件系统一样包含主要功能行为（major function behaviors）和边界行为（corner-case behaviors)，这两类行为都可能包含错误行为。</p>
+<p>定义$N={n_1,n_2,\dots}$为神经网络的神经元集合，$T={x_1,x_2,\dots}$为测试集数据，$\phi(x,n)$为神经元$n$对于输入数据$x$的输出，$L_i$为第$i$层的所有神经元构成的集合。</p>
+<h2 id="神经元级别覆盖率准则neuron-level-coverage-criteria">神经元级别覆盖率准则（Neuron-Level Coverage Criteria）</h2>
+<p>在神经元级别的覆盖率中，使用经过训练集训练的神经元权重来计算测试集输出，因此，神经元的输出应该在训练集的影响下符合某种数据分布。我们可以从这个数据分布中知道每个神经元的主要功能和边界功能。</p>
+<p>但精确衡量每个神经元的数据分布是十分消耗资源的，因此本文基于数据集来估计每个神经元对于主要功能区域和边界功能区域的边界（boundary）。具体来说，对于训练集中的数据，每个神经元的输出上下界$\rm{high}_n$和$\rm{low}_n$之间的范围$[\rm{low}_n,\rm{high}_n]$为神经元的主功能区域（major function region）。</p>
+<h3 id="k单元神经覆盖率k-multisection-neuron-coverage">$k$单元神经覆盖率（$k$-multisection Neuron Coverage)</h3>
+<p>为了全面地评估主功能区域，作者将该区域平均划分为$k$个单元，并计算数据在每个单元的覆盖情况，称为$k$单元神经覆盖率。</p>
+<p>对于神经元$n$，定义$S_i^n$为落在神经元$n$的第$i$个单元的数据集合，若$\phi(x,n)\in S_i^n$，则称$x$被第$i$个单元覆盖。对于测试集$T$和神经元$n$来说，$k$单元神经覆盖率被定义为被覆盖的单元数占总单元数的比例，即：</p>
+<p>$$
+\frac{|{S_i^n | \exist x \in T:\phi(x,n)\in S_i^n}|}{k}
+$$</p>
+<p>而对于整个神经网络来说，$k$单元神经覆盖率为所有神经元的覆盖单元数占所有神经元单元总数的比例，即：</p>
+<p>$$
+\rm{KMNCov}(T,k)=\frac{\sum_{n\in N}|{S_i^n | \exist x \in T:\phi(x,n)\in S_i^n}|}{k\times |N|}
+$$</p>
+<h3 id="神经元边界覆盖率neuron-boundary-coverage">神经元边界覆盖率（Neuron Boundary Coverage）</h3>
+<p>对于主功能区域外的区域，即$(-\infin, \rm{low}_n)\bigcup(\rm{high}_n,+\infin)$，称为边界区域（corner-case region）。</p>
+<p>对于神经元$n$，若$\phi(x,n)$在边界区域，则认为它被边界区域覆盖，分别定义上边界覆盖（UpperCornerNeuron，UCN）和下边界覆盖（LowerCornerNeuron，LCN）为：</p>
+<p>$$
+UCN={n\in N|\exist x \in T:\phi(x,n)\in (\rm{high}_n,+\infin)}
+$$</p>
+<p>$$
+LCN={n\in N|\exist x \in T:\phi(x,n)\in (-\infin, \rm{low}_n)}
+$$</p>
+<p>而神经元边界覆盖率（NBC）则为两者的数量占总覆盖情况数（每个神经元有两种情况，即$2|N|$）的总和：</p>
+<p>$$
+\rm{NBCov}(T)=\frac{|UCN|+|LCN|}{2\times|N|}
+$$</p>
+<h3 id="强神经元激活覆盖率strong-neuron-activation-coverage">强神经元激活覆盖率（Strong Neuron Activation Coverage）</h3>
+<p>在一些可解释性研究中，神经元的高激活值可能包含它所学到的更多信息，所以定义强神经元激活覆盖率（SNAC）表示上边界覆盖的情况，即</p>
+<p>$$
+\rm{SNACov}(T)=\frac{|UCN|}{|N|}
+$$</p>
+<h2 id="层级别覆盖率准则layer-level-coverage-criteria">层级别覆盖率准则（Layer-Level Coverage Criteria）</h2>
+<p>在层级别，本文使用了最活跃的神经元以及它们的组合来表示深度神经网络的行为。</p>
+<p>假设测试数据为$x$，$n_1$和$n_2$分别表示某一层的两个神经元，若$\phi(x,n_1)&gt;\phi(x,n_2)$，则称$n_1$比$n_2$在x上活跃。对于第$i$层，用$\rm{top}_k(x,i)$表示对于$x$来说最活跃的$k$个神经元。</p>
+<h3 id="top-k-neuron-coverage">Top-$k$ Neuron Coverage</h3>
+<p>Top-k神经元覆盖率（TKNCov）表示对于每一层中的神经元，被至少选中进一次top-k激活值的神经元个数占总神经元个数的比例，即：</p>
+<p>$$
+\rm{TKNCov}(T,k)=\frac{|\bigcup_{x\in T}(\bigcup_{i\le i \le l}\rm{top}_k(x,i))|}{|N|}
+$$</p>
+<h3 id="top-k-neuron-patterns">Top-$k$ Neuron Patterns</h3>
+<p>在神经网络中，同一层的神经元可能在神经网络判别过程中扮演着相似的角色，而一层中最活跃的神经元可以表示为神经网络的一种模式（pattern）。本文定义，深度神经网络在测试集中至少被认定为一次top-k的神经元的个数，为神经网络的top-k神经元模式：</p>
+<p>$$
+\rm{TKNPat}(T,k)=|{top_k(x,1),\dots,top_k(x,l)|x\in T}|
+$$</p>
+<p>直观来说，top-k神经元模式基于每一层最活跃的神经元来表示神经网络在多个场景的活跃程度。</p>
+<h2 id="与deepxplore的区别">与DeepXplore的区别</h2>
+<p>作者通过在原始数据和对抗数据集上，对不同的阈值的DeepXplore神经元覆盖率（DNC）进行实验：</p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h5ou1gjnosj212t0u0n1p.jpg" alt="https://tva1.sinaimg.cn/large/e6c9d24ely1h5ou1gjnosj212t0u0n1p.jpg"></p>
+<p>可以看到DNC在原始数据和对抗数据的表现具有很高的一致性，缺乏对更多的数据评价的能力。作者还提出了DNC的几点限制：</p>
+<ol>
+<li>对于所有神经元，设置的阈值都相同，而实际上不同神经元的数据分布是不一样的。</li>
+<li>在判断神经元是否被激活前，需要对利用该层的最大、最小值对神经元的输出进行min-max归一化，使其被映射到$[0,1]$范围内。这样对于不同两个输入$x_1$和$x_2$来说，神经元的不同输出$y_1$和$y_2$有可能会在归一化后被映射到同一个值$y$，而$x_1$和$x_2$本应该包含不同的信息。</li>
+</ol>
+<h1 id="combinatorial-testing-for-dl">Combinatorial Testing for DL</h1>
+<p>神经网络的状态可以由神经元的输出来表示，而由于神经元的输出空间很大，无法针对所有的情况进行测试。本文将联合测试（Combinatorial Testing，CT）与深度学习测试相结合，提出了几个测试覆盖率标准，和一个基于CT的测试样例生成技术。</p>
+<h2 id="combinatorial-testing">Combinatorial Testing</h2>
+<p>在传统的软件测试中，各种各样的配置文件和输入域使得系统质量和准确性的评估具有一定困难。通常来说，软件测试需要考虑到所有可能的输入，但这在实际运行的时候是基本不可能的。所以需要一个采样方法来减少输入数据的维度，我们称为基于联合测试（CT）的黑盒采样。</p>
+<p>大部分的软件问题是由于几个不同的因素组合而造成的（如当操作系统为MacOS，同时屏幕分辨率为1080*1920时才会出现bug），组合式测试的核心思想就是找到能够用最少的组合来覆盖多个因素的测试用例。</p>
+<h2 id="combinatorial-testing-criteria-for-dl">Combinatorial Testing Criteria for DL</h2>
+<p>定义$N={n_1,n_2,\dots}$为神经网络的神经元集合，$T={x_1,x_2,\dots}$为测试集数据，$\phi(x,n)$为神经元$n$对于输入数据$x$的输出，$L_i$为第$i$层的所有神经元构成的集合。对于输入$x$激活值大于0的神经元$x_i$，将其标注为活跃神经元，用$A(n_i,x)=1$表示，反之用$A(n_i,x)=0$表示非活跃神经元。</p>
+<h3 id="神经元激活配置neuron-activation-configuration">神经元激活配置（Neuron-activation configuration）</h3>
+<p>对于包含$k$个神经元的集合$L_i$和测试数据$x$，一个神经元配置$c=(b_1,b_2,\dots,b_k)$表示每个神经元对于测试数据的激活情况，其中$b_i\in {0, 1}$。本文使用$\rm{FC_NA(T,L_i)}=1$表示$L_i$的所有配置（所有可能的$k$元组）都能被测试集$T$覆盖，反之$\rm{FC_NA(T,L_i)}=0$；用$\rm{NC_NA(T,L_i)}$表示$L_i$被测试集$T$所覆盖的神经元激活配置个数。</p>
+<h3 id="t路组合稀疏覆盖率t-way-combination-sparse-coverage">$t$路组合稀疏覆盖率（$t$-way combination sparse coverage）</h3>
+<p>$t$路组合稀疏覆盖率用于减少测试深度学习系统时的测试配置数量。给定一个数据集$T$和神经元集合$L_i$，使用$\Theta$来表示$L_i$中所有的t路神经元组合（即所有t个神经元组成的t元组的集合）。$t$路组合稀疏覆盖率表示$L_i$的所有的t路神经元组合中，能够在$T$上包含全部配置的t路神经元组合比例，即</p>
+<p>$$
+\rm{TWsCov}(T,L_i)=\frac{|{\theta\in \Theta|\rm{FC_NA(T,\theta)}}|}{|\Theta|}
+$$</p>
+<p>举例来说，若$L_i={n_1,n_2,n_3}$，则有3个2路神经元：$\Theta={{n_1,n_2}\cup{n_1,n_3}\cup{n_2,n_3}}$。每一个2路神经元包含4种配置，$c_1=(0,0)$、$c_2=(0,1)$、$c_3=(1,0)$、$c_4=(1,1)$。假设$T$拥有5个样本，且在$L_1$的输出如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th>⁍</th>
+<th>⁍</th>
+<th>⁍</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>则只有${n_1,n_2}$能够包含所有配置，即$\rm{FC_NA(T,{n_1,n_2})}=1$，于是在$T$下$L_1$的2路组合稀疏覆盖率为$1/3$。</p>
+<h3 id="t路组合稠密覆盖率t-way-combination-dense-coverage">$t$路组合稠密覆盖率（$t$-way combination dense coverage）</h3>
+<p>由于$\rm{TWsCov}$并不能将所有的组合情况都考虑进去，本文提出了$t$路组合稠密覆盖率$\rm{TWdCov}$。</p>
+<p>与$\rm{TWsCov}$只考虑满足所有配置的组合不同，$\rm{TWdCov}$考虑了所有出现的组合占组合总数的百分比，其中$\rm{NC_NA}(T,\theta)$表示神经元组合$\theta$（如${n_1,n_3}$）在数据集$T$中出现过的配置个数，以上表为例就是$\rm{NC_NA}(T,{n_1,n_3})=|{(0,1),(0,0),(1,1)}|=3$，而所有神经元组合可能出现的配置总数为$2^t|\Theta|$。所以$\rm{TWdCov}$被表示为：</p>
+<p>$$
+\rm{TWdCov}(T,L_i)=\frac{\sum_{\theta\in\Theta}\rm{NC_NA(T,\theta)}}{2^t|\Theta|}
+$$</p>
+<h3 id="pt-完整性覆盖率completeness-coverage">$(p,t)$-完整性覆盖率（completeness coverage）</h3>
+<p>$(p,t)$-完整性覆盖率表示稠密覆盖率高于$p$的神经元组合占组合总数的百分比。举例来说：</p>
+<ul>
+<li>${n_1,n_2}$的所有配置都被激活了，稠密覆盖率为1。</li>
+<li>${n_1,n_3}$和${n_2,n_3}$各自被激活了3个配置，稠密覆盖率为0.75。</li>
+</ul>
+<p>则$L_i$对于测试集$T$的$(0.7,2)$-完整性覆盖率为1（即都超过0.7），$(0.9,2)$-完整性覆盖率为$1/3$。</p>
+<p>上述几种覆盖率都是针对某一个网络层，而对于神经网络可以在每一层中都计算对应的覆盖率，来观察每一层的测试覆盖效果。</p>
+<h1 id="deepcruiser">DeepCruiser</h1>
+<h2 id="rnn中的状态转移建模">RNN中的状态转移建模</h2>
+<h3 id="rnn的隐含状态和状态转移">RNN的隐含状态和状态转移</h3>
+<p>DeepCruiser为基于状态的神经网络（如RNN）提出了覆盖率标准。以RNN为例，RNN的输入为一个序列数据$x\in X^N$，其中$N$为序列长度，$x_i$为序列的第$i$个元素。RNN中会维护一个状态向量$s\in S^N$，$s_i$表示第$i$个状态，它可以是一个$m$维的向量。在训练过程中，RNN会基于上一个状态向量与当前的元素相结合，计算出当前时刻的输出与下一个状态向量，即$(s_{i+1},y_i)=f(s_i,x_i)$。初始状态下$s_0=\bold{0}$，即全0向量。对于这样的输入$x$，会产生一个从$s_0$到$s_n$的有限转移序列$t$。</p>
+<p>对于两个序列输入$x_0x_1x_2$和$x_0x_1&rsquo;x_2&rsquo;$，可以分别产生输出$y_0y_1y_2$和$y_0y_1&rsquo;y_2&rsquo;$，中间的状态分别为$s_0s_1s_2s_3$和$s_0s_1s_2&rsquo;s_3$，可以用下图来表示</p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h5r3pvqfzij20s60bc754.jpg" alt="https://tva1.sinaimg.cn/large/e6c9d24ely1h5r3pvqfzij20s60bc754.jpg"></p>
+<h3 id="抽象状态转移模型">抽象状态转移模型</h3>
+<p>RNN中的状态序列$S$可能是一个很大的序列，因此需要对每一个状态和状态之间的转移进行抽象，从而减少样本的搜索空间。</p>
+<p>对于<strong>状态（state）的抽象</strong>来说，本文将每一个$m$维的状态向量通过PCA降至$k$维。再分别获取这$k$个维度的数值上界$up_d$和下界$ld_d$，并以此将每个维度再平均划分为$m$个等宽区间。根据状态向量$s$分别在$k$个维度中的索引，确定它的抽象状态$\hat{s}$。对于两个抽象状态之间的距离，计算它们每个维度的索引之差的绝对值并求和：</p>
+<p>$$
+d(\hat{s},\hat{s&rsquo;})=\sum_{d=1}^k|I^d(\hat{s})-I^d(\hat{s&rsquo;})|
+$$</p>
+<p>因此，很多距离相近的状态向量会被映射到同一个抽象表示中，这样大大减少了数据的维度。</p>
+<p>对于<strong>转移（transition）的抽象</strong>来说，在确定了状态的抽象之后，即可以把原本的状态转移（如$(s_1,s_2)$）代入至抽象后的状态（如$(\hat{s_1},\hat{s_2})$。</p>
+<h3 id="将训练后的rnn转化为马尔可夫决策过程">将训练后的RNN转化为马尔可夫决策过程</h3>
+<p>作者通过统计从$\hat{s}$到$\hat{s&rsquo;}$的状态转移频率，作为状态转移概率$Pr_{\hat{x}}(\hat{s},\hat{s&rsquo;})$：</p>
+<p>$$
+Pr_{\hat{x}}(\hat{s},\hat{s&rsquo;})=\frac{{|(s,s&rsquo;,x)|s\in \hat{s}\wedge x\in \hat{x}\wedge s&rsquo;\in \hat{s&rsquo;}}|}{|(s,_,x)|s\in\hat{s}\wedge x\in\hat{x}|}
+$$</p>
+<h2 id="rnn的覆盖率准则">RNN的覆盖率准则</h2>
+<p>令$M=(\hat{S},I,\hat{T})$表示RNN抽象的马尔可夫决策过程，$\hat{S}$为抽象的状态集合，$I$为初始状态集合，$\hat{T}$为状态转移概率分布，$T={x_0,\dots,x_n}$为测试集。值得注意的是原始状态和抽象状态都是从训练集中获取的。</p>
+<h3 id="状态级别覆盖率准则state-level-coverage-criteria">状态级别覆盖率准则（State-Level Coverage Criteria）</h3>
+<p>与$k$单元神经元覆盖率类似，状态级别的覆盖率包含主功能区域和边界区域，对于所有维度$k$的每一个元素$d$，落在在$up_d$和$ld_d$之间的称为主功能区域，反之为边界区域。</p>
+<ul>
+<li>
+<p>基本状态覆盖率：测试集的抽象状态$\hat{S}_T$与训练集的抽象状态$\hat{S}_M$的交集数量站训练集抽象状态的比例：</p>
+<p>$$
+\rm{BSCov}(T,M)=\frac{|\hat{S}_T\cap\hat{S}_M|}{|\hat{S}_M|}
+$$</p>
+</li>
+<li>
+<p>$k$步状态边界覆盖率（$k$-step state boundary coverage）：对于测试集中不在主功能区域的状态，可以计算这些状态与训练集状态之间的距离。$k$步状态边界覆盖率表示测试集状态中，存在与训练集状态距离小于$k$的状态数的比例，即：</p>
+<p>$$
+\rm{k-SBCov}(T,M)=\frac{|\hat{S}<em>T\cap \bigcup</em>{i=1}^k \hat{S}<em>{M^c}(i)|}{|\hat{S}</em>{M^c}(i)|}
+$$</p>
+<p>其中$\hat{S}_{M^c}(i)$表示与训练集状态的最小距离等于$i$的状态集合。</p>
+</li>
+</ul>
+<h3 id="转移级别覆盖率准则">转移级别覆盖率准则</h3>
+<ul>
+<li>
+<p>基本转移覆盖率：测试集的状态转移$\hat{\delta}_T$与训练集的状态转移$\hat{\delta}_M$的交集数量站训练集状态转移的比例：</p>
+<p>$$
+\rm{BTCov}(T,M)=\frac{|\hat{\delta}_T\cap\hat{\delta}_M|}{|\hat{\delta}_M|}
+$$</p>
+</li>
+<li>
+<p>输入空间覆盖率：训练集和测试集可能会拥有相同的抽象状态，输入空间覆盖率衡量了测试集与训练集共享的抽象状态中，对应的测试集输入占训练集所有状态输入的比例，即：</p>
+<p>$$
+\rm{ISCov}(T,M)=\frac{\sum_{\hat{s}\in\hat{S}_T\cap\hat{S}_M}|\hat{X}<em>T(\hat{s})|}{\sum</em>{\hat{s}\in\hat{S}_M}|\hat{X}_M(\hat{s})|}
+$$</p>
+</li>
+<li>
+<p>加权输入覆盖率：基于训练集与测试集相交的抽象状态与其对应的同样相交的输入数据，获取相应的状态转移概率并相加，结果值占训练集状态对应的输入数量的比例。对于相交状态来说，其出现概率越高，则覆盖率就越大：</p>
+<p>$$
+\rm{WICov(T,M)}=\frac{\sum_{\hat{s}\in\hat{S}_T\cap\hat{S}<em>M}\sum</em>{\hat{x}\in\hat{X}_T(\hat{s})\cap\hat{X}<em>M(\hat{s})}\sum</em>{\hat{s&rsquo;}\in \hat{\delta}<em>T(\hat{s})}\hat{T}(\hat{s},\hat{x},\hat{s&rsquo;})}{\sum</em>{\hat{s}\in \hat{S}_M}|\hat{X}_M(\hat{s})|}
+$$</p>
+</li>
+</ul>
+<h2 id="蜕变测试">蜕变测试</h2>
+<p>本文以音频翻译为场景，利用蜕变测试的思想，对输入的音频进行一系列约束范围内的转换，使得变体样本$a&rsquo;$和原始样本$a$一样可以被人类识别。</p>
+<p>将$a&rsquo;$和$a$同时翻译后，比较二者的差异：</p>
+<ul>
+<li>若差异超过一定阈值，则认为$a&rsquo;$是一个failed test，将其加入失败测试用例中</li>
+<li>若$a&rsquo;$使得覆盖率提升，则认为$a&rsquo;$是一个有益的样本，将其加入测试集中。</li>
+</ul>
+<h1 id="mcdc-coverage-criterion-for-dl">MC/DC Coverage Criterion for DL</h1>
+<h2 id="mcdc">MC/DC</h2>
+<p>MC/DC的核心思想是，对于一个包含多个条件的决定，条件中所有可能的因素都必须被测试到，如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (a <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">3</span> <span style="color:#f92672">or</span> b <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>) <span style="color:#f92672">and</span> c <span style="color:#f92672">!=</span> <span style="color:#ae81ff">4</span>:  <span style="color:#75715e"># 3个条件</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">pass</span>
+</span></span></code></pre></div><p>则以下4个测试用例可以覆盖3个条件的所有情况：</p>
+<pre tabindex="0"><code>1. (a&gt;3)=false, (b=0)=true, (c!=4)=false
+2. (a&gt;3)=true, (b=0)=false, (c!=4)=true
+3. (a&gt;3)=false, (b=0)=false, (c!=4)=true
+4. (a&gt;3)=false, (b=0)=true, (c!=4)=true
+</code></pre><p>其中，前两个测试用例满足条件覆盖（即每一个条件的true和false都出现过）和决定覆盖（所有的决定都出现过，即整个if语句的结果中true与false都出现了）。而DC/MC的要求中，每一个条件都应该单独影响一次决定，即在仅改变某个条件的情况下，决策结果发生变化。</p>
+<h2 id="神经网络中的条件与决策">神经网络中的条件与决策</h2>
+<p>对于神经网络来说，第$k$层第$l$个神经元的输入$u_{k,l}$为：</p>
+<p>$$
+u_{k,l}=b_{k,l}+\sum_{1\le h \le s_{k-1}}w_{k-1,h,l}\cdot o_{k-1,h}
+$$</p>
+<p>其中，$w_{k-1,h,l}$表示第$k-1$层第$h$个神经元和第$k$层第$l$个神经元之间的权重，$o_{k-1,h}$表示第$k-1$层第$h$个神经元的输出。</p>
+<p>可以看到，其结构与传统软件的if语句类似，其中$w_{k-1,h,l}\cdot o_{k-1,h}$表示每个条件的值，$u_{k,l}$表示该神经元的决策。</p>
+<p>令$\Psi_k$为第$k$层节点子集的集合，它可以包含该层中任意个节点的组合。$\Psi_k$中的每一个元素$\psi_{k,_}$可以看作一个决策，它包含了若干个条件（即节点），这些条件可以与第$k-1$层的决策相连接。</p>
+<p>令$(\psi_{k,i},\psi_{k+1,j})$为相邻的两组特征，对于深度神经网络$\mathcal{N}$，其所有的相邻特征组为$\mathcal{O(N)}$。本文定义，若神经元$n$在输入$x$时被ReLU函数激活，则$sign(n,x)=1$，否则$sign(n,x)=-1$。</p>
+<h3 id="符号变化sign-change">符号变化（sign change）</h3>
+<p>对于特征$\psi_{k,l}$和两个输入$x_1$与$x_2$，定义<strong>符号变化</strong>（sign change，sc）和非符号变化（not sign change，nsc）分别为：</p>
+<ul>
+<li>对于所有的$n_{k,j}\in \phi_{k,l}$有$sign(n_{k,j},x_1)\ne sign(n_{k,j},x_2)$，记为$sc(\psi_{k,j},x_1,x_2)$。</li>
+<li>对于所有的$n_{k,j}\in \phi_{k,l}$有$sign(n_{k,j},x_1)= sign(n_{k,j},x_2)$，记为$nsc(\psi_{k,j},x_1,x_2)$。</li>
+</ul>
+<h3 id="值变化value-change">值变化（value change）</h3>
+<p>定义一个抽象的映射$g$，使得$g(\psi_{k,l},x_1,x_2)\rightarrow{true,false}$。举例来说，这里的$g$可以是一个距离函数，来判断两个输入样本在当前特征上的距离是否大于阈值，从而体现两个样本的输出特征具有一定差异。如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">g_demo</span>(psi, x1, x2):
+</span></span><span style="display:flex;"><span>    v1 <span style="color:#f92672">=</span> get_value(psi, x1)  <span style="color:#75715e"># 获取x1在psi对应神经元输出</span>
+</span></span><span style="display:flex;"><span>    v2 <span style="color:#f92672">=</span> get_value(psi, x2)
+</span></span><span style="display:flex;"><span>		dist <span style="color:#f92672">=</span> some_distance(v1, v2)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> dist <span style="color:#960050;background-color:#1e0010">》</span> <span style="color:#ae81ff">0.1</span>
+</span></span></code></pre></div><p>对于特征$\psi_{k,l}$、两个输入$x_1$与$x_2$和映射$g$，定义<strong>值变化</strong>（value change，vc）为：</p>
+<ul>
+<li>$g(\psi_{k,l},x_1,x_2)=true$</li>
+</ul>
+<p>记为$vc(g,\psi_{k,l},x_1,x_2)$若条件不满足，则定义为$\neg vc(g,\psi_{k,l},x_1,x_2)$。</p>
+<h2 id="covering-methods">Covering Methods</h2>
+<h3 id="sign-sign-coveragess-coverage">Sign-Sign Coverage（SS Coverage）</h3>
+<p>假设特征对$\alpha=(\psi_{k,i},\psi_{k+1,j})$和测试用例$x_1$与$x_2$，若符合以下条件：</p>
+<ul>
+<li>$sc(\psi_{k,i},x_1,x_2)$且$sc(P_k \backslash \psi_{k,i},x_1,x_2)$；</li>
+<li>$sc(\psi_{k+1,j},x_1,x_2)$</li>
+</ul>
+<p>则称$\alpha$对于$x_1$与$x_2$满足SS覆盖，记为$SS(\alpha,x_1,x_2)$。其中$P_k$为第$k$层所有节点。</p>
+<p>条件1说明了对于$x_1$与$x_2$，特征$\psi_{k,i}$的激活情况完全不同，且除了$\psi_{k,i}$以外的节点激活情况完全相同，即覆盖了$\psi_{k,i}$的不同条件；条件2说明了$x_1$与$x_2$可以使$\psi_{k,i}$特征作为condition独立影响$\psi_{k+1,j}$的decision，这使得SS很接近MC/DC的含义，但是以特征为粒度，而不是以节点为粒度。</p>
+<h3 id="value-sign-coveragevs-coverage">Value-Sign Coverage（VS Coverage）</h3>
+<p>假设特征对$\alpha=(\psi_{k,i},\psi_{k+1,j})$和测试用例$x_1$与$x_2$，若符合以下条件：</p>
+<ul>
+<li>$vc(g,\psi_{k,l},x_1,x_2)$且$nsc(P_k,x_1,x_2)$；</li>
+<li>$sc(\psi_{k+1,j},x_1,x_2)$</li>
+</ul>
+<p>则称$\alpha$对于$x_1$与$x_2$满足VS覆盖，记为$VS(\alpha,x_1,x_2)$。</p>
+<p>具体来说，$k$层节点的所有激活状态都没有改变，但特征$\psi_{k,i}$在两个样本下的值有差异，从而导致特征$\psi_{k+1,j}$的激活状态改变。</p>
+<h3 id="sign-value-coveragesv-coverage">Sign-Value Coverage（SV Coverage）</h3>
+<p>假设特征对$\alpha=(\psi_{k,i},\psi_{k+1,j})$和测试用例$x_1$与$x_2$，若符合以下条件：</p>
+<ul>
+<li>$sc(\psi_{k,i},x_1,x_2)$且$sc(P_k \backslash \psi_{k,i},x_1,x_2)$；</li>
+<li>$vc(g,\psi_{k+1,j},x_1,x_2)$且$nsc(\psi_{k+1},x_1,x_2)$；</li>
+</ul>
+<p>则称$\alpha$对于$x_1$与$x_2$满足SV覆盖，记为$SV(\alpha,x_1,x_2)$。</p>
+<p>SV Coverage反映了特征$\psi_{k,i}$的激活情况改变时，特征$\psi_{k+1,j}$的值发生变化，即条件改变导致决策的值发生变化的情况。</p>
+<h3 id="value-value-coveragevv-coverage">Value-Value Coverage（VV Coverage）</h3>
+<p>假设特征对$\alpha=(\psi_{k,i},\psi_{k+1,j})$、测试用例$x_1$与$x_2$，与两个映射函数$g_1$和$g_2$，若符合以下条件：</p>
+<ul>
+<li>$vc(g_1,\psi_{k,i},x_1,x_2)$且$nsc(P_k,x_1,x_2)$；</li>
+<li>$vc(g_2,\psi_{k+1,j},x_1,x_2)$且$nsc(\psi_{k+1},x_1,x_2)$；</li>
+</ul>
+<p>则称$\alpha$对于$x_1$与$x_2$满足VV覆盖，记为$VV(\alpha,x_1,x_2)$。</p>
+<p>在特征$\psi_{k,i}$值改变且$k$层神经元激活状态都不改变的情况下，特征$\psi_{k+1,j}$的值发生变化，且$k+1$层的激活状态不发生改变，则认定为VV覆盖。</p>
+<h1 id="deepcon">DeepCon</h1>
+<p>现有大多数方法只使用了神经元输出来衡量覆盖率，DeepCon还使用了神经元输入的权重作为参考。</p>
+<p>基于神经元输出的方法中，只要输出值够大，则它被认定为激活神经元的可能性就更大，但若它与下一层神经元连接的权重很小，则这个输出在神经网络中并不会发挥很大的作用，DeepCon因此把权重也作为覆盖率的衡量标准。</p>
+<h2 id="contribution-coverage">Contribution Coverage</h2>
+<h3 id="contribution-extraction">Contribution Extraction</h3>
+<p>令$x$为输入数据，$l$为神经网络层数，$n_{i,h}$表示第$i$层第$h$个神经元，$c_{j,h}^i$和$w^i_{j,h}$表示第$i$层第$h$个神经元与第$i-1$层第$j$个神经元相连的关系与权重，则其对$n_{i,h}$的输入为$u_{j,h}^i(x)=w_{j,h}^i\cdot o_{i-1,j}(x)$，其中$o_{i-1,j}(x)$为第$i-1$层第$j$个神经元的输出。第$i$层的第$h$个神经元的所有输入为$U_h^i(x)={u_{j,h}^i(x)|0\le j\le s_{i-1}}$，其中$s_{i-1}$为第$i-1$层的神经元个数。</p>
+<p>由于每个神经元的数据分布不同，本文将每个神经元的输入值$u_{j,h}^i(x)$Min-Max归一化为$nu_{j,h}^i(x)$：</p>
+<p>$$
+nu_{j,h}^i(x)=\frac{u_{j,h}^i(x)-\min(U_h^i(x))}{\max(U_h^i(x))-\min(U_h^i(x))}
+$$</p>
+<p>若$nu_{j,h}^i(x)$大于阈值$t$，且神经元$n_{i,j}$被认为是激活的（即输出也大于一定阈值），则$c_{j,h}^i$被认为被$x$激活，本文用$isAct(u_{j,h}^i,t,x)$表示是否被激活。另外对于输入层来说，只有输出值最高的神经元被认为是激活的，其余的为不激活的。</p>
+<p>为了获取所有被激活的连接关系$c$，从而构成集合$\tilde{U}(x)$，DeepCon通过$x$的预测结果，从最后一层进行反向传播，找到所有被激活的连接$c$，具体来说：</p>
+<ol>
+<li>对于输入$x$，找到输出层激活值最高的神经元$n_{l-1,j}$，即神经网络的输出结果。</li>
+<li>通过$isAct$函数，找到与$n_{l-1,j}$与$l-2$层中所有相连的关系中被激活的关系，构成$\tilde{U}^{l-1}(x)$，合并至$\tilde{U}(x)$。</li>
+<li>从$l-2$层遍历至第一层，对于第$i$层有：
+<ol>
+<li>找到$\tilde{U}^{i+1}(x)$对应的输入神经元。</li>
+<li>通过$isAct$找到这些神经元与上一层的相连关系中，被激活的关系，构成$\tilde{U}^{i}(x)$。</li>
+<li>合并至$\tilde{U}(x)$</li>
+</ol>
+</li>
+</ol>
+<p>最终，Contribution Coverage的定义为被激活的关系数占总关系数的比例，即：</p>
+<p>$$
+ConC(T)=\frac{|u|\exists x\in T,u\in U, isAct(u,t,x)|}{|U|}
+$$</p>
+<p>同时，作者还提出了每一层的Contribution Coverage，定义为该层被激活的关系占该层的关系比例：</p>
+<p>$$
+ConC_i(T)=\frac{|u|\exists x\in T,u\in U^i, isAct(u,t,x)|}{|U^i|}
+$$</p>
+<h2 id="deepcon-gen">DeepCon-Gen</h2>
+<p>本文还基于contribution coverage的引导进行测试用例的生成，通过梯度上升的方法不断更新输入$x$，使得更新后的$x$可以激活之前未激活的相连关系。</p>
+<p>具体来说，DeepCon-Gen随机选取$x$在神经网络中未激活的相连关系，最大化该关联输出给神经元$n$的值$u$与神经元$n$的输出值$o$。但在优化过程中，$x$可能只会通过增加其中一个值就可以达到梯度提升的效果，这样并不能保证该关系被激活。于是作者使用了两个惩罚值，使得一旦神经元的输入值$u$或输出值$o$达到阈值，就停止针对该损失项进行优化，直到两者同时达到阈值。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>x <span style="color:#f92672">=</span> seeds[i]  <span style="color:#75715e"># 获取输入数据</span>
+</span></span><span style="display:flex;"><span>c <span style="color:#f92672">=</span> random_pick_inactive_con(model, x)  <span style="color:#75715e"># 随机选取未激活关系</span>
+</span></span><span style="display:flex;"><span>u, o <span style="color:#f92672">=</span> get_in_and_out(c)  <span style="color:#75715e"># 获取该关系对应的神经元的输入和输出</span>
+</span></span><span style="display:flex;"><span>pCon, pOut <span style="color:#f92672">=</span> MAX_VAL, MAX_VAL
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>step <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">while</span> step <span style="color:#f92672">&lt;</span> MAX_STEP:
+</span></span><span style="display:flex;"><span>		obj <span style="color:#f92672">=</span> min(u, pCon) <span style="color:#f92672">+</span> min(o, pOut)
+</span></span><span style="display:flex;"><span>		x <span style="color:#f92672">=</span> gradAsc(obj, x, eta) <span style="color:#75715e"># 损失函数关于x的梯度提升更新，步长为eta</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> isAct(u) <span style="color:#f92672">and</span> pCon <span style="color:#f92672">==</span> MAX_VAL:
+</span></span><span style="display:flex;"><span>        pCon <span style="color:#f92672">=</span> min(u, pCon)  <span style="color:#75715e"># 损失值不会为了增加u而变化，除非u变得小于阈值</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> isAct(o) <span style="color:#f92672">and</span> pOut <span style="color:#f92672">==</span> MAX_VAL:
+</span></span><span style="display:flex;"><span>        pOut <span style="color:#f92672">=</span> min(o, pOut)  <span style="color:#75715e"># 同理</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> isAct(u) <span style="color:#f92672">and</span> isAct(o):
+</span></span><span style="display:flex;"><span>        update_cov()  <span style="color:#75715e"># 更新覆盖率</span>
+</span></span><span style="display:flex;"><span>        tests <span style="color:#f92672">+=</span> x  <span style="color:#75715e"># 将x添加到生成的测试用例集合中  </span>
+</span></span></code></pre></div><h1 id="comparison">Comparison</h1>
+<p>要比较各个覆盖率的有效性，可以从以下几个方面考虑：</p>
+<ol>
+<li>覆盖强度：覆盖率是否能够因为测试集的不断增加而保持增加，而且不会保持在一个非常高的水平</li>
+<li>对抗样本的检测：能否通过覆盖率体现出测试集中存在的对抗样本</li>
+<li>适用性：是否能够在多种类型的神经网络中保持效果</li>
+<li>效率：它计算所消耗的时间是否可以接受</li>
+</ol>
+<h2 id="覆盖强度">覆盖强度</h2>
+<p>对于覆盖强度来说，若随着测试集的扩大，覆盖率保持不变，则认为它并不能很好地反应测试集的多样性；若覆盖率一直很高甚至到100%，则认为它对测试样例覆盖情况的表达能力有限。</p>
+<p>对于模型之间的覆盖强度对比，在同样的测试集下，更好的覆盖率准则应该有这更平滑的上升曲线和相对更低的覆盖率，这样它对未知数据存在更大的空间。</p>
+<p>不仅是针对模型之间的覆盖强度，模型内部各个模块的覆盖强度也可以反映出模型的一些特点，如某些网络层可能考虑的因素更多，其覆盖率始终较低，或是其在设计时决定了它并没有利用前一层的很多信息，可以让开发者考虑对其进行优化。</p>
+<h2 id="对抗样本检测">对抗样本检测</h2>
+<p>根据观察，同类别的正常样本倾向于拥有相同的被激活神经元，而对抗样本则倾向于激活不相同的神经元。</p>
+<p>令训练集中每个类别的样本所激活的神经元集合为类别神经元（category-neurons）$\tilde{C}$，若测试集中的同类别样本的激活神经元$\tilde{C}(x)$于训练集的类别神经元的交集比例小于一定阈值$\gamma$，则认为$x$是一个对抗样本：</p>
+<p>$$
+\frac{{\tilde{C}(x)}\cap{\tilde{C_c}}}{\tilde{C}(x)}
+$$</p>
+<p>上述规则同样可以扩展到每一层的神经元激活情况，也可以是DeepCon中的激活相连关系。</p>
+<p>基于现有的对抗样本生成技术，通过比较不同覆盖率方法对对抗样本检测的ROC曲线，找到效果更好的覆盖率准则。</p>
+<h2 id="适用性">适用性</h2>
+<p>观察覆盖率准则在不同规模的神经网络中，随着测试集规模增大的变化曲线是否能够拥有正常的增长趋势，并对未知数据留有一定的探索空间。</p>
+<h2 id="效率">效率</h2>
+<p>分析覆盖率的计算方式，评估在网络规模的扩大时，计算量是线性增长、指数级增长还是对数级增长。</p>
+
+  </section>
+  <footer>
+    
+    
+
+    
+    <nav class="p-pagination c-pagination">
+      <div class="c-pagination__ctrl">
+        <div class="c-pagination__newer">
+          
+          <a href="https://hagemon.github.io/posts/understanding-concolic-testing/">Newer</a>
+          
+        </div>
+        <div class="c-pagination__older">
+          
+          <a href="https://hagemon.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E6%B5%8B%E8%AF%95%E7%BB%BC%E8%BF%B0/">Older</a>
+          
+        </div>
+      </div>
+    </nav>
+    
+    
+
+
+    
+
+  </footer>
+</article>
+  </main>
+  <footer class="l-footer">
+    
+<ul class="c-links">
+  
+  
+  <li class="c-links__item">
+    <a href="https://twitter.com/oneFolder_" target="_blank">
+      <svg viewBox="0 0 64 64" class="c-links__icon">
+        <title>twitter</title>
+        <use xlink:href="#icon-twitter"></use>
+      </svg>
+    </a>
+  </li>
+  
+  
+  
+  
+  <li class="c-links__item">
+    <a href="https://github.com/hagemon" target="_blank">
+      <svg viewBox="0 0 64 64" class="c-links__icon">
+        <title>github</title>
+        <use xlink:href="#icon-github"></use>
+      </svg>
+    </a>
+  </li>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</ul>
+
+
+
+    <p class="p-copyright">
+      
+        Hagemon Production
+      
+    </p>
+  </footer>
+
+  <script type="text/javascript" src="https://hagemon.github.io/js/bundle.js" defer></script>
+</body>
+</html>
+
