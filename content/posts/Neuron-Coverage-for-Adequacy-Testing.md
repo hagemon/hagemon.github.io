@@ -144,27 +144,27 @@ DeepGauge提出了多个层级的测试覆盖率标准，来检测系统的错�
 对于神经元$n$，定义$S_i^n$为落在神经元$n$的第$i$个单元的数据集合，若$\phi(x,n)\in S_i^n$，则称$x$被第$i$个单元覆盖。对于测试集$T$和神经元$n$来说，$k$单元神经覆盖率被定义为被覆盖的单元数占总单元数的比例，即：
 
 $$
-\frac{|\{S_i^n | \exist x \in T:\phi(x,n)\in S_i^n\}|}{k}
+\frac{|\{S_i^n | \exists x \in T:\phi(x,n)\in S_i^n\}|}{k}
 $$
 
 而对于整个神经网络来说，$k$单元神经覆盖率为所有神经元的覆盖单元数占所有神经元单元总数的比例，即：
 
 $$
-\rm{KMNCov}(T,k)=\frac{\sum_{n\in N}|\{S_i^n | \exist x \in T:\phi(x,n)\in S_i^n\}|}{k\times |N|}
+\rm{KMNCov}(T,k)=\frac{\sum_{n\in N}|\{S_i^n | \exists x \in T:\phi(x,n)\in S_i^n\}|}{k\times |N|}
 $$
 
 ### 神经元边界覆盖率（Neuron Boundary Coverage）
 
-对于主功能区域外的区域，即$(-\infin, \rm{low}_n)\bigcup(\rm{high}_n,+\infin)$，称为边界区域（corner-case region）。
+对于主功能区域外的区域，即$(-\infty, \rm{low}_n)\bigcup(\rm{high}_n,+\infty)$，称为边界区域（corner-case region）。
 
 对于神经元$n$，若$\phi(x,n)$在边界区域，则认为它被边界区域覆盖，分别定义上边界覆盖（UpperCornerNeuron，UCN）和下边界覆盖（LowerCornerNeuron，LCN）为：
 
 $$
-UCN=\{n\in N|\exist x \in T:\phi(x,n)\in (\rm{high}_n,+\infin)\}
+UCN=\{n\in N|\exists x \in T:\phi(x,n)\in (\rm{high}_n,+\infty)\}
 $$
 
 $$
-LCN=\{n\in N|\exist x \in T:\phi(x,n)\in (-\infin, \rm{low}_n)\}
+LCN=\{n\in N|\exists x \in T:\phi(x,n)\in (-\infty, \rm{low}_n)\}
 $$
 
 而神经元边界覆盖率（NBC）则为两者的数量占总覆盖情况数（每个神经元有两种情况，即$2|N|$）的总和：
@@ -394,7 +394,7 @@ $$
 
 可以看到，其结构与传统软件的if语句类似，其中$w_{k-1,h,l}\cdot o_{k-1,h}$表示每个条件的值，$u_{k,l}$表示该神经元的决策。
 
-令$\Psi_k$为第$k$层节点子集的集合，它可以包含该层中任意个节点的组合。$\Psi_k$中的每一个元素$\psi_{k,\_}$可以看作一个决策，它包含了若干个条件（即节点），这些条件可以与第$k-1$层的决策相连接。
+令$\Psi_k$为第$k$层节点子集的集合，它可以包含该层中任意个节点的组合。$\Psi_k$中的每一个元素$\psi_{k,i}$可以看作一个决策，它包含了若干个条件（即节点），这些条件可以与第$k-1$层的决策相连接。
 
 令$(\psi_{k,i},\psi_{k+1,j})$为相邻的两组特征，对于深度神经网络$\mathcal{N}$，其所有的相邻特征组为$\mathcal{O(N)}$。本文定义，若神经元$n$在输入$x$时被ReLU函数激活，则$sign(n,x)=1$，否则$sign(n,x)=-1$。
 
