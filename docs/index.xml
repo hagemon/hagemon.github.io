@@ -9,6 +9,16 @@
     <copyright>Hagemon Production</copyright>
     <lastBuildDate>Sun, 13 Mar 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://hagemon.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Understanding Symbolic Execution</title>
+      <link>https://hagemon.github.io/posts/understanding-symbolic-execution/</link>
+      <pubDate>Sat, 03 Sep 2022 16:27:47 +0800</pubDate>
+      
+      <guid>https://hagemon.github.io/posts/understanding-symbolic-execution/</guid>
+      <description>Understanding Symbolic Execution The article involves personal understanding of a lecture about Symbolic Execution, from Jonathan Aldrich.
+ Symbolic Execution abstract the execution of source code in a symbolic way. Unlike traditional inputs with real values, symbolic execution treats variables as symbols, which represents a set of inputs for each execution path, i.e. if-else in code.Symbolic execution statically parses source code line by line and generate test cases for each possible condition.</description>
+    </item>
+    
+    <item>
       <title>Understanding Concolic Testing</title>
       <link>https://hagemon.github.io/posts/understanding-concolic-testing/</link>
       <pubDate>Sat, 03 Sep 2022 16:10:21 +0800</pubDate>
