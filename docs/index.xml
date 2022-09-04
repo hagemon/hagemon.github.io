@@ -14,8 +14,9 @@
       <pubDate>Sat, 03 Sep 2022 16:27:47 +0800</pubDate>
       
       <guid>https://hagemon.github.io/posts/understanding-symbolic-execution/</guid>
-      <description>Understanding Symbolic Execution The article involves personal understanding of a lecture about Symbolic Execution, from Jonathan Aldrich.
- Symbolic Execution abstract the execution of source code in a symbolic way. Unlike traditional inputs with real values, symbolic execution treats variables as symbols, which represents a set of inputs for each execution path, i.e. if-else in code.Symbolic execution statically parses source code line by line and generate test cases for each possible condition.</description>
+      <description>The article involves personal understanding of a lecture about Symbolic Execution, from Jonathan Aldrich.
+ Symbolic Execution abstract the execution of source code in a symbolic way. Unlike traditional inputs with real values, symbolic execution treats variables as symbols, which represents a set of inputs for each execution path, i.e. if-else in code.Symbolic execution statically parses source code line by line and generate test cases for each possible condition.
+To this end, symbolic execution keeps three significant parameters:</description>
     </item>
     
     <item>

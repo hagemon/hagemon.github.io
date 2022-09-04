@@ -48,7 +48,10 @@
     skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
     TeX: {
       equationNumbers: { autoNumber: "AMS" },
-      extensions: ["AMSmath.js", "AMSsymbols.js"]
+      extensions: ["AMSmath.js", "AMSsymbols.js"],
+      Macros: {
+      '\\_': '_'
+    }
     }
   }
   });
@@ -302,9 +305,9 @@ $$</p>
 <table>
 <thead>
 <tr>
-<th>⁍</th>
-<th>⁍</th>
-<th>⁍</th>
+<th>$n_1$</th>
+<th>$n_2$</th>
+<th>$n_3$</th>
 </tr>
 </thead>
 <tbody>
@@ -353,7 +356,7 @@ $$</p>
 <h1 id="deepcruiser">DeepCruiser</h1>
 <h2 id="rnn中的状态转移建模">RNN中的状态转移建模</h2>
 <h3 id="rnn的隐含状态和状态转移">RNN的隐含状态和状态转移</h3>
-<p>DeepCruiser为基于状态的神经网络（如RNN）提出了覆盖率标准。以RNN为例，RNN的输入为一个序列数据$x\in X^N$，其中$N$为序列长度，$x_i$为序列的第$i$个元素。RNN中会维护一个状态向量$s\in S^N$，$s_i$表示第$i$个状态，它可以是一个$m$维的向量。在训练过程中，RNN会基于上一个状态向量与当前的元素相结合，计算出当前时刻的输出与下一个状态向量，即$(s_{i+1},y_i)=f(s_i,x_i)$。初始状态下$s_0=\bold{0}$，即全0向量。对于这样的输入$x$，会产生一个从$s_0$到$s_n$的有限转移序列$t$。</p>
+<p>DeepCruiser为基于状态的神经网络（如RNN）提出了覆盖率标准。以RNN为例，RNN的输入为一个序列数据$x\in X^N$，其中$N$为序列长度，$x_i$为序列的第$i$个元素。RNN中会维护一个状态向量$s\in S^N$，$s_i$表示第$i$个状态，它可以是一个$m$维的向量。在训练过程中，RNN会基于上一个状态向量与当前的元素相结合，计算出当前时刻的输出与下一个状态向量，即$(s_{i+1},y_i)=f(s_i,x_i)$。初始状态下$s_0=\bf{0}$，即全0向量。对于这样的输入$x$，会产生一个从$s_0$到$s_n$的有限转移序列$t$。</p>
 <p>对于两个序列输入$x_0x_1x_2$和$x_0x_1&rsquo;x_2&rsquo;$，可以分别产生输出$y_0y_1y_2$和$y_0y_1&rsquo;y_2&rsquo;$，中间的状态分别为$s_0s_1s_2s_3$和$s_0s_1s_2&rsquo;s_3$，可以用下图来表示</p>
 <p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h5r3pvqfzij20s60bc754.jpg" alt="https://tva1.sinaimg.cn/large/e6c9d24ely1h5r3pvqfzij20s60bc754.jpg"></p>
 <h3 id="抽象状态转移模型">抽象状态转移模型</h3>
@@ -383,7 +386,7 @@ $$</p>
 <li>
 <p>$k$步状态边界覆盖率（$k$-step state boundary coverage）：对于测试集中不在主功能区域的状态，可以计算这些状态与训练集状态之间的距离。$k$步状态边界覆盖率表示测试集状态中，存在与训练集状态距离小于$k$的状态数的比例，即：</p>
 <p>$$
-\rm{k-SBCov}(T,M)=\frac{|\hat{S}<em>T\cap \bigcup</em>{i=1}^k \hat{S}<em>{M^c}(i)|}{|\hat{S}</em>{M^c}(i)|}
+\rm{k-SBCov}(T,M)=\frac{|\hat{S}_T \cap \bigcup_{i=1}^k \hat{S}_{M^c}(i)|}{|\hat{S}_{M^c}(i)|}
 $$</p>
 <p>其中$\hat{S}_{M^c}(i)$表示与训练集状态的最小距离等于$i$的状态集合。</p>
 </li>
@@ -399,13 +402,13 @@ $$</p>
 <li>
 <p>输入空间覆盖率：训练集和测试集可能会拥有相同的抽象状态，输入空间覆盖率衡量了测试集与训练集共享的抽象状态中，对应的测试集输入占训练集所有状态输入的比例，即：</p>
 <p>$$
-\rm{ISCov}(T,M)=\frac{\sum_{\hat{s}\in\hat{S}_T\cap\hat{S}_M}|\hat{X}<em>T(\hat{s})|}{\sum</em>{\hat{s}\in\hat{S}_M}|\hat{X}_M(\hat{s})|}
+\rm{ISCov}(T,M)=\frac{\sum_{\hat{s}\in\hat{S}_T\cap\hat{S}_M}|\hat{X}_T(\hat{s})|}{\sum_{\hat{s}\in\hat{S}_M}|\hat{X}_M(\hat{s})|}
 $$</p>
 </li>
 <li>
 <p>加权输入覆盖率：基于训练集与测试集相交的抽象状态与其对应的同样相交的输入数据，获取相应的状态转移概率并相加，结果值占训练集状态对应的输入数量的比例。对于相交状态来说，其出现概率越高，则覆盖率就越大：</p>
 <p>$$
-\rm{WICov(T,M)}=\frac{\sum_{\hat{s}\in\hat{S}_T\cap\hat{S}<em>M}\sum</em>{\hat{x}\in\hat{X}_T(\hat{s})\cap\hat{X}<em>M(\hat{s})}\sum</em>{\hat{s&rsquo;}\in \hat{\delta}<em>T(\hat{s})}\hat{T}(\hat{s},\hat{x},\hat{s&rsquo;})}{\sum</em>{\hat{s}\in \hat{S}_M}|\hat{X}_M(\hat{s})|}
+\rm{WICov(T,M)}=\frac{\sum_{\hat{s}\in\hat{S}_T\cap\hat{S}_M}\sum_{\hat{x}\in\hat{X}_T(\hat{s})\cap\hat{X}_M(\hat{s})}\sum_{\hat{s&rsquo;}\in \hat{\delta}_T(\hat{s})}\hat{T}(\hat{s},\hat{x},\hat{s&rsquo;})}{\sum_{\hat{s}\in \hat{S}_M}|\hat{X}_M(\hat{s})|}
 $$</p>
 </li>
 </ul>
@@ -528,10 +531,10 @@ $$</p>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>step <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">while</span> step <span style="color:#f92672">&lt;</span> MAX_STEP:
-</span></span><span style="display:flex;"><span>		obj <span style="color:#f92672">=</span> min(u, pCon) <span style="color:#f92672">+</span> min(o, pOut)
-</span></span><span style="display:flex;"><span>		x <span style="color:#f92672">=</span> gradAsc(obj, x, eta) <span style="color:#75715e"># 损失函数关于x的梯度提升更新，步长为eta</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> isAct(u) <span style="color:#f92672">and</span> pCon <span style="color:#f92672">==</span> MAX_VAL:
-</span></span><span style="display:flex;"><span>        pCon <span style="color:#f92672">=</span> min(u, pCon)  <span style="color:#75715e"># 损失值不会为了增加u而变化，除非u变得小于阈值</span>
+</span></span><span style="display:flex;"><span>    obj <span style="color:#f92672">=</span> min(u, pCon) <span style="color:#f92672">+</span> min(o, pOut)
+</span></span><span style="display:flex;"><span>    x <span style="color:#f92672">=</span> gradAsc(obj, x, eta) <span style="color:#75715e"># 损失函数关于x的梯度提升更新，步长为eta</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> isAct(u) <span style="color:#f92672">and</span> pCon <span style="color:#f92672">==</span> MAX_VAL:
+</span></span><span style="display:flex;"><span>    pCon <span style="color:#f92672">=</span> min(u, pCon)  <span style="color:#75715e"># 损失值不会为了增加u而变化，除非u变得小于阈值</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> isAct(o) <span style="color:#f92672">and</span> pOut <span style="color:#f92672">==</span> MAX_VAL:
 </span></span><span style="display:flex;"><span>        pOut <span style="color:#f92672">=</span> min(o, pOut)  <span style="color:#75715e"># 同理</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> isAct(u) <span style="color:#f92672">and</span> isAct(o):

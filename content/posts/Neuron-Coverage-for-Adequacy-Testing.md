@@ -244,7 +244,7 @@ $$
 
 举例来说，若$L_i=\{n_1,n_2,n_3\}$，则有3个2路神经元：$\Theta=\{\{n_1,n_2\}\cup\{n_1,n_3\}\cup\{n_2,n_3\}\}$。每一个2路神经元包含4种配置，$c_1=(0,0)$、$c_2=(0,1)$、$c_3=(1,0)$、$c_4=(1,1)$。假设$T$拥有5个样本，且在$L_1$的输出如下表所示：
 
-| ⁍    | ⁍    | ⁍    |
+| $n_1$    | $n_2$    | $n_3$    |
 | ---- | ---- | ---- |
 | 0    | 0    | 1    |
 | 0    | 1    | 0    |
@@ -281,7 +281,7 @@ $(p,t)$-完整性覆盖率表示稠密覆盖率高于$p$的神经元组合占组
 
 ### RNN的隐含状态和状态转移
 
-DeepCruiser为基于状态的神经网络（如RNN）提出了覆盖率标准。以RNN为例，RNN的输入为一个序列数据$x\in X^N$，其中$N$为序列长度，$x_i$为序列的第$i$个元素。RNN中会维护一个状态向量$s\in S^N$，$s_i$表示第$i$个状态，它可以是一个$m$维的向量。在训练过程中，RNN会基于上一个状态向量与当前的元素相结合，计算出当前时刻的输出与下一个状态向量，即$(s_{i+1},y_i)=f(s_i,x_i)$。初始状态下$s_0=\bold{0}$，即全0向量。对于这样的输入$x$，会产生一个从$s_0$到$s_n$的有限转移序列$t$。
+DeepCruiser为基于状态的神经网络（如RNN）提出了覆盖率标准。以RNN为例，RNN的输入为一个序列数据$x\in X^N$，其中$N$为序列长度，$x_i$为序列的第$i$个元素。RNN中会维护一个状态向量$s\in S^N$，$s_i$表示第$i$个状态，它可以是一个$m$维的向量。在训练过程中，RNN会基于上一个状态向量与当前的元素相结合，计算出当前时刻的输出与下一个状态向量，即$(s_{i+1},y_i)=f(s_i,x_i)$。初始状态下$s_0=\bf{0}$，即全0向量。对于这样的输入$x$，会产生一个从$s_0$到$s_n$的有限转移序列$t$。
 
 对于两个序列输入$x_0x_1x_2$和$x_0x_1'x_2'$，可以分别产生输出$y_0y_1y_2$和$y_0y_1'y_2'$，中间的状态分别为$s_0s_1s_2s_3$和$s_0s_1s_2's_3$，可以用下图来表示
 
@@ -326,7 +326,7 @@ $$
 - $k$步状态边界覆盖率（$k$-step state boundary coverage）：对于测试集中不在主功能区域的状态，可以计算这些状态与训练集状态之间的距离。$k$步状态边界覆盖率表示测试集状态中，存在与训练集状态距离小于$k$的状态数的比例，即：
 
   $$
-  \rm{k-SBCov}(T,M)=\frac{|\hat{S}_T\cap \bigcup_{i=1}^k \hat{S}_{M^c}(i)|}{|\hat{S}_{M^c}(i)|}
+  \rm{k-SBCov}(T,M)=\frac{|\hat{S}\_T \cap \bigcup\_{i=1}^k \hat{S}\_{M^c}(i)|}{|\hat{S}\_{M^c}(i)|}
   $$
 
   其中$\hat{S}_{M^c}(i)$表示与训练集状态的最小距离等于$i$的状态集合。
@@ -336,19 +336,19 @@ $$
 - 基本转移覆盖率：测试集的状态转移$\hat{\delta}_T$与训练集的状态转移$\hat{\delta}_M$的交集数量站训练集状态转移的比例：
 
   $$
-  \rm{BTCov}(T,M)=\frac{|\hat{\delta}_T\cap\hat{\delta}_M|}{|\hat{\delta}_M|}
+  \rm{BTCov}(T,M)=\frac{|\hat{\delta}\_T\cap\hat{\delta}\_M|}{|\hat{\delta}\_M|}
   $$
 
 - 输入空间覆盖率：训练集和测试集可能会拥有相同的抽象状态，输入空间覆盖率衡量了测试集与训练集共享的抽象状态中，对应的测试集输入占训练集所有状态输入的比例，即：
 
   $$
-  \rm{ISCov}(T,M)=\frac{\sum_{\hat{s}\in\hat{S}_T\cap\hat{S}_M}|\hat{X}_T(\hat{s})|}{\sum_{\hat{s}\in\hat{S}_M}|\hat{X}_M(\hat{s})|}
+  \rm{ISCov}(T,M)=\frac{\sum\_{\hat{s}\in\hat{S}\_T\cap\hat{S}\_M}|\hat{X}\_T(\hat{s})|}{\sum\_{\hat{s}\in\hat{S}\_M}|\hat{X}\_M(\hat{s})|}
   $$
 
 - 加权输入覆盖率：基于训练集与测试集相交的抽象状态与其对应的同样相交的输入数据，获取相应的状态转移概率并相加，结果值占训练集状态对应的输入数量的比例。对于相交状态来说，其出现概率越高，则覆盖率就越大：
 
   $$
-  \rm{WICov(T,M)}=\frac{\sum_{\hat{s}\in\hat{S}_T\cap\hat{S}_M}\sum_{\hat{x}\in\hat{X}_T(\hat{s})\cap\hat{X}_M(\hat{s})}\sum_{\hat{s'}\in \hat{\delta}_T(\hat{s})}\hat{T}(\hat{s},\hat{x},\hat{s'})}{\sum_{\hat{s}\in \hat{S}_M}|\hat{X}_M(\hat{s})|}
+  \rm{WICov(T,M)}=\frac{\sum\_{\hat{s}\in\hat{S}\_T\cap\hat{S}\_M}\sum\_{\hat{x}\in\hat{X}\_T(\hat{s})\cap\hat{X}\_M(\hat{s})}\sum\_{\hat{s'}\in \hat{\delta}\_T(\hat{s})}\hat{T}(\hat{s},\hat{x},\hat{s'})}{\sum\_{\hat{s}\in \hat{S}_M}|\hat{X}_M(\hat{s})|}
   $$
 
 ## 蜕变测试
@@ -524,10 +524,10 @@ pCon, pOut = MAX_VAL, MAX_VAL
 
 step = 0
 while step < MAX_STEP:
-		obj = min(u, pCon) + min(o, pOut)
-		x = gradAsc(obj, x, eta) # 损失函数关于x的梯度提升更新，步长为eta
-		if isAct(u) and pCon == MAX_VAL:
-        pCon = min(u, pCon)  # 损失值不会为了增加u而变化，除非u变得小于阈值
+    obj = min(u, pCon) + min(o, pOut)
+    x = gradAsc(obj, x, eta) # 损失函数关于x的梯度提升更新，步长为eta
+    if isAct(u) and pCon == MAX_VAL:
+    pCon = min(u, pCon)  # 损失值不会为了增加u而变化，除非u变得小于阈值
     if isAct(o) and pOut == MAX_VAL:
         pOut = min(o, pOut)  # 同理
     if isAct(u) and isAct(o):

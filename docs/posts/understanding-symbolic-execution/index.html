@@ -48,7 +48,10 @@
     skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
     TeX: {
       equationNumbers: { autoNumber: "AMS" },
-      extensions: ["AMSmath.js", "AMSsymbols.js"]
+      extensions: ["AMSmath.js", "AMSsymbols.js"],
+      Macros: {
+      '\\_': '_'
+    }
     }
   }
   });
@@ -133,8 +136,7 @@
   </header>
   
   <section id="js-article" class="p-article__body">
-    <h1 id="understanding-symbolic-execution">Understanding Symbolic Execution</h1>
-<p>The article involves personal understanding of  <a href="https://www.notion.so/Understanding-Concolic-Testing-5ba0faf9cf6b4644a5eb537461f06f89">a lecture about Symbolic Execution</a>, from <a href="https://www.notion.so/c9eda16fb42141389f65357c5b30a665">Jonathan Aldrich</a>.</p>
+    <p>The article involves personal understanding of  <a href="https://www.notion.so/Understanding-Concolic-Testing-5ba0faf9cf6b4644a5eb537461f06f89">a lecture about Symbolic Execution</a>, from <a href="https://www.notion.so/c9eda16fb42141389f65357c5b30a665">Jonathan Aldrich</a>.</p>
 <hr>
 <p>Symbolic Execution abstract the execution of source code in a symbolic way. Unlike traditional inputs with real values, symbolic execution treats variables as symbols, which represents a set of inputs for each execution path, i.e. <code>if-else</code> in code.Symbolic execution statically parses source code line by line and generate test cases for each possible condition.</p>
 <p>To this end, symbolic execution keeps three significant  parameters:</p>
@@ -158,35 +160,35 @@
 <thead>
 <tr>
 <th>stat</th>
-<th>⁍</th>
-<th>⁍</th>
+<th>$g$</th>
+<th>$E$</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>0</td>
 <td>true</td>
-<td>⁍</td>
+<td>$a\mapsto \alpha,b\mapsto \beta,c\mapsto \gamma$</td>
 </tr>
 <tr>
 <td>1</td>
 <td>true</td>
-<td>⁍</td>
+<td>$a\mapsto \alpha,b\mapsto \beta,c\mapsto \gamma, x\mapsto 0,y\mapsto 0, z\mapsto 0$</td>
 </tr>
 <tr>
 <td>2</td>
-<td>⁍</td>
-<td>⁍</td>
+<td>$\neg a$</td>
+<td>$a\mapsto \alpha,b\mapsto \beta,c\mapsto \gamma, x\mapsto 0,y\mapsto 0, z\mapsto 0$</td>
 </tr>
 <tr>
 <td>5</td>
-<td>⁍</td>
-<td>⁍</td>
+<td>$\neg a\wedge \beta \ge 5$</td>
+<td>$a\mapsto \alpha,b\mapsto \beta,c\mapsto \gamma, x\mapsto 0,y\mapsto 0, z\mapsto 0$</td>
 </tr>
 <tr>
 <td>9</td>
-<td>⁍</td>
-<td>⁍</td>
+<td>$\neg a\wedge \beta \ge 5 \wedge 0 + 0 + 0 \ne3$</td>
+<td>$a\mapsto \alpha,b\mapsto \beta,c\mapsto \gamma, x\mapsto 0,y\mapsto 0, z\mapsto 0$</td>
 </tr>
 </tbody>
 </table>
@@ -196,45 +198,45 @@
 <thead>
 <tr>
 <th>stat</th>
-<th>⁍</th>
-<th>⁍</th>
+<th>$g$</th>
+<th>$E$</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>0</td>
 <td>true</td>
-<td>⁍</td>
+<td>$a\mapsto \alpha,b\mapsto \beta,c\mapsto \gamma$</td>
 </tr>
 <tr>
 <td>1</td>
 <td>true</td>
-<td>⁍</td>
+<td>$a\mapsto \alpha,b\mapsto \beta,c\mapsto \gamma, x\mapsto 0,y\mapsto 0, z\mapsto 0$</td>
 </tr>
 <tr>
 <td>2</td>
-<td>⁍</td>
-<td>⁍</td>
+<td>$\neg a$</td>
+<td>$a\mapsto \alpha,b\mapsto \beta,c\mapsto \gamma, x\mapsto 0,y\mapsto 0, z\mapsto 0$</td>
 </tr>
 <tr>
 <td>5</td>
-<td>⁍</td>
-<td>⁍</td>
+<td>$\neg a\wedge \beta &lt; 5$</td>
+<td>$a\mapsto \alpha,b\mapsto \beta,c\mapsto \gamma, x\mapsto 0,y\mapsto 0, z\mapsto 0$</td>
 </tr>
 <tr>
 <td>6</td>
-<td>⁍</td>
-<td>⁍</td>
+<td>$\neg a\wedge \beta &lt; 5 \wedge \gamma$</td>
+<td>$a\mapsto \alpha,b\mapsto \beta,c\mapsto \gamma, x\mapsto 0,y\mapsto 1, z\mapsto 0$</td>
 </tr>
 <tr>
 <td>7</td>
-<td>⁍</td>
-<td>⁍</td>
+<td>$\neg a\wedge \beta &lt; 5 \wedge \gamma$</td>
+<td>$a\mapsto \alpha,b\mapsto \beta,c\mapsto \gamma, x\mapsto 0,y\mapsto 1, z\mapsto 2$</td>
 </tr>
 <tr>
 <td>9</td>
-<td>⁍</td>
-<td>⁍</td>
+<td>$\neg a\wedge \beta &lt; 5 \wedge \gamma \wedge \neg(0+1+2\ne3)$</td>
+<td>$a\mapsto \alpha,b\mapsto \beta,c\mapsto \gamma, x\mapsto 0,y\mapsto 1, z\mapsto 2$</td>
 </tr>
 </tbody>
 </table>
