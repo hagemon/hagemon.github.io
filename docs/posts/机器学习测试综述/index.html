@@ -339,7 +339,7 @@ $$</p>
 <h3 id="将蜕变关系metamorphic-relations作为test-oracles">将蜕变关系（Metamorphic Relations）作为Test Oracles</h3>
 <p>蜕变关系指的是：基于一定规则对测试样本进行修改后，得到的变体样本（mutanted samples）与原样本具有相同输出的，则两者满足蜕变关系。如被测程序为：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">sin</span>(x):
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># some implementation</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">pass</span> <span style="color:#75715e"># some implementation</span>
 </span></span></code></pre></div><p>根据sin函数的定义，输入$3$与$\pi-3$的返回结果应该一致，若返回不一致，则表明该函数实现存在问题。</p>
 <p>在ML测试中，许多蜕变关系方法通过对训练数据和测试数据的变换生成变体样本，其中分为两个类别：粗粒度变化和细粒度变化。</p>
 <p>粗粒度变化主要包括扩大数据集、交换数据顺序而不改变单个样本：</p>

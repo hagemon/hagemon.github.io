@@ -2,26 +2,26 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://hagemon.github.io/tags/machine-learning-testing/</loc>
+    <lastmod>2022-09-04T12:20:30+08:00</lastmod>
+  </url><url>
     <loc>https://hagemon.github.io/posts/</loc>
-    <lastmod>2022-09-04T10:10:32+08:00</lastmod>
+    <lastmod>2022-09-04T12:20:30+08:00</lastmod>
+  </url><url>
+    <loc>https://hagemon.github.io/tags/software-analyze-and-testing/</loc>
+    <lastmod>2022-09-04T12:20:30+08:00</lastmod>
+  </url><url>
+    <loc>https://hagemon.github.io/tags/</loc>
+    <lastmod>2022-09-04T12:20:30+08:00</lastmod>
   </url><url>
     <loc>https://hagemon.github.io/posts/understanding-symbolic-execution/</loc>
     <lastmod>2022-09-04T10:10:32+08:00</lastmod>
   </url><url>
     <loc>https://hagemon.github.io/posts/understanding-concolic-testing/</loc>
-    <lastmod>2022-09-03T16:20:58+08:00</lastmod>
+    <lastmod>2022-09-04T12:20:30+08:00</lastmod>
   </url><url>
     <loc>https://hagemon.github.io/posts/neuron-coverage-for-adequacy-testing/</loc>
     <lastmod>2022-09-04T10:10:32+08:00</lastmod>
-  </url><url>
-    <loc>https://hagemon.github.io/tags/machine-learning-testing/</loc>
-    <lastmod>2022-08-29T11:37:24+08:00</lastmod>
-  </url><url>
-    <loc>https://hagemon.github.io/tags/software-analyze-and-testing/</loc>
-    <lastmod>2022-08-29T11:37:24+08:00</lastmod>
-  </url><url>
-    <loc>https://hagemon.github.io/tags/</loc>
-    <lastmod>2022-08-29T11:37:24+08:00</lastmod>
   </url><url>
     <loc>https://hagemon.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E6%B5%8B%E8%AF%95%E7%BB%BC%E8%BF%B0/</loc>
     <lastmod>2022-08-29T11:37:24+08:00</lastmod>

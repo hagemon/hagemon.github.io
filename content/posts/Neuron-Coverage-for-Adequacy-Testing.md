@@ -2,6 +2,7 @@
 title= "Neuron Coverage for Adequacy Testing"
 date= 2022-09-03T16:09:59+08:00
 math= true
+tags = ['Software Analyze and Testing', 'Machine Learning Testing']
 +++
 
 神经覆盖率的概念首先在DeepXplore的论文《**DeepXplore: Automated Whitebox Testing of Deep Learning Systems**》中被提及，其核心思想是输入数据中被激活的神经元个数占总神经元个数的比例。Lei Ma在此基础上做出了一些改进，提出DeepGauge、Combinatorial Testing和DeepCT。

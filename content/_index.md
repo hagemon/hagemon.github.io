@@ -5,7 +5,7 @@ date = "2022-03-13"
 
 Yize Le, received his bachelor's degree in Software Engineering from [Fuzhou Univerisity](https://ccds.fzu.edu.cn) (2013-2017) and master's degree in Computer Science from [Chongqing Univerisity](http://www.cs.cqu.edu.cn) (2017-2020). 
 
-He has experiences on iOS/Web development and has ability on building AI models. He studied on deep metric learning, deep hashing and big data analytics in past years, but has recently become more interested in software analytics and trustworthy AI. 
+He has experiences on iOS/Web development and has ability on building AI models. He studied on deep metric learning, deep hashing and big data analytics in past years, but has recently become more interested in trustworthy AI and software analytics. 
 
 I wrote some [posts](/posts) to document learnt knowledge, keep updating!
 
