@@ -25,8 +25,10 @@ To this end, symbolic execution keeps three significant parameters:</description
       <pubDate>Sat, 03 Sep 2022 16:10:21 +0800</pubDate>
       
       <guid>https://hagemon.github.io/posts/understanding-concolic-testing/</guid>
-      <description>Defination The defination of conclic testing is&amp;hellip;
-Result We can conclude that&amp;hellip;</description>
+      <description>The article involves personal understanding of a lecture about Concolic Testing, from Jonathan Aldrich.
+ There exists two mainly challenges in software testing:
+ designing a set of test cases that cover all the source code. finding inputs that trigger corner case defects.  Symbolic execution is a classic method to solve problems above, but it suffers from some significant limitations:
+ SMT solvers may not be able to find satisfying assignments to variables for long paths with many conditions.</description>
     </item>
     
     <item>
