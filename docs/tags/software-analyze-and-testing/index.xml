@@ -37,7 +37,7 @@ To this end, symbolic execution keeps three significant parameters:</description
       <pubDate>Sat, 03 Sep 2022 16:09:59 +0800</pubDate>
       
       <guid>https://hagemon.github.io/posts/neuron-coverage-for-adequacy-testing/</guid>
-      <description>神经覆盖率的概念首先在DeepXplore的论文《DeepXplore: Automated Whitebox Testing of Deep Learning Systems》中被提及，其核心思想是输入数据中被激活的神经元个数占总神经元个数的比例。Lei Ma在此基础上做出了一些改进，提出DeepGauge、Combinatorial Testing和DeepCT。
+      <description>神经覆盖率的概念首先在DeepXplore的论文《DeepXplore: Automated Whitebox Testing of Deep Learning Systems》中被提及，其核心思想是输入数据中被激活的神经元个数占总神经元个数的比例。Lei Ma在此基础上做出了一些改进，提出DeepGauge和Combinatorial；Xiaoning Du提出了针对基于状态的神经网络（如RNN）的覆盖率准则以及相应的工具DeepCruiser；Zhiyang Zhou考虑了特征之间的连接权重，提出了Contribution Coverage和工具DeepCon。
 DeepXplore 深度学习系统被广泛应用在一些安全相关的场景中（如自动驾驶），系统在一些边界情况下（corner cases）的准确性和可预测性是十分重要的。大多深度学习系统依赖于标注的数据，从而在一些边界情况下容易暴露问题，从而引发严重的后果。
 于是有以下两个问题需要考虑：
  是否有一个标准，可以衡量输入数据的全面性，从而推断模型是否可以考虑到所发生的各种情况。 如何在不需要大量的带标签数据的情况下，可以找到深度学习系统的错误行为。  为了解决这些问题，作者做出了以下几点尝试：
@@ -53,9 +53,7 @@ $$ obj_1(x)=\sum_{k\ne j}F_k(x)[c]-\lambda_1\cdot F_j(x)[c] $$
 最大化神经元覆盖率 对于那些激活值小于$t$的神经元，希望它们的值可以大于$t$，于是在优化目标中加上：
 $$ obj_2(x)=\lambda_2\cdot f_n(x) $$
 联合优化目标 将两个优化目标合并，得到联合优化目标：
-$$ obj_{joint}(x)=\sum_{k\ne j}F_k(x)[c]-\lambda_1\cdot F_j(x)[c]+\lambda_2\cdot f_n(x) $$
-其中，$n$是每个iteration中随机选择的非激活神经元。
-特定域约束 对于特定的问题，数值的范围需要有特定的约束。如图像数据的范围只能在0到255之间。具体来说，输入的更新可以表示为$x_{i+1}=x_i+s\cdot g$，其中$g$为梯度值。作者需要保证在这个更新之后的数据仍然满足约束条件：</description>
+$$ obj_{joint}(x)=\sum_{k\ne j}F_k(x)[c]-\lambda_1\cdot F_j(x)[c]+\lambda_2\cdot f_n(x) $$</description>
     </item>
     
     <item>

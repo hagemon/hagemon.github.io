@@ -5,7 +5,7 @@ math= true
 tags = ['Software Analyze and Testing', 'Machine Learning Testing']
 +++
 
-神经覆盖率的概念首先在DeepXplore的论文《**DeepXplore: Automated Whitebox Testing of Deep Learning Systems**》中被提及，其核心思想是输入数据中被激活的神经元个数占总神经元个数的比例。Lei Ma在此基础上做出了一些改进，提出DeepGauge、Combinatorial Testing和DeepCT。
+神经覆盖率的概念首先在DeepXplore的论文《**DeepXplore: Automated Whitebox Testing of Deep Learning Systems**》中被提及，其核心思想是输入数据中被激活的神经元个数占总神经元个数的比例。Lei Ma在此基础上做出了一些改进，提出DeepGauge和Combinatorial；Xiaoning Du提出了针对基于状态的神经网络（如RNN）的覆盖率准则以及相应的工具DeepCruiser；Zhiyang Zhou考虑了特征之间的连接权重，提出了Contribution Coverage和工具DeepCon。
 
 # DeepXplore
 

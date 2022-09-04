@@ -140,7 +140,7 @@
   </header>
   
   <section id="js-article" class="p-article__body">
-    <p>神经覆盖率的概念首先在DeepXplore的论文《<strong>DeepXplore: Automated Whitebox Testing of Deep Learning Systems</strong>》中被提及，其核心思想是输入数据中被激活的神经元个数占总神经元个数的比例。Lei Ma在此基础上做出了一些改进，提出DeepGauge、Combinatorial Testing和DeepCT。</p>
+    <p>神经覆盖率的概念首先在DeepXplore的论文《<strong>DeepXplore: Automated Whitebox Testing of Deep Learning Systems</strong>》中被提及，其核心思想是输入数据中被激活的神经元个数占总神经元个数的比例。Lei Ma在此基础上做出了一些改进，提出DeepGauge和Combinatorial；Xiaoning Du提出了针对基于状态的神经网络（如RNN）的覆盖率准则以及相应的工具DeepCruiser；Zhiyang Zhou考虑了特征之间的连接权重，提出了Contribution Coverage和工具DeepCon。</p>
 <h1 id="deepxplore">DeepXplore</h1>
 <p>深度学习系统被广泛应用在一些安全相关的场景中（如自动驾驶），系统在一些边界情况下（corner cases）的准确性和可预测性是十分重要的。大多深度学习系统依赖于标注的数据，从而在一些边界情况下容易暴露问题，从而引发严重的后果。</p>
 <p>于是有以下两个问题需要考虑：</p>
