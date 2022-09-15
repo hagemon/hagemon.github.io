@@ -218,7 +218,7 @@
 <p>$$
 \Upsilon_{i+1}{(e)}=\frac{\Upsilon_{i}(e)+\sum \Upsilon_i(new_events(e))}{exec_times(e)^2}
 $$</p>
-<p>其中，$new_events(\cdot)$表示在$e$执行后的布局$l&rsquo;$上，曾经执行过的所有事件的集合（即图模型中状态$s$的出度）；$exec_times(\cdot)$表示事件$e$总共被执行过的次数。初始状态下，$\Upsilon_1(e)=100$、$exec_times(e)=1$、$new_events(e)=\empty$。</p>
+<p>其中，$new_events(\cdot)$表示在$e$执行后的布局$l&rsquo;$上，曾经执行过的所有事件的集合（即图模型中状态$s$的出度）；$exec_times(\cdot)$表示事件$e$总共被执行过的次数。初始状态下，$\Upsilon_1(e)=100$、$exec_times(e)=1$、$new_events(e)=\emptyset$。</p>
 </li>
 <li>
 <p>随机事件选择（Random event selection）：根据预定义的概率选择事件，其中点击事件概率为60%、长按事件为35%、导航事件为5%。随机事件选择可以减少探索过程中陷入重复选择的情况，如在一个很长的<em>ListView</em>中可能点击多个相似的组件。</p>
@@ -282,8 +282,14 @@ $$</p>
 <p>Mutants生成的主要思想是，在原有的seeds中，能够找到一个起点（pivot）布局和一个事件序列$\tau$，使得$\tau$的第一个事件可以在起点的布局上执行，而seeds中pivot的后一个事件可以作用在$\tau$的最后一个布局上。同时，需要满足$\tau$的第一个事件作用页面是不活跃的。</p>
 <p>其中，对于这些不活跃的页面$b$，一般会存在一个活跃页面$a$与其保持相互独立的关系，即在$b$上的任何操作不会影响$a$的原有操作。</p>
 <p>于是本文定义了两个概念：</p>
-<p>**独立事件序列：**指的是对于布局$l_i$，存在一个额外的序列$\tau=[e_1&rsquo;,e_2&rsquo;\dots]$满足$e_1&rsquo;.r(l_i)$是不活跃的，即独立于$l_i$中任一活跃页面。</p>
-<p>**序列连接：**指的是假设两个序列$\tau_1=[e_1,e_2\dots]$和$\tau_2=[e_1&rsquo;,e_2&rsquo;\dots]$，若$\tau_2$的第一个事件$e_1&rsquo;$能够在$\tau_1$的最后一个布局$l_{|\tau_1|+1}$上作用，则两个序列相连，记为$\tau_1 \leadsto \tau_2$。</p>
+<ul>
+<li>
+<p>独立事件序列：指的是对于布局$l_i$，存在一个额外的序列$\tau=[e_1&rsquo;,e_2&rsquo;\dots]$满足$e_1&rsquo;.r(l_i)$是不活跃的，即独立于$l_i$中任一活跃页面。</p>
+</li>
+<li>
+<p>序列连接：指的是假设两个序列$\tau_1=[e_1,e_2\dots]$和$\tau_2=[e_1&rsquo;,e_2&rsquo;\dots]$，若$\tau_2$的第一个事件$e_1&rsquo;$能够在$\tau_1$的最后一个布局$l_{|\tau_1|+1}$上作用，则两个序列相连，记为$\tau_1 \leadsto \tau_2$。</p>
+</li>
+</ul>
 <p>假设seeds的事件序列为$E=[e_1, e_2, e_3,\dots, e_n]$，在生成mutants时，需要在第$i$个位置前插入一个序列$\tau=[e_1&rsquo;,e_2&rsquo;\dots,e_m&rsquo;]$，生成$E&rsquo;=[e_1, e_2\dots, e_i, e_1&rsquo;,e_2&rsquo;\dots e_m&rsquo;, e_{i+1}\dots e_n]$。此时$\tau$应该满足上述的两个条件：</p>
 <ol>
 <li>是一个独立事件序列</li>

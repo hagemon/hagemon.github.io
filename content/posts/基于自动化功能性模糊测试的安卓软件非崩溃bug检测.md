@@ -107,13 +107,14 @@ GUI转移模型用于生成测试用例序列，用$M=\<S,\Sigma,\delta\>$表示
   \Upsilon_{i+1}{(e)}=\frac{\Upsilon_{i}(e)+\sum \Upsilon_i(new\_events(e))}{exec\_times(e)^2}
   $$
 
-  其中，$new\_events(\cdot)$表示在$e$执行后的布局$l'$上，曾经执行过的所有事件的集合（即图模型中状态$s$的出度）；$exec\_times(\cdot)$表示事件$e$总共被执行过的次数。初始状态下，$\Upsilon_1(e)=100$、$exec\_times(e)=1$、$new\_events(e)=\empty$。
+  其中，$new\_events(\cdot)$表示在$e$执行后的布局$l'$上，曾经执行过的所有事件的集合（即图模型中状态$s$的出度）；$exec\_times(\cdot)$表示事件$e$总共被执行过的次数。初始状态下，$\Upsilon_1(e)=100$、$exec\_times(e)=1$、$new\_events(e)=\emptyset$。
 
 - 随机事件选择（Random event selection）：根据预定义的概率选择事件，其中点击事件概率为60%、长按事件为35%、导航事件为5%。随机事件选择可以减少探索过程中陷入重复选择的情况，如在一个很长的*ListView*中可能点击多个相似的组件。
 
 在具体实现时，首先基于系统性事件选择进行探索，之后交替两种策略构建seeds。这样可以构建出一个图模型：
 
 ![https://tva1.sinaimg.cn/large/e6c9d24ely1h54ygie6h2j20yy0u00vs.jpg](https://tva1.sinaimg.cn/large/e6c9d24ely1h54ygie6h2j20yy0u00vs.jpg)
+
 
 ### 从Seeds中确定独立页面和活跃状态
 
@@ -187,9 +188,9 @@ Mutants生成的主要思想是，在原有的seeds中，能够找到一个起�
 
 于是本文定义了两个概念：
 
-**独立事件序列：**指的是对于布局$l_i$，存在一个额外的序列$\tau=[e_1',e_2'\dots]$满足$e_1'.r(l_i)$是不活跃的，即独立于$l_i$中任一活跃页面。
+- 独立事件序列：指的是对于布局$l_i$，存在一个额外的序列$\tau=[e_1',e_2'\dots]$满足$e_1'.r(l_i)$是不活跃的，即独立于$l_i$中任一活跃页面。
 
-**序列连接：**指的是假设两个序列$\tau_1=[e_1,e_2\dots]$和$\tau_2=[e_1',e_2'\dots]$，若$\tau_2$的第一个事件$e_1'$能够在$\tau_1$的最后一个布局$l_{|\tau_1|+1}$上作用，则两个序列相连，记为$\tau_1 \leadsto \tau_2$。
+- 序列连接：指的是假设两个序列$\tau_1=[e_1,e_2\dots]$和$\tau_2=[e_1',e_2'\dots]$，若$\tau_2$的第一个事件$e_1'$能够在$\tau_1$的最后一个布局$l_{|\tau_1|+1}$上作用，则两个序列相连，记为$\tau_1 \leadsto \tau_2$。
 
 假设seeds的事件序列为$E=[e_1, e_2, e_3,\dots, e_n]$，在生成mutants时，需要在第$i$个位置前插入一个序列$\tau=[e_1',e_2'\dots,e_m']$，生成$E'=[e_1, e_2\dots, e_i, e_1',e_2'\dots e_m', e_{i+1}\dots e_n]$。此时$\tau$应该满足上述的两个条件：
 
