@@ -3,6 +3,7 @@ title= "Understanding Symbolic Execution"
 date= 2022-09-03T16:27:47+08:00
 math= true
 tags = ['Software Analyze and Testing', 'Machine Learning Testing']
+draft = true
 +++
 
 The article involves personal understanding of  [a lecture about Symbolic Execution](https://www.notion.so/Understanding-Concolic-Testing-5ba0faf9cf6b4644a5eb537461f06f89), from [Jonathan Aldrich](https://www.notion.so/c9eda16fb42141389f65357c5b30a665).

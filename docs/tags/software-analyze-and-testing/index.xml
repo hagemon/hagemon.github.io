@@ -7,30 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Hagemon Production</copyright>
-    <lastBuildDate>Sat, 03 Sep 2022 16:27:47 +0800</lastBuildDate><atom:link href="https://hagemon.github.io/tags/software-analyze-and-testing/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Understanding Symbolic Execution</title>
-      <link>https://hagemon.github.io/posts/understanding-symbolic-execution/</link>
-      <pubDate>Sat, 03 Sep 2022 16:27:47 +0800</pubDate>
-      
-      <guid>https://hagemon.github.io/posts/understanding-symbolic-execution/</guid>
-      <description>The article involves personal understanding of a lecture about Symbolic Execution, from Jonathan Aldrich.
- Symbolic Execution abstract the execution of source code in a symbolic way. Unlike traditional inputs with real values, symbolic execution treats variables as symbols, which represents a set of inputs for each execution path, i.e. if-else in code.Symbolic execution statically parses source code line by line and generate test cases for each possible condition.
-To this end, symbolic execution keeps three significant parameters:</description>
-    </item>
-    
-    <item>
-      <title>Understanding Concolic Testing</title>
-      <link>https://hagemon.github.io/posts/understanding-concolic-testing/</link>
-      <pubDate>Sat, 03 Sep 2022 16:10:21 +0800</pubDate>
-      
-      <guid>https://hagemon.github.io/posts/understanding-concolic-testing/</guid>
-      <description>The article involves personal understanding of a lecture about Concolic Testing, from Jonathan Aldrich.
- There exists two mainly challenges in software testing:
- designing a set of test cases that cover all the source code. finding inputs that trigger corner case defects.  Symbolic execution is a classic method to solve problems above, but it suffers from some significant limitations:
- SMT solvers may not be able to find satisfying assignments to variables for long paths with many conditions.</description>
-    </item>
-    
+    <lastBuildDate>Sat, 03 Sep 2022 16:09:59 +0800</lastBuildDate><atom:link href="https://hagemon.github.io/tags/software-analyze-and-testing/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Neuron Coverage for Adequacy Testing</title>
       <link>https://hagemon.github.io/posts/neuron-coverage-for-adequacy-testing/</link>
@@ -86,7 +63,7 @@ $$ obj_{joint}(x)=\sum_{k\ne j}F_k(x)[c]-\lambda_1\cdot F_j(x)[c]+\lambda_2\cdot
 所谓页面独立性，指的是对于同一个父组件上平行的组件（如ListView中并排的按钮），或不属于同一个父组件的组件（如ListView的按钮和导航栏的按钮）在功能上应该相互独立。对于其中一个组件的操作不会影响其它组件的正常功能。本文称其为独立页面属性（Independent View Properties）。
 给予独立性的概念，mutants和seeds的执行情况应该要保持一致，否则就认定为出现了功能性问题。
 本文构建了自动化功能模糊测试工具GENIE，在给定一个软件后，GINIE可以做到：
- 在不需要认为设计测试用例的情况下，自动检测非崩溃bug。 检测到的bug具有多样性和通用性，在多个功能属性上皆有效果。  独立页面属性 举例来说明独立页面属性：ActivityDiary应用可以记录每日生活中的照片，这些照片可以被分为多个类别（电影、睡觉、做清洁等）。用户在选择一个类别后，可以上传照片并发布到Diary页。在Dairy页面中，可以对已发布的照片执行删除操作。具体场景如下图描述：
+ 在不需要人为设计测试用例的情况下，自动检测非崩溃bug。 检测到的bug具有多样性和通用性，在多个功能属性上皆有效果。  独立页面属性 举例来说明独立页面属性：ActivityDiary应用可以记录每日生活中的照片，这些照片可以被分为多个类别（电影、睡觉、做清洁等）。用户在选择一个类别后，可以上传照片并发布到Diary页。在Dairy页面中，可以对已发布的照片执行删除操作。具体场景如下图描述：
 初始状态为$l_1$，用户按照以下的流程（记为流程A）操作进行状态转移：
  点击Cinema按钮，新增一个Cinema主题的日记，状态转移到$l_2$。 点击相机按钮，选择一张图片后，图片加载到页面上，状态转移至$l_3$。 点击导航栏，返回日记页面，页面显示Cinema标题和图片内容，状态转移至$l_4$。 点击图片，弹出删除对话框，状态转移至$l_5$。 点击确认删除，页面上图片被删除，仅保留Cinema标题，状态转移至$l_6$，流程终止。  从直觉来说，若在删除Cinema的图片之前添加一个Sleeping或Cleaning的日记，对Cinema图片的删除流程是不会有影响的，这里就体现了页面之间的独立关系。将上述流程作为seeds，我们可以生成一个mutants：
 该流程（记为流程B）表示为：
@@ -137,7 +114,7 @@ Definition. A GUI graph $G$ is a directed graph that consist of distinct GUI sta
       
       <guid>https://hagemon.github.io/posts/%E7%90%86%E8%A7%A3%E5%92%8C%E6%A3%80%E6%B5%8B%E5%AE%89%E5%8D%93%E5%BA%94%E7%94%A8%E4%B8%AD%E7%B3%BB%E7%BB%9F%E8%AE%BE%E7%BD%AE%E7%9B%B8%E5%85%B3%E7%9A%84%E7%BC%BA%E9%99%B7/</guid>
       <description>本文是论文Understanding and Finding System Setting-Related Defects in Android Apps的总结笔记，作者是Jingling Sun。
-总览 安卓系统提供了很多用户可以更改的系统配置，比如网络连接、飞行模式、静音、系统语言等。这些系统配置的变更，可能会影响到app的表现形式。但如果app对这些变更处理不当，可能使ap存在缺陷（简称为设置缺陷）。这些缺陷可能引发UI错误、功能失效甚至是崩溃，从而影响用户体验。而目前的软件测试方法并不能系统地找到这些设置缺陷。
+总览 安卓系统提供了很多用户可以更改的系统配置，比如网络连接、飞行模式、静音、系统语言等。这些系统配置的变更，可能会影响到app的表现形式。但如果app对这些变更处理不当，可能使app存在缺陷（简称为设置缺陷）。这些缺陷可能引发UI错误、功能失效甚至是崩溃，从而影响用户体验。而目前的软件测试方法并不能系统地找到这些设置缺陷。
 本文主要从两个方面研究设置缺陷：一方面，本文收集了180个开源安卓app的1074个设置缺陷，并探究它们的影响（impact）、根本原因（root causes）和后果（consequence）。另一方面，构建了一个端到端的测试工具（SetDroid）对26个流行的开源项目进行测试，并找到了42个设置缺陷（33个被确认，21个被修复）。同时，对5个流行的工业软件开展测试，找到了17个设置缺陷（全部被确认和修复）。
 本文的核心思想是，所有的软件应该针对系统设置的变化，自动地做出相应的改变，并且：
  系统设置还原后，能够恢复到原来的状态。 在不还原的情况下，能够体现出不同设置下的差异。  以实际的app为例，来解释设置缺陷是如何引发错误的：

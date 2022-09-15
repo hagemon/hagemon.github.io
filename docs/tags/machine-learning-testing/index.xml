@@ -7,30 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Hagemon Production</copyright>
-    <lastBuildDate>Sat, 03 Sep 2022 16:27:47 +0800</lastBuildDate><atom:link href="https://hagemon.github.io/tags/machine-learning-testing/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Understanding Symbolic Execution</title>
-      <link>https://hagemon.github.io/posts/understanding-symbolic-execution/</link>
-      <pubDate>Sat, 03 Sep 2022 16:27:47 +0800</pubDate>
-      
-      <guid>https://hagemon.github.io/posts/understanding-symbolic-execution/</guid>
-      <description>The article involves personal understanding of a lecture about Symbolic Execution, from Jonathan Aldrich.
- Symbolic Execution abstract the execution of source code in a symbolic way. Unlike traditional inputs with real values, symbolic execution treats variables as symbols, which represents a set of inputs for each execution path, i.e. if-else in code.Symbolic execution statically parses source code line by line and generate test cases for each possible condition.
-To this end, symbolic execution keeps three significant parameters:</description>
-    </item>
-    
-    <item>
-      <title>Understanding Concolic Testing</title>
-      <link>https://hagemon.github.io/posts/understanding-concolic-testing/</link>
-      <pubDate>Sat, 03 Sep 2022 16:10:21 +0800</pubDate>
-      
-      <guid>https://hagemon.github.io/posts/understanding-concolic-testing/</guid>
-      <description>The article involves personal understanding of a lecture about Concolic Testing, from Jonathan Aldrich.
- There exists two mainly challenges in software testing:
- designing a set of test cases that cover all the source code. finding inputs that trigger corner case defects.  Symbolic execution is a classic method to solve problems above, but it suffers from some significant limitations:
- SMT solvers may not be able to find satisfying assignments to variables for long paths with many conditions.</description>
-    </item>
-    
+    <lastBuildDate>Sat, 03 Sep 2022 16:09:59 +0800</lastBuildDate><atom:link href="https://hagemon.github.io/tags/machine-learning-testing/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Neuron Coverage for Adequacy Testing</title>
       <link>https://hagemon.github.io/posts/neuron-coverage-for-adequacy-testing/</link>

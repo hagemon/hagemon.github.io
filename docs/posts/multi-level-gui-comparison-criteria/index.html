@@ -204,7 +204,7 @@
 </tr>
 </tbody>
 </table>
-<p>For <strong>C-Lv3</strong>, the comparison engine compares the difference of CIS between $s&rsquo;$ and existing ScreenNodes.  If the CIS of $s&rsquo;$ is the same as any of existing ScreenNode, it would be regarded as a new GUI state, otherwise the <strong>C-Lv4</strong> would be performed.</p>
+<p>For <strong>C-Lv3</strong>, the comparison engine compares the difference of CIS between $s&rsquo;$ and existing ScreenNodes.  If the CIS of $s&rsquo;$ is not the same as any of existing ScreenNode, it would be regarded as a new GUI state, otherwise the <strong>C-Lv4</strong> would be performed.</p>
 <p><strong>C-Lv4</strong> further compares the event handler (i.e. property like &lt;clickable&gt;) in exucatable widget nodes. If there is no difference between executable widget nodes of $s&rsquo;$ and existing ScreenNodes, <strong>C-Lv5</strong> would be performed.</p>
 <h3 id="c-lv5-compare-contents">C-Lv5: Compare Contents</h3>
 <p>The author used UIAutomator again to extract contents values from related tags such as &lt;text&gt; and &lt;content-desc&gt;. For fast comparison, the abstraction representation of text values are simplified as <strong>the length of text</strong>. Specifically, the comparison engine sum up all length of text values in the current screen.</p>

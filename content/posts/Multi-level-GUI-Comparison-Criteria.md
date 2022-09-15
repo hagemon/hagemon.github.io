@@ -83,7 +83,7 @@ Each widget composition is represented as a ***cumulative index sequence*** (CIS
 | Layout | A, B, C, F | [0]-[0,0]-[0,1]-[0,0,2] |
 | Executable | D, G, L, M | [0,0,0]-[0,1,0]-[0,0,2,0]-[0,0,2,1] |
 
-For **C-Lv3**, the comparison engine compares the difference of CIS between $s'$ and existing ScreenNodes.  If the CIS of $s'$ is the same as any of existing ScreenNode, it would be regarded as a new GUI state, otherwise the **C-Lv4** would be performed.
+For **C-Lv3**, the comparison engine compares the difference of CIS between $s'$ and existing ScreenNodes.  If the CIS of $s'$ is not the same as any of existing ScreenNode, it would be regarded as a new GUI state, otherwise the **C-Lv4** would be performed.
 
 **C-Lv4** further compares the event handler (i.e. property like \<clickable\>) in exucatable widget nodes. If there is no difference between executable widget nodes of $s'$ and existing ScreenNodes, **C-Lv5** would be performed.
 

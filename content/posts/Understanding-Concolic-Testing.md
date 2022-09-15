@@ -3,6 +3,7 @@ title= "Understanding Concolic Testing"
 date= 2022-09-03T16:10:21+08:00
 math= true
 tags = ['Software Analyze and Testing', 'Machine Learning Testing']
+draft = true
 +++
 
 The article involves personal understanding of  [a lecture about Concolic Testing](https://www.cs.cmu.edu/~aldrich/courses/17-355-19sp/notes/notes15-concolic-testing.pdf), from [Jonathan Aldrich](https://www.notion.so/Understanding-Concolic-Testing-5ba0faf9cf6b4644a5eb537461f06f89).
