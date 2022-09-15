@@ -112,8 +112,10 @@ GUI转移模型用于生成测试用例序列，用$M=\<S,\Sigma,\delta\>$表示
 - 随机事件选择（Random event selection）：根据预定义的概率选择事件，其中点击事件概率为60%、长按事件为35%、导航事件为5%。随机事件选择可以减少探索过程中陷入重复选择的情况，如在一个很长的*ListView*中可能点击多个相似的组件。
 
 在具体实现时，首先基于系统性事件选择进行探索，之后交替两种策略构建seeds。这样可以构建出一个图模型：
+<!-- 
+![https://tva1.sinaimg.cn/large/e6c9d24ely1h54ygie6h2j20yy0u00vs.jpg](https://tva1.sinaimg.cn/large/e6c9d24ely1h54ygie6h2j20yy0u00vs.jpg) -->
 
-![https://tva1.sinaimg.cn/large/e6c9d24ely1h54ygie6h2j20yy0u00vs.jpg](https://tva1.sinaimg.cn/large/e6c9d24ely1h54ygie6h2j20yy0u00vs.jpg)
+<img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h54ygie6h2j20yy0u00vs.jpg" width="50%" style="margin-left:25%">
 
 
 ### 从Seeds中确定独立页面和活跃状态
@@ -133,7 +135,10 @@ GUI转移模型用于生成测试用例序列，用$M=\<S,\Sigma,\delta\>$表示
 
 值得注意的是，若页面不属于任何一个group，则它独立于在其它group的页面。
 
-![https://tva1.sinaimg.cn/large/e6c9d24ely1h534k88d8fj21060j8jva.jpg](https://tva1.sinaimg.cn/large/e6c9d24ely1h534k88d8fj21060j8jva.jpg)
+<!-- ![https://tva1.sinaimg.cn/large/e6c9d24ely1h534k88d8fj21060j8jva.jpg](https://tva1.sinaimg.cn/large/e6c9d24ely1h534k88d8fj21060j8jva.jpg) -->
+
+<img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h534k88d8fj21060j8jva.jpg" width="60%" style="margin-left:20%">
+
 
 举例来说，图(d)展示了$l_1$布局的树形结构，其中$w_1$、$w_2$和$w_3$属于同一个group view（$w_0$），且为同类型的兄弟节点，于是它们相互独立。显然，点击其中一个组件，是不会影响到另外两个的；$w_6\nparallel w_1$，因为两者不属于同一个group；$w_4\nparallel w_1$，因为$w_4$不属于任何一个group。
 
@@ -203,7 +208,10 @@ Mutants生成的主要思想是，在原有的seeds中，能够找到一个起�
 
 因此，一个合理的事件序列$\tau$可以从点击Sleeping或点击Cleaning开始。根据图模型可以构建下一个事件（点击Camera）。我们以$\tau_1=[Cleaning, Camera]$为例，它能够满足序列连接的条件。首先第一个事件的Cleaning页面在$l_3$上可以找到相似的页面（即Cleaning本身），而过渡到$l_4$的事件（点击Nav）也可以在点击Camera之后的状态$s_1$中执行。
 
-![https://tva1.sinaimg.cn/large/e6c9d24ely1h54ygie6h2j20yy0u00vs.jpg](https://tva1.sinaimg.cn/large/e6c9d24ely1h54ygie6h2j20yy0u00vs.jpg)
+<!-- ![https://tva1.sinaimg.cn/large/e6c9d24ely1h54ygie6h2j20yy0u00vs.jpg](https://tva1.sinaimg.cn/large/e6c9d24ely1h54ygie6h2j20yy0u00vs.jpg) -->
+
+<img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h54ygie6h2j20yy0u00vs.jpg" width="50%" style="margin-left:25%">
+
 
 该步骤实现的具体算法如下：
 
@@ -312,7 +320,9 @@ GINIE报告的错误中，有许多是重复的错误，或是假阳性样本（
 
 从表5可知，GINIE产生了许多假阳性样本，具体统计情况如下所示：
 
-![https://tva1.sinaimg.cn/large/e6c9d24ely1h567rix80rj20hk0k4q4p.jpg](https://tva1.sinaimg.cn/large/e6c9d24ely1h567rix80rj20hk0k4q4p.jpg)
+<!-- ![https://tva1.sinaimg.cn/large/e6c9d24ely1h567rix80rj20hk0k4q4p.jpg](https://tva1.sinaimg.cn/large/e6c9d24ely1h567rix80rj20hk0k4q4p.jpg) -->
+
+<img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h567rix80rj20hk0k4q4p.jpg" width="50%" style="margin-left:25%">
 
 本文把引起假阳性的原因分为三类：
 
@@ -320,7 +330,9 @@ GINIE报告的错误中，有许多是重复的错误，或是假阳性样本（
 - 布局类型推断不准确（记为#L）
 - 状态抽象不够准确（记为#S）
 
-![https://tva1.sinaimg.cn/large/e6c9d24ely1h5698f87xqj20u00y4wj6.jpg](https://tva1.sinaimg.cn/large/e6c9d24ely1h5698f87xqj20u00y4wj6.jpg)
+<!-- ![https://tva1.sinaimg.cn/large/e6c9d24ely1h5698f87xqj20u00y4wj6.jpg](https://tva1.sinaimg.cn/large/e6c9d24ely1h5698f87xqj20u00y4wj6.jpg) -->
+
+<img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h5698f87xqj20u00y4wj6.jpg" width="80%" style="margin-left:10%">
 
 __页面独立属性被破坏__：GINIE所选择的组件虽然和其余组件不属于一个group或是同一个group中的兄弟关系，它们在GINIE中被定义为相互独立，而实际上有依赖关系。如图4第一列中，UnitConverter中的刷新按钮和其余按钮不在同一个group，却会影响页面中From和To两列的状态；AnyMemo中的随机按钮和重复按钮是同一个group的兄弟关系，但它们同时开启时会相互影响。
 
@@ -353,7 +365,9 @@ __状态抽象不够准确__：在构建mutants时，$\tau$的结尾需要和piv
 
 本文对GINIE检测到的34个非崩溃bug进行分析，结果如下图所示：
 
-![https://tva1.sinaimg.cn/large/e6c9d24ely1h56gl0c5drj20vg0suacq.jpg](https://tva1.sinaimg.cn/large/e6c9d24ely1h56gl0c5drj20vg0suacq.jpg)
+<!-- ![https://tva1.sinaimg.cn/large/e6c9d24ely1h56gl0c5drj20vg0suacq.jpg](https://tva1.sinaimg.cn/large/e6c9d24ely1h56gl0c5drj20vg0suacq.jpg) -->
+
+<img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h56gl0c5drj20vg0suacq.jpg" width="80%" style="margin-left:10%">
 
 78.8%（26/34）的bug超过一年没有被解决，57.6%（19/34）的bug影响了超过10个版本。
 
@@ -361,7 +375,10 @@ __状态抽象不够准确__：在构建mutants时，$\tau$的结尾需要和piv
 
 下表描绘了seeds和mutants的质量：
 
-![https://tva1.sinaimg.cn/large/e6c9d24ely1h56gn7pndfj20ji0fuq4r.jpg](https://tva1.sinaimg.cn/large/e6c9d24ely1h56gn7pndfj20ji0fuq4r.jpg)
+<!-- ![https://tva1.sinaimg.cn/large/e6c9d24ely1h56gn7pndfj20ji0fuq4r.jpg](https://tva1.sinaimg.cn/large/e6c9d24ely1h56gn7pndfj20ji0fuq4r.jpg) -->
+
+<img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h56gn7pndfj20ji0fuq4r.jpg" width="60%" style="margin-left:20%">
+
 
 其中B/A表示能够生成错误的seeds的比例，T.P. Insert.Pos.表示mutant插入位置的正确率。
 
