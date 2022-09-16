@@ -385,33 +385,38 @@
 <p><strong>测试用例过于深入：</strong></p>
 <p>在表中用“#Distinct Transit.”表示测试用例涉及的页面数量。</p>
 <p>18个bug中，12个bug（66.6%）涉及的页面数量大于5个，每个页面上又需要大量的交互事件，有的bug甚至需要80,000多个步骤才可以被复现，这让测试工具难以生成相应的事件序列。</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+ <aside>
+ 💡 对于现有的测试工具，还需要更好的方法去解决这些深度测试用例的问题。
+ </aside>
 </li>
 <li>
 <p><strong>需要特定的文本输入：</strong></p>
 <p>18个bug中，4个bug需要文本输入，其中3个bug的文本输入是corner-case或是特定的非法输入。但现有的工具大多通过随机生成字符串的方式，对文本输入进行测试，所以很难覆盖到这些问题。</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+ <aside>
+ 💡 测试工具需要改进它们的文本输入生成策略，除了生成有意义的文本之外，还需要生成一些corner-case或非法输入，从而开展压力测试。
+ </aside>
 </li>
 <li>
 <p><strong>需要改变系统设置或软件设置：</strong></p>
 <p>18个bug中，3个bug需要通过改变设置发生，其中2个是改变系统设置（如改变系统语言后会产生bug），而现有的工具并没有考虑改变设置所带来的影响。</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+ <aside>
+ 💡 测试工具应该考虑在事件序列中随机插入设置改变的事件，来覆盖这种情况。
+ </aside>
 </li>
 <li>
 <p>拥有特定的用户交互</p>
 <p>18个bug中，12个bug需要特定的交互事件。举例来说，WordPress在发表文章时，需要上传一系列图片。若图片还在上传时，文章就被作者删除，则会引发问题。</p>
 <p>通过检查这18个bug 的相关代码，本文发现这些代码需要在不同的回调函数之间，执行一系列的交互。以WordPress的问题为例，这个问题涉及到了删除文章的GUI事件与上传图片的后台线程进行交互。</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+ <aside>
+ 💡 现有的测试工具专注于最大化覆盖代码的行数或者时执行情况，而忽略了回调之间的交互情况，所以需要设计特定的覆盖准则（如回调交互的覆盖程度）。
+ </aside>
 </li>
 <li>
 <p>需要与其它app交互</p>
 <p>18个bug中，有5个需要和其它app进行交互，从而获取一些特定的数据（如从别的app获取图片），而现有的工具大多只是在app内部进行测试。</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+ <aside>
+ 💡 测试工具可以在外部获取一些数据和文件，加入到测试的过程之中。
+ </aside>
 </li>
 </ol>
 <h2 id="rq3-制约因素和改进方式">RQ3: 制约因素和改进方式</h2>
@@ -425,15 +430,17 @@
 <p>本文发现，在测试时使用一些直接的、细粒度的操作，可以更有效地发现bug。如APE、COMBODROID和STOAT发现的bug比HUMANOID、TIMEMACHINE和Q-TESTING多。</p>
 <p>HUMANOID和Q-TESTING基于深度神经网络来指导事件序列的生成，TIMEMACHINE启发式地寻找一些没有被访问过的页面。这些方法都尽可能地覆盖更多的页面，但这并不意味着就能够找到bug。</p>
 <p>相反，APE通过不断地优化状态抽象（State Abstraction）来区分不同的app状态（这些状态可能是同一个页面的不同GUI布局），COMBODROID在代码层面，通过数据流之间的关系来生成事件序列，STOAT通过随机模型来优化事件之间的组合。这些工具都利用了更细粒度的信息来生成事件，于是更容易发现一些bug。</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<aside>
+💡 测试工具可以利用更细粒度的信息，在用户页面进行探索，从而找到更多的bug。
+</aside>
 <h3 id="gui状态抽象的粒度">GUI状态抽象的粒度</h3>
 <p>本文发现，GUI状态抽象的方式，能够很大程度上影响工具的bug检测能力：粒度越细的工具，能够找到的bug越多。</p>
 <p>举例来说，TIMEMACHINE和Q-TESTING没有检测到WordPress和NextCloud的bug，这是由于它们的状态抽象准则比较粗糙（分别是C-Lv3的变体和介于C-Lv2与C-Lv3之间的粒度）。因此，TIMEMACHINE无法找到一些可能引发问题的状态，作为它的interesting state（会被保存的状态）；而Q-TESTING在区分状态时，只将两个不同使用场景的页面定义为不同的状态。具体的状态抽象粒度可以看<a href="https://hagemon.github.io/posts/multi-level-gui-comparison-criteria/">这篇文章</a>。</p>
 <p>而上述的这些无法被粗粒度方法检测的bug，在APE、HUMANOID和COMBODROID中都可以被检测到。HUMANOID和COMBODROID都使用了洗粒度的C-Lv4准则，而APE进一步提出了一个对状态抽象的动态优化策略。</p>
 <p>但对于MONKEY来说，它没有做任何的状态抽象，而是独立地对每一个页面生成随机的GUI事件，这样使它的可扩展性较差。对于一些bug，可能需要点击在角落的较小的组件，这让它找到这个组件的概率比较低。</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<aside>
+💡 为测试找到一个合适的状态抽象准则是很重要的，但是这个问题还需要深入的研究。一个解决方案是，可以为不同类型的软件或功能设置特定粒度的状态抽象准则。
+</aside>
 <h3 id="测试时的启发式操作">测试时的启发式操作</h3>
 <p>本文认为，虽然一些启发式操作并不是一些测试工具的核心优势，但是它们趋势能提升自己的bug检测能力。</p>
 <p>举例来说，MONKEY本身是不支持长按操作的，所以某些bug是无法发现的，而其它基于MONKEY的测试工具能够找到它们，因为这些工具额外实现了长按操作。另外，APIE和COMBODROID实现了一些特别的文本输入策略，这些策略也模仿了用户的交互操作：</p>
@@ -444,8 +451,9 @@
 </ol>
 <p>基于这种启发式的操作（而不是直接清空文本），这两个工具可以发现MaterialFBook中长按、复制、黏贴的bug。</p>
 <p>同样的，一些工具使用了启发式的方式来增加测试的有效性，比如APE和COMBODROID随机地引入MONKEY的随机测试策略（而不是一直使用自己的策略），从而发现一些随机操作下更容易引发的bug。如MONKEY会因为随机的swipe而唤起下拉菜单，并通过随机的点击事件更改设置。</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<aside>
+💡 在测试工具中引入一些小的启发式操作，来模拟用户与app的真实交互（如特定的UI动作、文本输入的方式、将程序放置至后台再唤醒等），可以有效地提升bug检测的能力。
+</aside>
 <h2 id="讨论与总结">讨论与总结</h2>
 <p>与现有的方法对比，本文利用了真实的bug作为检验指标，从而可以深入分析RQ1-RQ3提出的问题</p>
 <p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h4ykolo4ysj21vi0dote0.jpg" alt=""></p>

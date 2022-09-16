@@ -372,8 +372,9 @@
 <li>大多数的软件都至少受一种设置缺陷的影响，占比达到了90%（162/180）。其中“Display”、“Network and connect”、“Apps and notifications”的影响范围最广。</li>
 <li>在所有的设置缺陷中，“Display”、“Network and connect”、“Apps and notifications”类型出现的最多，因此这些设置类型最容易引发设置缺陷。</li>
 </ol>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<aside>
+💡 总结：在研究中，95%的软件涉及至少一种设置类型，90%的软件存在设置缺陷的情况，所以设置缺陷对app的正常运行有很大的影响。
+</aside>
 <h3 id="rq2引发设置缺陷的根本原因">RQ2:引发设置缺陷的根本原因</h3>
 <p>本文分析了482个已修复的bug reports，并总结了几种常见的引发原因：</p>
 <table>
@@ -440,8 +441,9 @@
 <p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h4yl6weledj20vm08ita1.jpg" alt=""></p>
 </li>
 </ol>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<aside>
+💡 总结：本文总结了引发设置缺陷的5种主要的根本原因，其中前3种原因占所有缺陷的85.1%（410/482），后2种原因占比为8%（39/482）
+</aside>
 <h3 id="rq3设置缺陷引发的后果">RQ3:设置缺陷引发的后果</h3>
 <p>本文从1,074个bug reports中总结了四种主要的后果：</p>
 <ol>
@@ -467,8 +469,9 @@
 <p>类似的情况还有app卡死、黑屏、无限读取、无法刷新等问题。</p>
 </li>
 </ol>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<aside>
+💡 总结：设置缺陷可能引发多种后果，其中70.7%（759/1,074）的缺陷引发非崩溃问题（non-crash failures），这些问题很难被现有的测试工具自动检测。
+</aside>
 <h2 id="检测app中的设置缺陷基于setdroid">检测app中的设置缺陷（基于SETDROID）</h2>
 <h3 id="蜕变模糊测试">蜕变模糊测试</h3>
 <p>对于一个常规的测试用例，由测试输入（test input）和预期输出（test oracle）组成，但是很多情况下，预期输出是很难获得的（oracle problem）。</p>
@@ -568,8 +571,9 @@
 <p><strong>实用性</strong>：在工业软件中，SETDROID检测出了17个设置缺陷，并且全部被对应的公司修复，这些缺陷也是不同模块引发的不同结果。</p>
 </li>
 </ul>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+  <aside>
+  💡 SETDROID能够在热门软件中有效地探测到设置缺陷，这些缺陷所涉及的原因和后果也种类繁多，且都是开发者所关心的。同时，通过规则1可以找到很多能够被证实的缺陷。
+  </aside>
 </li>
 <li>
 <p>RQ5：SETDROID能否找到现有工具无法找到的设计缺陷？</p>
@@ -606,8 +610,9 @@
 </ul>
 </li>
 </ul>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+  <aside>
+  💡 通过对比实验，可以说明SETDROID随机注入设置变化的有效性，同时也能够发现其它工具无法发现的错误。
+  </aside>
 </li>
 </ul>
 <h2 id="效度威胁">效度威胁</h2>

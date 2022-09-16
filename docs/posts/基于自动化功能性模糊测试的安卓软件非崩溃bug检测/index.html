@@ -191,7 +191,7 @@
 <h3 id="问题和主要思路独立页面属性模糊测试">问题和主要思路（独立页面属性模糊测试）</h3>
 <p>为解决上述的问题，本文的主要步骤包括：</p>
 <ol>
-<li>构建<strong>图结构</strong>的GUI转移模型（GUI transitional model ），其中图的节点是经过量化的页面的状态，图的边时引发状态转移的操作事件。</li>
+<li>构建<strong>图结构</strong>的GUI转移模型（GUI transitional model ），其中图的节点是经过量化的页面的状态，图的边是引发状态转移的操作事件。</li>
 <li>根据转移模型，生成一系列seeds。分析seeds中每个页面的布局，以树的形式描绘布局中每个页面间的关系，根据一定的规则找到具有相互独立属性的页面。这些页面往往具有相似的功能，但是在行为上是相互独立的。</li>
 <li>利用seeds和转移模型，在seeds中找到一个“支点节点（pivot）”，并且在转移模型中找到一个环路，使其在执行若干个操作事件后可以回到支点节点。这个环路就是mutants中的额外操作事件。</li>
 <li>对比seeds和对应mutants是否存在差异，从而判断是否有违背页面独立属性的情况。</li>
@@ -205,42 +205,45 @@
 <li>对于内部节点，它的类型可以是列表页面（ListView）或线形布局页面（LinearLayout）等，我们统称为group view。</li>
 </ul>
 <p>如果$P$不在前台运行，则本文定义$l=\bot$。</p>
-<p>GUI事件$e=&lt;t,r,o&gt;$是一个三元组，其中$e.t$表示事件$e$的类型（如点击、编辑、轻扫）；$e.r$是一个函数，参数为某个布局，返回值为在这个布局上执行了$e$的页面，即$e.r(l)=w$表示在布局$l$中的页面$w$执行事件了$e$；$e.o$表示与事件$e$相关联的数据，这是个可选的属性。</p>
+<p>GUI事件$e=&lt;t,r,o&gt;$是一个三元组，其中$e.t$表示事件$e$的类型（如点击、编辑、轻扫）；$e.r$是一个函数，参数为某个布局，返回值为在这个布局上执行了$e$的页面，即$e.r(l)=w$表示在布局$l$中的页面$w$执行了事件$e$；$e.o$表示与事件$e$相关联的数据，这是个可选的属性。</p>
 <p>于是一个GUI测试用例可以用一个事件序列$E=[e_1,e_2\dots,e_n]$来表示。在$P$上执行$E$可以得到一个执行过程$\prod_p(E)=&lt;L,I,H&gt;$，其中$L=[l_1,l_2,\dots,l_{n+1}]$是过程中变化的页面布局，$I$和$H$分别记录了每个布局中的独立页面和当前活跃的页面（active view）。于是$l_{i+1}=e_i(l_i)$可以表示事件对页面布局的驱动过程。</p>
 <h3 id="构建gui转移模型">构建GUI转移模型</h3>
 <p>GUI转移模型用于生成测试用例序列，用$M=&lt;S,\Sigma,\delta&gt;$表示。其中$S$是所有抽象状态$s$的集合，且$S$是$L$中布局们的子集（因为不同的布局可能属于同一种状态）；$\Sigma$表示$P$能够接受的所有事件的合集；$\delta :S\times \Sigma \rightarrow S$表示“状态经过事件后，转移到新的状态“这一映射转移关系，每一个转移可以用元组$&lt;s,e,s&rsquo;&gt;\in \delta$来表示。</p>
-<p>本文使用了一种C-Lv4的变体来衡量布局$l$和$l&rsquo;$之间的差异。具体来说，本文将布局$l$表示为它组件的集合${w_1, w_2, \dots,w_{|l|}}$，并且将布局$l$抽象为$l_{abs}=\cup_{w}\in {w.type}$，即将页面树结构中的页面用类型来表示，这样做时为了减少状态数量有指数爆炸的威胁。当两个布局的抽象相等时$l_{abs}=l&rsquo;_{abs}$，认为两个布局相等，记为$l\simeq l&rsquo;$。</p>
+<p>本文使用了一种C-Lv4的变体来衡量布局$l$和$l&rsquo;$之间的差异。具体来说，本文将布局$l$表示为它组件的集合$\{w_1, w_2, \dots,w_{|l|}\}$，并且将布局$l$抽象为$l_{abs}=\cup_{w}\in {w.type}$，即将页面树结构中的页面用类型来表示，这样做时为了减少状态数量有指数爆炸的威胁。当两个布局的抽象相等时$l_{abs}=l&rsquo;_{abs}$，认为两个布局相等，记为$l\simeq l&rsquo;$。</p>
 <p>举例来说，当两个布局的结点存在差异时，则判断两个布局不相等，如$l_3$比$l_2$多出了一个imageView结点；而对于ListView这种可以包含零至多个结点的group view，若两个布局只在子节点的个数上有差异，而每个子节点没有差异，则认定为两个布局相等，如$l_4$与$l_4&rsquo;$中，ListView子节点个数有差异，但每个子节点的类型都是一致的，所以两者相等。</p>
 <p>为了能生成更合理的事件序列，本文提出了一种State Coverage-optimized Model Mining算法。对于GUI分布$l$，遍历其所有页面，找到各页面可以执行的事件$e$并执行，从而转移至新的分布$l&rsquo;$，以此类推从而构成图。在这个过程中，如果找到任意一对$l_{abs}\simeq l&rsquo;_{abs}$，则$M$中会出现一个环形，这个环形结构在后续的mutants生成中有着重要的作用。其中，对于事件的选择按照以下两个策略实现：</p>
 <ul>
 <li>
 <p>系统性事件选择（Systematic event selection）：该策略优先考虑了较少被执行到的，且能够转移到较多新布局的事件。具体地，用$\Upsilon(e)$表示事件$e$的权重，本文为seeds中出现过的所有事件$e$存储一份权重，用于使用和更新：</p>
 <p>$$
-\Upsilon_{i+1}{(e)}=\frac{\Upsilon_{i}(e)+\sum \Upsilon_i(new_events(e))}{exec_times(e)^2}
+\Upsilon_{i+1}{(e)}=\frac{\Upsilon_{i}(e)+\sum \Upsilon_i(new\_events(e))}{exec\_times(e)^2}
 $$</p>
-<p>其中，$new_events(\cdot)$表示在$e$执行后的布局$l&rsquo;$上，曾经执行过的所有事件的集合（即图模型中状态$s$的出度）；$exec_times(\cdot)$表示事件$e$总共被执行过的次数。初始状态下，$\Upsilon_1(e)=100$、$exec_times(e)=1$、$new_events(e)=\emptyset$。</p>
+<p>其中，$new\_events(\cdot)$表示在$e$执行后的布局$l&rsquo;$上，曾经执行过的所有事件的集合（即图模型中状态$s$的出度）；$exec\_times(\cdot)$表示事件$e$总共被执行过的次数。初始状态下，$\Upsilon_1(e)=100$ 、$exec\_times(e)=1$ 、$new\_events(e)=\emptyset$。</p>
 </li>
 <li>
 <p>随机事件选择（Random event selection）：根据预定义的概率选择事件，其中点击事件概率为60%、长按事件为35%、导航事件为5%。随机事件选择可以减少探索过程中陷入重复选择的情况，如在一个很长的<em>ListView</em>中可能点击多个相似的组件。</p>
 </li>
 </ul>
 <p>在具体实现时，首先基于系统性事件选择进行探索，之后交替两种策略构建seeds。这样可以构建出一个图模型：</p>
-<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h54ygie6h2j20yy0u00vs.jpg" alt="https://tva1.sinaimg.cn/large/e6c9d24ely1h54ygie6h2j20yy0u00vs.jpg"></p>
+<!-- 
+![https://tva1.sinaimg.cn/large/e6c9d24ely1h54ygie6h2j20yy0u00vs.jpg](https://tva1.sinaimg.cn/large/e6c9d24ely1h54ygie6h2j20yy0u00vs.jpg) -->
+<img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h54ygie6h2j20yy0u00vs.jpg" width="50%" style="margin-left:25%">
 <h3 id="从seeds中确定独立页面和活跃状态">从Seeds中确定独立页面和活跃状态</h3>
 <p>为了要知道在生成mutants时，哪些组件和事件可以作为起点。以上面的例子来说，即在已知$l_2$与随后的“Cinema点击事件”的情况下，找到与点击Cinema平行且相互独立的“Cleaning点击事件”。</p>
 <p>为了做到这点，我们需要知道在seeds中有哪些相互平行、互不干扰的组件（比如他们是同一个列表的两个按钮，或是不同列表的按钮）。同时，我们也应该知道在seeds中有哪些组件已经被事件影响了（比如Cinema已经被点击过了）。</p>
 <p>于是本章的重点在于定义“页面相互独立”的规则和记录已经发生时间为的方法。</p>
-<p>对于页面相互独立的规则，布局$l$可以被分割为多个不重合的group views $G={w_{g_1},w_{g_2},\dots,w_{g_{n}}}$，其中$w_{g_{i}}\in l$表示布局中一个内部节点。令$\rm{Group}(w)$表示页面$w$所在的group（如按钮$w_1$在ListView $w_2$上，则有$\rm{Group}(w_1)=w_2$）。如果$w_1$和$w_2$两个页面满足以下两个条件：</p>
+<p>对于页面相互独立的规则，布局$l$可以被分割为多个不重合的group views $G=\{w_{g_1},w_{g_2},\dots,w_{g_{n}}\}$，其中$w_{g_{i}}\in l$表示布局中一个内部节点。令$\rm{Group}(w)$表示页面$w$所在的group（如按钮$w_1$在ListView $w_2$上，则有$\rm{Group}(w_1)=w_2$）。如果$w_1$和$w_2$两个页面满足以下两个条件：</p>
 <ol>
 <li>$w_1$和$w_2$属于不同的group，即$\rm{Group}(w_1)\ne \rm{Group}(w_2)$</li>
 <li>$w_1$和$w_2$属于相同的group，即$\rm{Group}(w_1)=\rm{Group}(w_2)$，且它们的类型也相等，即$w_1.type=w_2.type$</li>
 </ol>
-<p>则$w_1\nparallel w_2$。</p>
+<p>则$w_1$与$w_2$相互独立，记为$w_1\nparallel w_2$。</p>
 <p>值得注意的是，若页面不属于任何一个group，则它独立于在其它group的页面。</p>
-<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h534k88d8fj21060j8jva.jpg" alt="https://tva1.sinaimg.cn/large/e6c9d24ely1h534k88d8fj21060j8jva.jpg"></p>
+<!-- ![https://tva1.sinaimg.cn/large/e6c9d24ely1h534k88d8fj21060j8jva.jpg](https://tva1.sinaimg.cn/large/e6c9d24ely1h534k88d8fj21060j8jva.jpg) -->
+<img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h534k88d8fj21060j8jva.jpg" width="60%" style="margin-left:20%">
 <p>举例来说，图(d)展示了$l_1$布局的树形结构，其中$w_1$、$w_2$和$w_3$属于同一个group view（$w_0$），且为同类型的兄弟节点，于是它们相互独立。显然，点击其中一个组件，是不会影响到另外两个的；$w_6\nparallel w_1$，因为两者不属于同一个group；$w_4\nparallel w_1$，因为$w_4$不属于任何一个group。</p>
 <p>图(e)中展示了$l_4&rsquo;$布局的树形结构。其中$w_4\nparallel w_1$，因为它们都是$w_0$的子节点。显然点击$w_6$也是不会影响到$w_3$的。</p>
-<p>在确定独立规则后，本文还定义了Active View。具体来说，对于布局$l$的group view集合$G={w_{g_1},w_{g_2},\dots,w_{g_{n}}}$，定义一个映射结构$h_l\in H$，记录每个group view的活跃子页面，其规则如下：</p>
+<p>在确定独立规则后，本文还定义了Active View。具体来说，对于布局$l$的group view集合$G=\{w_{g_1},w_{g_2},\dots,w_{g_{n}}\}$，定义一个映射结构$h_l\in H$，记录每个group view的活跃子页面，其规则如下：</p>
 <ol>
 <li>对于页面$w_i$，当一个事件$e$关于布局$l$满足$e.r(l)=w_i$时，认为$w_i$是其所在group的活跃页面，即令$h(\rm{Group}(w_i))=w_i$。</li>
 <li>对于活跃页面$w_i$，当一个事件$e$关于布局$l$满足$e.r(l)=w_j$，且$\rm{Group}(w_i)=\rm{Group}(w_j)$时，页面$w_i$不再活跃（become inactive），即令$h(\rm{Group}(w_j))=w_j$。</li>
@@ -253,10 +256,10 @@ $$</p>
 <li>如何界定两个布局、两个页面之间是否相似</li>
 <li>如何记录与更新页面的活跃状态</li>
 </ol>
-<p>**布局相似性：**对于第一个问题，若两个布局属于同一个主页面，则认为它们相似。本文使用Similar_layout_type($l_1,l_2$)函数反应两个布局是否相似，如示例中的$l_2$和$l_3$虽然页面结构不同，但都属于ActivityDariy这个主页面，所以认为他们是相似的布局。</p>
-<p>**页面相似性：**对于页面来说，假设事件$e$作用于布局$l={w_1,\dots,w_{|l|}}$，且$l&rsquo;={w_1,\dots,w_{|l&rsquo;|}}$是另一个布局。显然此处有$e.r(l)=w_i$。如果此时存在$w_j&rsquo;\in l&rsquo;$，能够满足$e.r(l&rsquo;)=w_j$，即若$w_i$在$l$上可以被事件$e$作用，且$w_j$在$l&rsquo;$上也可以被事件$e$作用，则认为$w_i$和$w_j$相似，记为$w_i\sim w_j$。</p>
+<p><strong>布局相似性</strong>：对于第一个问题，若两个布局属于同一个主页面，则认为它们相似。本文使用Similar_layout_type($l_1,l_2$)函数反应两个布局是否相似，如示例中的$l_2$和$l_3$虽然页面结构不同，但都属于ActivityDariy这个主页面，所以认为他们是相似的布局。</p>
+<p><strong>页面相似性</strong>：对于页面来说，假设事件$e$作用于布局$l={w_1,\dots,w_{|l|}}$，且$l&rsquo;={w_1,\dots,w_{|l&rsquo;|}}$是另一个布局。显然此处有$e.r(l)=w_i$。如果此时存在$w_j&rsquo;\in l&rsquo;$，能够满足$e.r(l&rsquo;)=w_j$，即若$w_i$在$l$上可以被事件$e$作用，且$w_j$在$l&rsquo;$上也可以被事件$e$作用，则认为$w_i$和$w_j$相似，记为$w_i\sim w_j$。</p>
 <p>具体来说，为了寻找是否存在$w_j\in l&rsquo;$和$w_i\in l$相似，本文将页面的类别信息转化为一个字符串，并于所有$w_j\in l&rsquo;$进行字符串对比，若没找到一致的，则计算字符串编辑距离，找到距离最近的那一个“最相似”的页面。</p>
-<p>**活跃状态更新：**对于第二个问题，假设经过事件$e$后的布局为$l$，则从之前的所有布局序列中，按照倒序寻找第一个和$l$相似的布局$l_i$，从对应的$h_i={(w_{g_1},w_{a_1}), (w_{g_2},w_{a_2})\dots}$中，寻找是否存在$w_g&rsquo;$与$l$的某个group view $w_g$相似，且$w_g&rsquo;$的活跃页面$w_a&rsquo;=h[w_g&rsquo;]$与$l$中的某个节点$w_a$相似。若存在这种关系，则为布局$l$的活跃页面关系$h$添加$h[w_g&rsquo;]=w_a&rsquo;$。</p>
+<p><strong>活跃状态更新</strong>：对于第二个问题，假设经过事件$e$后的布局为$l$，则从之前的所有布局序列中，按照倒序寻找第一个和$l$相似的布局$l_i$，从对应的$h_i={(w_{g_1},w_{a_1}), (w_{g_2},w_{a_2})\dots}$中，寻找是否存在$w_g&rsquo;$与$l$的某个group view $w_g$相似，且$w_g&rsquo;$的活跃页面$w_a&rsquo;=h[w_g&rsquo;]$与$l$中的某个节点$w_a$相似。若存在这种关系，则为布局$l$的活跃页面关系$h$添加$h[w_g&rsquo;]=w_a&rsquo;$。</p>
 <p>总结来说，独立页面的确定与活跃状态的构建可以用以下流程表示：</p>
 <ol>
 <li>初始化空布局列表$L$、空独立页面列表$I$、空活跃状态列表$H$</li>
@@ -298,7 +301,8 @@ $$</p>
 <p>举例来说，假设下图是seeds，令$l_3$为pivot布局。$l_3$可以被抽象为状态$s_1$（包含所有页面的类型）。可以看到Cinema、Sleeping和Cleaning是三个相互独立的页面，且属于同一个group view。其中Cinema（记为$w_1$）是活跃的（在$e_1$时有$h[Group(w_1)]=w_1$）。</p>
 <p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h4zp315khpj220y0f4tde.jpg" alt="https://tva1.sinaimg.cn/large/e6c9d24ely1h4zp315khpj220y0f4tde.jpg"></p>
 <p>因此，一个合理的事件序列$\tau$可以从点击Sleeping或点击Cleaning开始。根据图模型可以构建下一个事件（点击Camera）。我们以$\tau_1=[Cleaning, Camera]$为例，它能够满足序列连接的条件。首先第一个事件的Cleaning页面在$l_3$上可以找到相似的页面（即Cleaning本身），而过渡到$l_4$的事件（点击Nav）也可以在点击Camera之后的状态$s_1$中执行。</p>
-<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h54ygie6h2j20yy0u00vs.jpg" alt="https://tva1.sinaimg.cn/large/e6c9d24ely1h54ygie6h2j20yy0u00vs.jpg"></p>
+<!-- ![https://tva1.sinaimg.cn/large/e6c9d24ely1h54ygie6h2j20yy0u00vs.jpg](https://tva1.sinaimg.cn/large/e6c9d24ely1h54ygie6h2j20yy0u00vs.jpg) -->
+<img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h54ygie6h2j20yy0u00vs.jpg" width="50%" style="margin-left:25%">
 <p>该步骤实现的具体算法如下：</p>
 <ol>
 <li>获取seeds的布局、页面和活跃状态序列$&lt;L,I,H&gt;$，初始化mutants为空序列</li>
@@ -393,17 +397,19 @@ $$</p>
 <p>表6展示了各软件所有seeds和mutants的的代码覆盖情况，包括行数占比、分支数占比和方法数占比。此处使用了Jacoco来衡量代码的覆盖率。可以看到mutants在各指标的覆盖率上都有所提升。</p>
 <h3 id="rq3oracle-precision">RQ3:Oracle Precision</h3>
 <p>从表5可知，GINIE产生了许多假阳性样本，具体统计情况如下所示：</p>
-<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h567rix80rj20hk0k4q4p.jpg" alt="https://tva1.sinaimg.cn/large/e6c9d24ely1h567rix80rj20hk0k4q4p.jpg"></p>
+<!-- ![https://tva1.sinaimg.cn/large/e6c9d24ely1h567rix80rj20hk0k4q4p.jpg](https://tva1.sinaimg.cn/large/e6c9d24ely1h567rix80rj20hk0k4q4p.jpg) -->
+<img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h567rix80rj20hk0k4q4p.jpg" width="50%" style="margin-left:25%">
 <p>本文把引起假阳性的原因分为三类：</p>
 <ul>
 <li>页面独立属性被破坏（记为#I）</li>
 <li>布局类型推断不准确（记为#L）</li>
 <li>状态抽象不够准确（记为#S）</li>
 </ul>
-<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h5698f87xqj20u00y4wj6.jpg" alt="https://tva1.sinaimg.cn/large/e6c9d24ely1h5698f87xqj20u00y4wj6.jpg"></p>
-<p>**页面独立属性被破坏：**GINIE所选择的组件虽然和其余组件不属于一个group或是同一个group中的兄弟关系，它们在GINIE中被定义为相互独立，而实际上有依赖关系。如图4第一列中，UnitConverter中的刷新按钮和其余按钮不在同一个group，却会影响页面中From和To两列的状态；AnyMemo中的随机按钮和重复按钮是同一个group的兄弟关系，但它们同时开启时会相互影响。</p>
-<p>**布局类型推断不准确：**在oracle checking时，GINIE会选择类型相似的布局进行比较并计算GUI effects，评判“相似”的标准是属于同一个主页面。但有时同一个主页面的两个布局功能差异较大，GINIE很难自动判断，如图4第二列中的FEATURED与BOOKMARKS是完全不同的两个功能，但是会被GINIE判断为相似的布局。</p>
-<p>**状态抽象不够准确：**在构建mutants时，$\tau$的结尾需要和pivot达成闭环，闭环的条件是结尾的布局要和pivot相似，相似的条件是其页面的类型相等。但有的页面仅仅是在title等属性上不一致，但是确实两个不同功能的页面，此时GINIE会把它们当作相似的页面，从而构建了不合适的mutant。如图4第三列中的“New Activity”页面的“Gardening”页面。</p>
+<!-- ![https://tva1.sinaimg.cn/large/e6c9d24ely1h5698f87xqj20u00y4wj6.jpg](https://tva1.sinaimg.cn/large/e6c9d24ely1h5698f87xqj20u00y4wj6.jpg) -->
+<img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h5698f87xqj20u00y4wj6.jpg" width="80%" style="margin-left:10%">
+<p><strong>页面独立属性被破坏</strong>：GINIE所选择的组件虽然和其余组件不属于一个group或是同一个group中的兄弟关系，它们在GINIE中被定义为相互独立，而实际上有依赖关系。如图4第一列中，UnitConverter中的刷新按钮和其余按钮不在同一个group，却会影响页面中From和To两列的状态；AnyMemo中的随机按钮和重复按钮是同一个group的兄弟关系，但它们同时开启时会相互影响。</p>
+<p><strong>布局类型推断不准确</strong>：在oracle checking时，GINIE会选择类型相似的布局进行比较并计算GUI effects，评判“相似”的标准是属于同一个主页面。但有时同一个主页面的两个布局功能差异较大，GINIE很难自动判断，如图4第二列中的FEATURED与BOOKMARKS是完全不同的两个功能，但是会被GINIE判断为相似的布局。</p>
+<p><strong>状态抽象不够准确</strong>：在构建mutants时，$\tau$的结尾需要和pivot达成闭环，闭环的条件是结尾的布局要和pivot相似，相似的条件是其页面的类型相等。但有的页面仅仅是在title等属性上不一致，但是确实两个不同功能的页面，此时GINIE会把它们当作相似的页面，从而构建了不合适的mutant。如图4第三列中的“New Activity”页面的“Gardening”页面。</p>
 <p>尽管GINIE的准确率只有40.9%（260/635），这也比当前较为著名的工具（如Facebook的INFER的26.3%）要高出不少，且很多bug都是开发者编写测试用例也无法测试出来的。另外GINIE并不需要投入太多人力去找到这些bug，只需要在找到的bug中筛选出真实的bug，很大程度上降低了时间成本。</p>
 <h3 id="rq4bug-types">RQ4:Bug types</h3>
 <p>本文总结了6种类型的bug，并举例说明：</p>
@@ -426,11 +432,13 @@ $$</p>
 <h2 id="讨论">讨论</h2>
 <h3 id="ginie对长期存在问题的解决">GINIE对长期存在问题的解决</h3>
 <p>本文对GINIE检测到的34个非崩溃bug进行分析，结果如下图所示：</p>
-<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h56gl0c5drj20vg0suacq.jpg" alt="https://tva1.sinaimg.cn/large/e6c9d24ely1h56gl0c5drj20vg0suacq.jpg"></p>
+<!-- ![https://tva1.sinaimg.cn/large/e6c9d24ely1h56gl0c5drj20vg0suacq.jpg](https://tva1.sinaimg.cn/large/e6c9d24ely1h56gl0c5drj20vg0suacq.jpg) -->
+<img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h56gl0c5drj20vg0suacq.jpg" width="80%" style="margin-left:10%">
 <p>78.8%（26/34）的bug超过一年没有被解决，57.6%（19/34）的bug影响了超过10个版本。</p>
 <h3 id="seeds和mutants的质量">seeds和mutants的质量</h3>
 <p>下表描绘了seeds和mutants的质量：</p>
-<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h56gn7pndfj20ji0fuq4r.jpg" alt="https://tva1.sinaimg.cn/large/e6c9d24ely1h56gn7pndfj20ji0fuq4r.jpg"></p>
+<!-- ![https://tva1.sinaimg.cn/large/e6c9d24ely1h56gn7pndfj20ji0fuq4r.jpg](https://tva1.sinaimg.cn/large/e6c9d24ely1h56gn7pndfj20ji0fuq4r.jpg) -->
+<img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h56gn7pndfj20ji0fuq4r.jpg" width="60%" style="margin-left:20%">
 <p>其中B/A表示能够生成错误的seeds的比例，T.P. Insert.Pos.表示mutant插入位置的正确率。</p>
 <h3 id="效度威胁">效度威胁</h3>
 <p>本文主要有两个主要的效度威胁：</p>

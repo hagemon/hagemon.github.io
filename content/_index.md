@@ -16,7 +16,9 @@ Email: ooonefolder@gmail.com or yizele@foxmail.com
 ### Research Interests
 
 - Trustworthy AI System
+    - [CovBaseline](https://github.com/hagemon/CovBaseline): Simple implementations of neuron coverage criterias, including  Multi-layer-section Coverage that under verification.
 - Software Analyze and Testing
+    - [ifz](https://github.com/hagemon/ifz): a simple implementation of fuzzing testing on iOS apps, still young.
 - Software Supply Chain
 
 #### 🤖️ Machine Learning
