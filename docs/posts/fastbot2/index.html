@@ -138,7 +138,7 @@
   <section id="js-article" class="p-article__body">
     <p>文章<a href="https://tingsu.github.io/files/ASE22-industry-Fastbot.pdf">《Fastbot2: Reusable Automated Model-based GUI Testing for Android Enhanced by Reinforcement Learning》</a>的笔记，作者是字节跳动的Zhengwei Lv。</p>
 <h1 id="introduction">Introduction</h1>
-<p>本文介绍了一种基于强化学习模型的自动GUI测试方法，主要思想是利用已经积累的event-activity转移知识**（knowledge of historical event-activity transitions）**，为之后的事件选择做出合理的决策。该方法所要解决的主要问题是：<strong>如何制定事件选择的策略，使得所选择到的事件可以探索到更多的activity，从而能够找到更多潜在的crash。</strong></p>
+<p>本文介绍了一种基于强化学习模型的自动GUI测试方法，主要思想是利用已经积累的event-activity转移知识（knowledge of historical event-activity transitions），为之后的事件选择做出合理的决策。该方法所要解决的主要问题是：<strong>如何制定事件选择的策略，使得所选择到的事件可以探索到更多的activity，从而能够找到更多潜在的crash。</strong></p>
 <p>本文以覆盖更多activity为目标，提出以下两个方法：</p>
 <ol>
 <li>构建全局概率模型，在测试过程中不断更新各事件选择的概率，从而选择能够探索更多页面的事件。</li>
@@ -163,7 +163,7 @@
 <p>以上五个步骤在一定时间内会重复执行，直到达到运行时限（如测试1小时）。</p>
 <h1 id="a-throughout-example">A Throughout Example</h1>
 <p>本文使用了头条中4个Activity的转换过程为例，介绍了event选择的策略：</p>
-<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h6l94w7andj20u011zahj.jpg" alt="https://tva1.sinaimg.cn/large/e6c9d24ely1h6l94w7andj20u011zahj.jpg"></p>
+<img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h6l94w7andj20u011zahj.jpg" width="50%" style="margin-left:25%">
 <h1 id="model">Model</h1>
 <h2 id="hyper-events">Hyper-events</h2>
 <p>本文将软件中相似的事件抽象为hyper-event，从而平衡模型的可扩展性和准确性。具体来说，在衡量组件的相似情况时只考虑以下4个因素：</p>

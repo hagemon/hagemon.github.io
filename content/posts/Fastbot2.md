@@ -8,7 +8,7 @@ math=true
 
 # Introduction
 
-本文介绍了一种基于强化学习模型的自动GUI测试方法，主要思想是利用已经积累的event-activity转移知识**（knowledge of historical event-activity transitions），为之后的事件选择做出合理的决策。该方法所要解决的主要问题是：**如何制定事件选择的策略，使得所选择到的事件可以探索到更多的activity，从而能够找到更多潜在的crash。**
+本文介绍了一种基于强化学习模型的自动GUI测试方法，主要思想是利用已经积累的event-activity转移知识（knowledge of historical event-activity transitions），为之后的事件选择做出合理的决策。该方法所要解决的主要问题是：**如何制定事件选择的策略，使得所选择到的事件可以探索到更多的activity，从而能够找到更多潜在的crash。**
 
 本文以覆盖更多activity为目标，提出以下两个方法：
 

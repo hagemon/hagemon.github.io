@@ -15,7 +15,7 @@
       
       <guid>https://hagemon.github.io/posts/fastbot2/</guid>
       <description>文章《Fastbot2: Reusable Automated Model-based GUI Testing for Android Enhanced by Reinforcement Learning》的笔记，作者是字节跳动的Zhengwei Lv。
-Introduction 本文介绍了一种基于强化学习模型的自动GUI测试方法，主要思想是利用已经积累的event-activity转移知识**（knowledge of historical event-activity transitions）**，为之后的事件选择做出合理的决策。该方法所要解决的主要问题是：如何制定事件选择的策略，使得所选择到的事件可以探索到更多的activity，从而能够找到更多潜在的crash。
+Introduction 本文介绍了一种基于强化学习模型的自动GUI测试方法，主要思想是利用已经积累的event-activity转移知识（knowledge of historical event-activity transitions），为之后的事件选择做出合理的决策。该方法所要解决的主要问题是：如何制定事件选择的策略，使得所选择到的事件可以探索到更多的activity，从而能够找到更多潜在的crash。
 本文以覆盖更多activity为目标，提出以下两个方法：
  构建全局概率模型，在测试过程中不断更新各事件选择的概率，从而选择能够探索更多页面的事件。 基于N-step SARSA方法，在测试过程中维护Q-table，利用多步信息选择到更合适的事件。  Workflow 本方法主要分为测试前和测试中两个阶段。在测试前，需要安装软件、收集一些静态信息和初始化模型，具体来说：
  对安装包进行反编译，获取静态的组件文本标签； 在所有测试机上安装软件； 利用历史数据初始化概率模型（若无则令模型为空，即所有事件都没有被探索过）。  在测试时，需要利用当前的GUI信息进行事件选择、执行、模型更新、Activity覆盖统计和bug统计等，具体来说：
