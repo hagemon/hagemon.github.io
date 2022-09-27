@@ -7,7 +7,27 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Hagemon Production</copyright>
-    <lastBuildDate>Sat, 03 Sep 2022 16:09:59 +0800</lastBuildDate><atom:link href="https://hagemon.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 27 Sep 2022 22:46:03 +0800</lastBuildDate><atom:link href="https://hagemon.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Fastbot2</title>
+      <link>https://hagemon.github.io/posts/fastbot2/</link>
+      <pubDate>Tue, 27 Sep 2022 22:46:03 +0800</pubDate>
+      
+      <guid>https://hagemon.github.io/posts/fastbot2/</guid>
+      <description>文章《Fastbot2: Reusable Automated Model-based GUI Testing for Android Enhanced by Reinforcement Learning》的笔记，作者是字节跳动的Zhengwei Lv。
+Introduction 本文介绍了一种基于强化学习模型的自动GUI测试方法，主要思想是利用已经积累的event-activity转移知识**（knowledge of historical event-activity transitions）**，为之后的事件选择做出合理的决策。该方法所要解决的主要问题是：如何制定事件选择的策略，使得所选择到的事件可以探索到更多的activity，从而能够找到更多潜在的crash。
+本文以覆盖更多activity为目标，提出以下两个方法：
+ 构建全局概率模型，在测试过程中不断更新各事件选择的概率，从而选择能够探索更多页面的事件。 基于N-step SARSA方法，在测试过程中维护Q-table，利用多步信息选择到更合适的事件。  Workflow 本方法主要分为测试前和测试中两个阶段。在测试前，需要安装软件、收集一些静态信息和初始化模型，具体来说：
+ 对安装包进行反编译，获取静态的组件文本标签； 在所有测试机上安装软件； 利用历史数据初始化概率模型（若无则令模型为空，即所有事件都没有被探索过）。  在测试时，需要利用当前的GUI信息进行事件选择、执行、模型更新、Activity覆盖统计和bug统计等，具体来说：
+ 获取当前GUI信息； 获取可被执行的事件； 根据策略选择事件，这些事件应该有更大的概率探索到新的activity； 执行事件； 更新概率模型和Q-table（用于做出更好的决策）；  以上五个步骤在一定时间内会重复执行，直到达到运行时限（如测试1小时）。
+A Throughout Example 本文使用了头条中4个Activity的转换过程为例，介绍了event选择的策略：
+Model Hyper-events 本文将软件中相似的事件抽象为hyper-event，从而平衡模型的可扩展性和准确性。具体来说，在衡量组件的相似情况时只考虑以下4个因素：
+ 组件所在的Activity； 组件的resource-id； 组件的文本（若是动态获取的文本，则认为它是empty）； 组件支持的事件（如点击和长按）。  若两个组件在这4个因素上相同，则本文认为它们有着相近的功能，并且可以使用同一个hyper-event驱动。
+example 举例来说，例图中的Activity 1中，Title 1和Title 2拥有相同的属性，即：
+ 在同一个activity中； 都具有空文本（动态获取）； 同一个resource-id和同样； 同样的事件类型（点击）。  Probabilistic Model 概率模型表示了在每个hyper-event转化到各Activity的概率。具体来说有如下定义：
+ $\mathcal{E}$表示UI组件中获取到的hyper-events集合； $\mathcal{A}$表示待测软件所有的Activity的集合； $\delta$表示转移函数，即各hyper-event转移到各Activity的概率，本文用$e\rightarrow (A,p)$表示事件$e$转移到activity $A$ 的概率为$p$。  本文用$M=(\mathcal{E},\mathcal{A},\delta)$表示模型。其中，事件$e$转化为$A_i$的概率计算方法为：</description>
+    </item>
+    
     <item>
       <title>Neuron Coverage for Adequacy Testing</title>
       <link>https://hagemon.github.io/posts/neuron-coverage-for-adequacy-testing/</link>

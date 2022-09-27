@@ -2,14 +2,17 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://hagemon.github.io/posts/fastbot2/</loc>
+    <lastmod>2022-09-27T22:46:03+08:00</lastmod>
+  </url><url>
+    <loc>https://hagemon.github.io/posts/</loc>
+    <lastmod>2022-09-27T22:46:03+08:00</lastmod>
+  </url><url>
     <loc>https://hagemon.github.io/tags/machine-learning-testing/</loc>
     <lastmod>2022-09-04T15:23:31+08:00</lastmod>
   </url><url>
     <loc>https://hagemon.github.io/posts/neuron-coverage-for-adequacy-testing/</loc>
     <lastmod>2022-09-04T15:23:31+08:00</lastmod>
-  </url><url>
-    <loc>https://hagemon.github.io/posts/</loc>
-    <lastmod>2022-09-15T10:01:24+08:00</lastmod>
   </url><url>
     <loc>https://hagemon.github.io/tags/software-analyze-and-testing/</loc>
     <lastmod>2022-09-15T10:01:24+08:00</lastmod>
@@ -33,7 +36,7 @@
     <lastmod>2022-08-03T20:46:25+00:00</lastmod>
   </url><url>
     <loc>https://hagemon.github.io/</loc>
-    <lastmod>2022-09-16T19:38:30+08:00</lastmod>
+    <lastmod>2022-09-16T19:41:21+08:00</lastmod>
   </url><url>
     <loc>https://hagemon.github.io/tags/rust/</loc>
     <lastmod>2022-08-09T16:42:22+08:00</lastmod>

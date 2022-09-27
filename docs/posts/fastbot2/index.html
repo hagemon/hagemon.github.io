@@ -4,16 +4,16 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
   
-  <title>Posts</title>
-  <meta property="og:title" content="Posts" />
-  <meta name="twitter:title" content="Posts" />
+  <title>Fastbot2</title>
+  <meta property="og:title" content="Fastbot2" />
+  <meta name="twitter:title" content="Fastbot2" />
   
 
   
 
   <meta name="author" content=""/>
   <meta property="og:site_name" content="Hagemon&#39;s Log" />
-  <meta property="og:url" content="https://hagemon.github.io/posts/" />
+  <meta property="og:url" content="https://hagemon.github.io/posts/fastbot2/" />
 
   
   <meta name="twitter:card" content="summary" />
@@ -24,7 +24,8 @@
   
 
   
-  <meta property="og:type" content="website" />
+  <meta property="og:type" content="article" />
+  
   
   
   <meta name="generator" content="Hugo 0.96.0" />
@@ -37,7 +38,38 @@
   
   <link rel="stylesheet" href="https://hagemon.github.io/css/custom.css">
   <link rel='icon' type='image/x-icon' href="https://hagemon.github.io/favicon.ico" />
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async>
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: {
+      equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"],
+      Macros: {
+      '\\_': '_'
+    }
+    }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+  MathJax.Hub.Config({
   
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+
   
   
 
@@ -48,7 +80,7 @@
   <svg xmlns="http://www.w3.org/2000/svg" style="display: none;" aria-hidden="true"> <symbol id="icon-500px" viewBox="0 0 16 16"><g> <path d="M3.953 10.512a5.24 5.24 0 0 0 6.996 3.141c.625-.262 1.184-.641 1.666-1.122s.859-1.041 1.122-1.666c.272-.647.412-1.331.412-2.037s-.137-1.394-.412-2.037c-.262-.625-.641-1.184-1.122-1.666s-1.041-.859-1.666-1.122a5.226 5.226 0 0 0-2.037-.413c-.716 0-1.431.144-2.066.413-.509.216-1.372.769-1.875 1.291l-.003.003V.984h7.241c.262-.003.262-.372.262-.491 0-.122 0-.487-.266-.491H4.377a.343.343 0 0 0-.344.341v6.066c0 .197.244.338.472.384.444.094.544-.047.653-.197l.016-.019c.166-.247.681-.766.688-.772a4.262 4.262 0 0 1 3.037-1.25c1.147 0 2.222.444 3.028 1.25a4.245 4.245 0 0 1 1.256 3.019 4.236 4.236 0 0 1-1.25 3.019 4.336 4.336 0 0 1-3.047 1.25 4.136 4.136 0 0 1-2.159-.597l.003-3.688c0-.491.213-1.028.572-1.431a2.09 2.09 0 0 1 1.588-.716c.594 0 1.15.225 1.566.634.409.406.637.95.637 1.528a2.179 2.179 0 0 1-2.206 2.197c-.238 0-.672-.106-.691-.109-.25-.075-.356.272-.391.387-.134.441.069.528.109.541.397.125.659.147 1.003.147a3.173 3.173 0 0 0 3.169-3.169c0-1.734-1.422-3.144-3.166-3.144-.856 0-1.659.328-2.263.919-.575.566-.903 1.319-.903 2.069v.019c-.003.094-.003 2.306-.006 3.031l-.003-.003c-.328-.363-.653-.919-.869-1.488-.084-.222-.275-.184-.534-.103-.125.034-.469.141-.391.394zm3.722-.865c0 .106.097.2.156.253l.019.019c.1.097.194.147.281.147a.181.181 0 0 0 .131-.05c.044-.041.537-.544.588-.591l.553.55c.05.056.106.088.172.088.088 0 .184-.053.284-.156.238-.244.119-.375.063-.438l-.559-.559.584-.588c.128-.137.016-.284-.097-.397-.162-.162-.322-.206-.422-.112l-.581.581-.588-.588a.16.16 0 0 0-.113-.047c-.078 0-.172.053-.275.156-.181.181-.219.306-.125.406l.588.584-.584.584c-.053.05-.078.103-.075.156zm1.278-7.931c-.938 0-1.938.191-2.669.506a.207.207 0 0 0-.134.181.753.753 0 0 0 .069.337c.047.116.166.425.4.334a6.689 6.689 0 0 1 2.334-.444 6.35 6.35 0 0 1 2.469.497c.622.263 1.206.644 1.844 1.194a.22.22 0 0 0 .147.059c.125 0 .244-.122.347-.237.169-.191.287-.35.119-.509a6.858 6.858 0 0 0-2.1-1.356 7.326 7.326 0 0 0-2.825-.563zM14.006 13.3c-.113-.113-.209-.178-.294-.203s-.162-.006-.222.053l-.056.056a6.32 6.32 0 0 1-6.938 1.356 6.336 6.336 0 0 1-2.013-1.356 6.046 6.046 0 0 1-1.356-2.012c-.288-.713-.381-1.247-.413-1.422-.003-.016-.006-.028-.006-.037-.041-.206-.231-.222-.503-.178-.112.019-.459.072-.428.319v.006a7.261 7.261 0 0 0 2.04 3.994 7.266 7.266 0 0 0 10.288 0l.059-.059c.069-.084.134-.225-.159-.516z"/> </g></symbol> <symbol id="icon-codepen" viewBox="0 0 16 16"><g> <path d="M14.777 5.751l-7-4.667a.5.5 0 0 0-.555 0l-7 4.667a.501.501 0 0 0-.223.416v4.667c0 .167.084.323.223.416l7 4.667a.5.5 0 0 0 .554 0l7-4.667a.501.501 0 0 0 .223-.416V6.167a.501.501 0 0 0-.223-.416zM7.5 10.232L4.901 8.5 7.5 6.768 10.099 8.5 7.5 10.232zM8 5.899V2.434l5.599 3.732L11 7.898l-3-2zm-1 0l-3 2-2.599-1.732L7 2.435V5.9zM3.099 8.5L1 9.899V7.101L3.099 8.5zM4 9.101l3 2v3.465l-5.599-3.732L4 9.102zm4 2l3-2 2.599 1.732L8 14.565V11.1zM11.901 8.5L14 7.101v2.798L11.901 8.5z"/> </g></symbol> <symbol id="icon-dribbble" viewBox="0 0 16 16"><g> <path d="M8 16c-4.412 0-8-3.588-8-8s3.587-8 8-8c4.412 0 8 3.587 8 8s-3.588 8-8 8zm6.747-6.906c-.234-.075-2.116-.634-4.256-.291a29.7 29.7 0 0 1 1.328 4.872 6.845 6.845 0 0 0 2.928-4.581zM10.669 14.3c-.103-.6-.497-2.688-1.456-5.181-.016.006-.031.009-.044.016-3.856 1.344-5.241 4.016-5.362 4.266a6.807 6.807 0 0 0 6.863.9zm-7.747-1.722c.156-.266 2.031-3.369 5.553-4.509a7.04 7.04 0 0 1 .269-.081 24.04 24.04 0 0 0-.553-1.159c-3.409 1.022-6.722.978-7.022.975-.003.069-.003.138-.003.209 0 1.753.666 3.356 1.756 4.566zM1.313 6.609c.306.003 3.122.016 6.319-.831a43.092 43.092 0 0 0-2.534-3.953 6.854 6.854 0 0 0-3.784 4.784zM6.4 1.366a36.612 36.612 0 0 1 2.55 4c2.431-.909 3.459-2.294 3.581-2.469A6.799 6.799 0 0 0 6.4 1.366zm6.891 2.325c-.144.194-1.291 1.663-3.816 2.694.159.325.313.656.453.991.05.119.1.234.147.353 2.275-.284 4.534.172 4.759.219a6.816 6.816 0 0 0-1.544-4.256z"/> </g></symbol> <symbol id="icon-facebook" viewBox="0 0 16 16"><g> <path d="M9.5 3H12V0H9.5C7.57 0 6 1.57 6 3.5V5H4v3h2v8h3V8h2.5l.5-3H9V3.5c0-.271.229-.5.5-.5z"/> </g></symbol> <symbol id="icon-feed" viewBox="0 0 16 16"><g> <path d="M2.13 11.733c-1.175 0-2.13.958-2.13 2.126 0 1.174.955 2.122 2.13 2.122a2.126 2.126 0 0 0 2.133-2.122 2.133 2.133 0 0 0-2.133-2.126zM.002 5.436v3.067c1.997 0 3.874.781 5.288 2.196a7.45 7.45 0 0 1 2.192 5.302h3.08c0-5.825-4.739-10.564-10.56-10.564zM.006 0v3.068C7.128 3.068 12.924 8.87 12.924 16H16C16 7.18 8.824 0 .006 0z"/> </g></symbol> <symbol id="icon-flickr" viewBox="0 0 16 16"><g> <path d="M0 8.5a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0zm9 0a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/> </g></symbol> <symbol id="icon-github" viewBox="0 0 16 16"><g> <path d="M8 .198a8 8 0 0 0-2.529 15.591c.4.074.547-.174.547-.385 0-.191-.008-.821-.011-1.489-2.226.484-2.695-.944-2.695-.944-.364-.925-.888-1.171-.888-1.171-.726-.497.055-.486.055-.486.803.056 1.226.824 1.226.824.714 1.223 1.872.869 2.328.665.072-.517.279-.87.508-1.07-1.777-.202-3.645-.888-3.645-3.954 0-.873.313-1.587.824-2.147-.083-.202-.357-1.015.077-2.117 0 0 .672-.215 2.201.82A7.672 7.672 0 0 1 8 4.066c.68.003 1.365.092 2.004.269 1.527-1.035 2.198-.82 2.198-.82.435 1.102.162 1.916.079 2.117.513.56.823 1.274.823 2.147 0 3.073-1.872 3.749-3.653 3.947.287.248.543.735.543 1.481 0 1.07-.009 1.932-.009 2.195 0 .213.144.462.55.384A8 8 0 0 0 8.001.196z"/> </g></symbol> <symbol id="icon-gitlab" viewBox="0 0 28 28"><g> <path d="M1.625 11.031L14 26.89.437 17.046a1.092 1.092 0 0 1-.391-1.203l1.578-4.813zm7.219 0h10.313L14.001 26.89zM5.75 1.469l3.094 9.562H1.625l3.094-9.562a.548.548 0 0 1 1.031 0zm20.625 9.562l1.578 4.813a1.09 1.09 0 0 1-.391 1.203l-13.563 9.844 12.375-15.859zm0 0h-7.219l3.094-9.562a.548.548 0 0 1 1.031 0z"/> </g></symbol> <symbol id="icon-google-plus" viewBox="0 0 16 16"><g> <path d="M5.091 7.147v1.747h2.888c-.116.75-.872 2.197-2.888 2.197-1.737 0-3.156-1.441-3.156-3.216s1.419-3.216 3.156-3.216c.991 0 1.65.422 2.028.784L8.5 4.112c-.888-.828-2.037-1.331-3.409-1.331C2.275 2.784 0 5.059 0 7.875s2.275 5.091 5.091 5.091c2.937 0 4.888-2.066 4.888-4.975 0-.334-.037-.591-.081-.844H5.092zM16 7h-1.5V5.5H13V7h-1.5v1.5H13V10h1.5V8.5H16z"/> </g></symbol> <symbol id="icon-instagram" viewBox="0 0 22 22"><g> <path d="M15.445 0H6.554A6.559 6.559 0 0 0 0 6.554v8.891A6.559 6.559 0 0 0 6.554 22h8.891a6.56 6.56 0 0 0 6.554-6.555V6.554A6.557 6.557 0 0 0 15.445 0zm4.342 15.445a4.343 4.343 0 0 1-4.342 4.342H6.554a4.341 4.341 0 0 1-4.341-4.342V6.554a4.34 4.34 0 0 1 4.341-4.341h8.891a4.342 4.342 0 0 1 4.341 4.341l.001 8.891z"/> <path d="M11 5.312A5.693 5.693 0 0 0 5.312 11 5.694 5.694 0 0 0 11 16.688 5.694 5.694 0 0 0 16.688 11 5.693 5.693 0 0 0 11 5.312zm0 9.163a3.475 3.475 0 1 1-.001-6.95 3.475 3.475 0 0 1 .001 6.95zm5.7-10.484a1.363 1.363 0 1 1-1.364 1.364c0-.752.51-1.364 1.364-1.364z"/> </g></symbol> <symbol id="icon-linkedin" viewBox="0 0 16 16"><g> <path d="M6 6h2.767v1.418h.04C9.192 6.727 10.134 6 11.539 6 14.46 6 15 7.818 15 10.183V15h-2.885v-4.27c0-1.018-.021-2.329-1.5-2.329-1.502 0-1.732 1.109-1.732 2.255V15H6V6zM1 6h3v9H1V6zM4 3.5a1.5 1.5 0 1 1-3.001-.001A1.5 1.5 0 0 1 4 3.5z"/> </g></symbol> <symbol id="icon-mail" viewBox="0 0 22 18"><g> <path fill="#000" d="M0 17.225V.776h22v16.447H0v.002zm3.011-1.815h15.978l-5.111-5.115L11 13.179l-2.877-2.883-5.112 5.114zm-1.216-1.275l5.077-5.09L1.795 3.98v10.155zm13.332-5.09l5.079 5.09V3.979l-5.079 5.066zm-4.126 1.588l8.022-8.027-16.045-.001 8.023 8.028z"/> </g></symbol> <symbol id="icon-medium" viewBox="0 0 24 24"><g> <path d="M22.085 4.733L24 2.901V2.5h-6.634l-4.728 11.768L7.259 2.5H.303v.401L2.54 5.594c.218.199.332.49.303.783V16.96c.069.381-.055.773-.323 1.05L0 21.064v.396h7.145v-.401l-2.52-3.049a1.244 1.244 0 0 1-.347-1.05V7.806l6.272 13.659h.729l5.393-13.659v10.881c0 .287 0 .346-.188.534l-1.94 1.877v.402h9.412v-.401l-1.87-1.831a.556.556 0 0 1-.214-.534V5.267a.554.554 0 0 1 .213-.534z"/> </g></symbol> <symbol id="icon-npm" viewBox="0 0 16 16"><g> <path d="M0 0v16h16V0H0zm13 13h-2V5H8v8H3V3h10v10z"/> </g></symbol> <symbol id="icon-pinterest" viewBox="0 0 16 16"><g> <path d="M8 1.069a6.93 6.93 0 0 0-2.525 13.384c-.059-.547-.116-1.391.025-1.988.125-.541.813-3.444.813-3.444s-.206-.416-.206-1.028c0-.963.559-1.684 1.253-1.684.591 0 .878.444.878.975 0 .594-.378 1.484-.575 2.306-.166.691.344 1.253 1.025 1.253 1.231 0 2.178-1.3 2.178-3.175 0-1.659-1.194-2.819-2.894-2.819-1.972 0-3.128 1.478-3.128 3.009 0 .597.228 1.234.516 1.581.056.069.066.128.047.2a95.89 95.89 0 0 1-.194.787c-.031.128-.1.153-.231.094-.866-.403-1.406-1.669-1.406-2.684 0-2.188 1.587-4.194 4.578-4.194 2.403 0 4.272 1.712 4.272 4.003 0 2.388-1.506 4.313-3.597 4.313-.703 0-1.362-.366-1.588-.797 0 0-.347 1.322-.431 1.647-.156.603-.578 1.356-.862 1.816a6.93 6.93 0 0 0 8.984-6.622 6.931 6.931 0 0 0-6.931-6.934z"/> </g></symbol> <symbol id="icon-search" viewBox="0 0 16 16"><g> <path d="M15.504 13.616l-3.79-3.223c-.392-.353-.811-.514-1.149-.499a6 6 0 1 0-.672.672c-.016.338.146.757.499 1.149l3.223 3.79c.552.613 1.453.665 2.003.115s.498-1.452-.115-2.003zM6 10a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/> </g></symbol> <symbol id="icon-strava" viewBox="0 0 24 24"><g> <path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169"/> </g></symbol> <symbol id="icon-tumblr" viewBox="0 0 16 16"><g> <path d="M9.001 7v3.659c0 .928-.012 1.463.086 1.727.098.262.342.534.609.691.354.212.758.318 1.214.318.81 0 1.289-.107 2.09-.633v2.405a9.089 9.089 0 0 1-1.833.639A7.93 7.93 0 0 1 9.369 16a4.9 4.9 0 0 1-1.725-.276 4.195 4.195 0 0 1-1.438-.79c-.398-.343-.672-.706-.826-1.091s-.23-.944-.23-1.676V6.556H3.003V4.29c.628-.204 1.331-.497 1.778-.877a4.386 4.386 0 0 0 1.08-1.374C6.133 1.505 6.32.825 6.422 0h2.579v4H13v3H9.001z"/> </g></symbol> <symbol id="icon-twitter" viewBox="0 0 16 16"><g> <path d="M16 3.538a6.461 6.461 0 0 1-1.884.516 3.301 3.301 0 0 0 1.444-1.816 6.607 6.607 0 0 1-2.084.797 3.28 3.28 0 0 0-2.397-1.034 3.28 3.28 0 0 0-3.197 4.028 9.321 9.321 0 0 1-6.766-3.431 3.284 3.284 0 0 0 1.015 4.381A3.301 3.301 0 0 1 .643 6.57v.041A3.283 3.283 0 0 0 3.277 9.83a3.291 3.291 0 0 1-1.485.057 3.293 3.293 0 0 0 3.066 2.281 6.586 6.586 0 0 1-4.862 1.359 9.286 9.286 0 0 0 5.034 1.475c6.037 0 9.341-5.003 9.341-9.341 0-.144-.003-.284-.009-.425a6.59 6.59 0 0 0 1.637-1.697z"/> </g></symbol> <symbol id="icon-vimeo" viewBox="0 0 16 16"><g> <path d="M15.994 4.281c-.072 1.556-1.159 3.691-3.263 6.397-2.175 2.825-4.016 4.241-5.522 4.241-.931 0-1.722-.859-2.366-2.581-.431-1.578-.859-3.156-1.291-4.734-.478-1.722-.991-2.581-1.541-2.581-.119 0-.538.253-1.256.753l-.753-.969c.791-.694 1.569-1.388 2.334-2.081 1.053-.909 1.844-1.387 2.372-1.438 1.244-.119 2.013.731 2.3 2.553.309 1.966.525 3.188.647 3.666.359 1.631.753 2.447 1.184 2.447.334 0 .838-.528 1.509-1.588.669-1.056 1.028-1.862 1.078-2.416.097-.912-.262-1.372-1.078-1.372a2.98 2.98 0 0 0-1.184.263c.787-2.575 2.287-3.825 4.506-3.753 1.641.044 2.416 1.109 2.322 3.194z"/> </g></symbol> <symbol id="icon-wordpress" viewBox="0 0 16 16"><g> <path d="M2 8c0 2.313 1.38 4.312 3.382 5.259L2.52 5.622A5.693 5.693 0 0 0 2 8zm10.05-.295c0-.722-.266-1.222-.495-1.612-.304-.482-.589-.889-.589-1.371 0-.537.418-1.037 1.008-1.037.027 0 .052.003.078.005A6.064 6.064 0 0 0 8 2.156 6.036 6.036 0 0 0 2.987 4.79c.141.004.274.007.386.007.627 0 1.599-.074 1.599-.074.323-.018.361.444.038.482 0 0-.325.037-.687.055l2.185 6.33 1.313-3.835-.935-2.495a12.304 12.304 0 0 1-.629-.055c-.323-.019-.285-.5.038-.482 0 0 .991.074 1.58.074.627 0 1.599-.074 1.599-.074.323-.018.362.444.038.482 0 0-.326.037-.687.055l2.168 6.282.599-1.947c.259-.809.457-1.389.457-1.889zm-3.945.806l-1.8 5.095a6.148 6.148 0 0 0 3.687-.093.52.52 0 0 1-.043-.081L8.105 8.511zm5.16-3.315c.026.186.04.386.04.601 0 .593-.114 1.259-.456 2.093l-1.833 5.16c1.784-1.013 2.983-2.895 2.983-5.051a5.697 5.697 0 0 0-.735-2.803zM8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm0 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14z"/> </g></symbol> <symbol id="icon-youtube" viewBox="0 0 16 16"><g> <path d="M15.841 4.8s-.156-1.103-.637-1.587c-.609-.637-1.291-.641-1.603-.678-2.237-.163-5.597-.163-5.597-.163h-.006s-3.359 0-5.597.163c-.313.038-.994.041-1.603.678C.317 3.697.164 4.8.164 4.8S.005 6.094.005 7.391v1.213c0 1.294.159 2.591.159 2.591s.156 1.103.634 1.588c.609.637 1.409.616 1.766.684 1.281.122 5.441.159 5.441.159s3.363-.006 5.6-.166c.313-.037.994-.041 1.603-.678.481-.484.637-1.588.637-1.588s.159-1.294.159-2.591V7.39c-.003-1.294-.162-2.591-.162-2.591zm-9.494 5.275V5.578l4.322 2.256-4.322 2.241z"/> </g></symbol></svg>
   <header class="l-header">
     
-    <h1 class="c-title p-title"><a href="https://hagemon.github.io/" class="p-title__link">Hagemon&#39;s Log</a></h1>
+    <p class="c-title p-title"><a href="https://hagemon.github.io/" class="p-title__link">Hagemon&#39;s Log</a></p>
     
     
   </header>
@@ -81,180 +113,174 @@
   <main id="main" class="l-main">
 
 
-
-    
-    
-    
-    <article class="c-article p-list-article">
+<article class="p-article">
   <header>
-    <h2 class="c-title c-article__title"><a href="https://hagemon.github.io/posts/clipin-log-3/">Clipin Log 3. 截屏页面的实现</a></h2>
-    <p class="c-article__meta">
-      Posted on
-<time datetime="2021-01-09T21:24:06Z">
-  Jan 9, 2021
-</time>
-
-      
-      
-      
-    </p>
-  </header>
-  
-  
-  
-  
-</article>
-
+    <h1>Fastbot2</h1>
     
-    
+    <div>
+        <div class="c-meta">
         
-    <article class="c-article p-list-article">
-  <header>
-    <h2 class="c-title c-article__title"><a href="https://hagemon.github.io/posts/clipin-log-2/">Clipin Log 2. 截屏管理器</a></h2>
-    <p class="c-article__meta">
-      Posted on
-<time datetime="2021-01-09T21:13:22Z">
-  Jan 9, 2021
+           Posted on
+<time datetime="2022-09-27T22:46:03&#43;08:00">
+  Sep 27, 2022
 </time>
 
-      
-      
-      
-    </p>
-  </header>
-  
-  
-  
-  
-</article>
-
-    
-    
         
-    <article class="c-article p-list-article">
-  <header>
-    <h2 class="c-title c-article__title"><a href="https://hagemon.github.io/posts/clipin-log-1/">Clipin Log 1. 基于Status Bar的应用&amp;监听快捷键</a></h2>
-    <p class="c-article__meta">
-      Posted on
-<time datetime="2021-01-09T20:53:34Z">
-  Jan 9, 2021
-</time>
-
-      
-      
-      
-    </p>
-  </header>
-  
-  
-  
-  
-</article>
-
-    
-    
         
-    <article class="c-article p-list-article">
-  <header>
-    <h2 class="c-title c-article__title"><a href="https://hagemon.github.io/posts/clipin-log-0/">Clipin Log 0. Mac OS上截图&amp;保留小工具的开发记录</a></h2>
-    <p class="c-article__meta">
-      Posted on
-<time datetime="2021-01-09T20:50:05Z">
-  Jan 9, 2021
-</time>
-
-      
-      
-      
-    </p>
-  </header>
-  
-  
-</article>
-
-    
-    
         
-    <article class="c-article p-list-article">
-  <header>
-    <h2 class="c-title c-article__title"><a href="https://hagemon.github.io/posts/%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/">优化方法总结</a></h2>
-    <p class="c-article__meta">
-      Posted on
-<time datetime="2019-08-24T11:47:27Z">
-  Aug 24, 2019
-</time>
-
-      
-      
-      
-    </p>
-  </header>
-  
-  
-  
-  
-</article>
-
-    
-    
-        
-    <article class="c-article p-list-article">
-  <header>
-    <h2 class="c-title c-article__title"><a href="https://hagemon.github.io/posts/%E8%93%84%E6%B0%B4%E6%B1%A0%E7%AE%97%E6%B3%95/">蓄水池算法</a></h2>
-    <p class="c-article__meta">
-      Posted on
-<time datetime="2019-08-23T11:47:27Z">
-  Aug 23, 2019
-</time>
-
-      
-      
-      
-    </p>
-  </header>
-  
-  
-</article>
-
-    
-    
-        
-    <article class="c-article p-list-article">
-  <header>
-    <h2 class="c-title c-article__title"><a href="https://hagemon.github.io/posts/gbdt%E4%B8%AD%E5%AF%B9%E4%BA%8E%E6%A2%AF%E5%BA%A6%E6%8B%9F%E5%90%88%E7%9A%84%E7%90%86%E8%A7%A3/">GBDT中对于梯度拟合的理解</a></h2>
-    <p class="c-article__meta">
-      Posted on
-<time datetime="2019-08-20T20:05:27Z">
-  Aug 20, 2019
-</time>
-
-      
-      
-      
-    </p>
-  </header>
-  
-  
-</article>
-
-    
-
-<nav class="c-pagination p-pagination">
-  <div class="c-pagination__ctrl">
-    <div class="c-pagination__newer">
-      
-      <a href="/posts/page/2/">Newer</a>
+        </div>
+      </div>
       
     </div>
-    <div class="c-pagination__older">
-      
-    </div>
-  </div>
-  <span class="c-pagination__count p-pagination__count">Page 3 of 3</span>
-</nav>
+    
+  </header>
+  
+  <section id="js-article" class="p-article__body">
+    <p>文章<a href="https://tingsu.github.io/files/ASE22-industry-Fastbot.pdf">《Fastbot2: Reusable Automated Model-based GUI Testing for Android Enhanced by Reinforcement Learning》</a>的笔记，作者是字节跳动的Zhengwei Lv。</p>
+<h1 id="introduction">Introduction</h1>
+<p>本文介绍了一种基于强化学习模型的自动GUI测试方法，主要思想是利用已经积累的event-activity转移知识**（knowledge of historical event-activity transitions）**，为之后的事件选择做出合理的决策。该方法所要解决的主要问题是：<strong>如何制定事件选择的策略，使得所选择到的事件可以探索到更多的activity，从而能够找到更多潜在的crash。</strong></p>
+<p>本文以覆盖更多activity为目标，提出以下两个方法：</p>
+<ol>
+<li>构建全局概率模型，在测试过程中不断更新各事件选择的概率，从而选择能够探索更多页面的事件。</li>
+<li>基于N-step SARSA方法，在测试过程中维护Q-table，利用多步信息选择到更合适的事件。</li>
+</ol>
+<h1 id="workflow">Workflow</h1>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h6l5ikeem5j224q0i4gqo.jpg" alt="https://tva1.sinaimg.cn/large/e6c9d24ely1h6l5ikeem5j224q0i4gqo.jpg"></p>
+<p>本方法主要分为测试前和测试中两个阶段。在测试前，需要安装软件、收集一些静态信息和初始化模型，具体来说：</p>
+<ol>
+<li>对安装包进行反编译，获取静态的组件文本标签；</li>
+<li>在所有测试机上安装软件；</li>
+<li>利用历史数据初始化概率模型（若无则令模型为空，即所有事件都没有被探索过）。</li>
+</ol>
+<p>在测试时，需要利用当前的GUI信息进行事件选择、执行、模型更新、Activity覆盖统计和bug统计等，具体来说：</p>
+<ol>
+<li>获取当前GUI信息；</li>
+<li>获取可被执行的事件；</li>
+<li>根据策略选择事件，这些事件应该有更大的概率探索到新的activity；</li>
+<li>执行事件；</li>
+<li>更新概率模型和Q-table（用于做出更好的决策）；</li>
+</ol>
+<p>以上五个步骤在一定时间内会重复执行，直到达到运行时限（如测试1小时）。</p>
+<h1 id="a-throughout-example">A Throughout Example</h1>
+<p>本文使用了头条中4个Activity的转换过程为例，介绍了event选择的策略：</p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h6l94w7andj20u011zahj.jpg" alt="https://tva1.sinaimg.cn/large/e6c9d24ely1h6l94w7andj20u011zahj.jpg"></p>
+<h1 id="model">Model</h1>
+<h2 id="hyper-events">Hyper-events</h2>
+<p>本文将软件中相似的事件抽象为hyper-event，从而平衡模型的可扩展性和准确性。具体来说，在衡量组件的相似情况时只考虑以下4个因素：</p>
+<ol>
+<li>组件所在的Activity；</li>
+<li>组件的resource-id；</li>
+<li>组件的文本（若是动态获取的文本，则认为它是empty）；</li>
+<li>组件支持的事件（如点击和长按）。</li>
+</ol>
+<p>若两个组件在这4个因素上相同，则本文认为它们有着相近的功能，并且可以使用同一个hyper-event驱动。</p>
+<h3 id="example">example</h3>
+<p>举例来说，例图中的Activity 1中，Title 1和Title 2拥有相同的属性，即：</p>
+<ol>
+<li>在同一个activity中；</li>
+<li>都具有空文本（动态获取）；</li>
+<li>同一个resource-id和同样；</li>
+<li>同样的事件类型（点击）。</li>
+</ol>
+<h2 id="probabilistic-model">Probabilistic Model</h2>
+<p>概率模型表示了在每个hyper-event转化到各Activity的概率。具体来说有如下定义：</p>
+<ul>
+<li>$\mathcal{E}$表示UI组件中获取到的hyper-events集合；</li>
+<li>$\mathcal{A}$表示待测软件所有的Activity的集合；</li>
+<li>$\delta$表示转移函数，即各hyper-event转移到各Activity的概率，本文用$e\rightarrow (A,p)$表示事件$e$转移到activity $A$ 的概率为$p$。</li>
+</ul>
+<p>本文用$M=(\mathcal{E},\mathcal{A},\delta)$表示模型。其中，事件$e$转化为$A_i$的概率计算方法为：</p>
+<p>$$
+P(e,A_i)=\frac{N(e,A_i)}{N(e)}
+$$</p>
+<p>即事件$e$转化值$A_i$的次数占事件$e$执行总次数的比例。</p>
+<p>模型的构建为事件的选择起到了指导作用，目的是让选择到的事件能够尽可能地探索更多的Activity和潜在的crash。为此，本文进一步提出了基于概率模型（Model-based）和强化学习（Learning-based）的方法。</p>
+<h2 id="model-based-event-selection">Model-based Event Selection</h2>
+<p>基于概率模型的事件选择方法包含两个模式：模型扩张（expansion）和模型利用（exploitation）。</p>
+<h3 id="expansion">Expansion</h3>
+<p>模型扩张是为了能够探索到更多没有被执行过的事件。如果当前GUI页面的存在从来没有在$M$中出现过的hyper-event，则FASTBOT2会随机从中选一个做为下一步的事件。在模型的初始情况下，或是软件有了新的特征时，会按照这个策略尽快地找到每个页面可执行的事件，并在模型中更新它的转化概率。</p>
+<h3 id="exploitation">Exploitation</h3>
+<p>当所有的事件都被执行过一次后，就会进入模型利用模式。FASTBOT2根据已经构建好的概率模型，为当前的页面选择可能覆盖更多activity的事件。具体来说，令$\mathcal{A}_t$为已经被探索过的activity，$\mathcal{E}_c$为当前页面支持的所有事件，则对于事件$e_i$能够探索到的activity个数的期望可以表示为：</p>
+<p>$$
+\mathbb{E}(e_i)=\sum_{A\notin \mathcal{A_t}}P(e_i,A)
+$$</p>
+<p>期望越高的事件，应该越容易被选到。于是本文定义事件$e_i$被选择到的概率为：</p>
+<p>$$
+P_M(e_i)=\exp({\frac{\mathbb{E(e_i)}}{\alpha}})/\sum_{e_i \in\mathcal{E}_c}\exp({\frac{\mathbb{E(e_i)}}{\alpha}})
+$$</p>
+<p>其中$\alpha$为超参数，用于调节随机性。同时为了公平性，每个事件只能被选取$K$次。本文将两个参数分别设置为0.8和1。</p>
+<h3 id="example-1">Example</h3>
+<p>扩张阶段（Expansion）：假设软件启动于Activity 1，初始状态下所有event都没有被执行过，于是FASTBOT2随机选取一个事件$e$执行，并将其跳转至$A$的情况记录在模型中（即$P(e,A)=1$）。随后在$A$中随机选取未被执行过的事件，持续更新模型。</p>
+<p>利用阶段（Exploitation）：对于某个Activity，若尚有未被执行的事件，则依旧按扩张的策略选取；若已经没有未执行的事件，则根据概率选取一个事件，并不断更新概率模型。</p>
+<p>举例来说，假设当前的模型状态如例图(b)所示，根据公式可以得到在Activity 1中$e_1$被选中的概率最大，若此时它跳转至Activity 2（这也是概率更高的结果），会发现$e_5$尚未被执行，FASTBOT2会根据扩张策略选择$e_5$。在这个过程中，模型也会更新每个事件被选择的概率。</p>
+<p>然而，概率模型方法的缺点是只能通过一步的信息来做出决策，这样容易选择到当前收益高的事件（如执行某个事件，可能探索到$a$个Activities），而无法探测那些后期有更高收益的事件（如执行事件$e_1$并不会带来很大的收益，但在按顺序执行事件$e_1$、$e_3$、$e_8$后会探索到远大于$a$的Activities）。</p>
+<h2 id="learning-based-event-selection">Learning-based Event Selection</h2>
+<p>为了解决上述的问题，本文提出了基于强化学习的方法。具体来说，本文使用了N-Step SARSA的思想，利用Q-table保存每一个事件所能带来的期望收益，这个收益包含了未来$n$步的潜在信息。</p>
+<p>基于学习的事件选择方法包也含了模型扩张（expansion）和模型利用（exploitation）两个模式。</p>
+<h3 id="expansion-1">Expansion</h3>
+<p>在模型扩张时，事件的选择并不会依赖于Q-table，这里可能使用和Model-based一样的扩张方式（选择未被选择过的事件），也可以是完全随机选择。无论在什么样的事件选择策略下，都需要更新Q-table的值。Q-table可以被初始化为一个全0表。</p>
+<p>具体来说，当根据某种策略得到了一个“事件-Activity”的序列后，以$n$为窗口大小，更新Q-table的值：</p>
+<p>$$
+Q(e_t)=Q(e_t)+\alpha(G_{t,t+n}-Q(e_t))
+$$</p>
+<p>这其实是一种线性插值的形式，其中$G_{t,t+n}$表示未来$n$步的收益：</p>
+<p>$$
+G_{t,t+n}=r_{t+1}+\gamma r_{t+2}+\dots + \gamma^n Q(e_{t+n})
+$$</p>
+<p>可以看到，这里使用了未来$n-1$步直接收益的指数加权平均和第$n$步的期望收益，其中，$t$时刻的直接收益定义为：</p>
+<p>$$
+r_{t+1}=\frac{\mathbb{E}(e_t)}{\sqrt{N(e_t)+1}}+\frac{n_h+0.5*n_c+\sum_{e_i\in \mathcal{E}_c }\mathbb{E}(e_i)}{\sqrt{N(A_t)+1}}
+$$</p>
+<p>右项中的$n_h$表示事件$e_t$执行后页面$A_t$中没有在之前测试中执行的事件数，$n_c$表示当前测试在$A&rsquo;$中未执行过的事件个数，$N(A_t)$表示$A_t$在当前测试中被访问的次数。</p>
+<p>可以看到，当事件$e_t$的期望高且执行次数少时，左项会较大；当$e_t$执行后的页面被探索次数较少、未探索的事件较多，且这些事件也有很高的期望值时，右值较大。这里分母的根号是为了平衡和分子的量纲差距。</p>
+<h3 id="exploitation-1">Exploitation</h3>
+<p>当所有的事件都被探索之后，可以利用Q-table来进行事件选择的决策。与Model-based类似，每个事件被选中的概率为：</p>
+<p>$$
+P_Q(e_i)=\exp({\frac{{Q(e_i)}}{\beta}})/\sum_{e_i \in \mathcal{A}_c}\exp({\frac{{Q(e_i)}}{\beta}})
+$$</p>
+<h3 id="example-2">Example</h3>
+<p>假设在Activity 2中，$e_4$和$e_6$在本次测试中暂未被执行过，且$e_6$已经加入$M$。在此情况下，在Activity中执行$e_1$有比较高的奖励（因为$n_h$和$n_c$比较大）。类似的，$e_8$作为不在$M$中的新事件，也导致了$e_5$有较高的奖励。在这些过程中，Q-table都在被不断地更新，但没有被使用。当所有事件都被执行过之后，Q-table来时为事件选择做决策，这样可以找到更具价值的事件。</p>
+<h1 id="evaluation">Evaluation</h1>
+<p>作者在头条和抖音的10个版本中，与STOAT、APE和MONKEY进行比较。本文提出了两个研究问题：</p>
+<ul>
+<li>RQ1：FASTBOT2能否比其它工具拥有更高的功能覆盖率？</li>
+<li>RQ2：model-based和learning-based方法是否能起到作用？（Ablation Study）</li>
+</ul>
+<p>对于RQ1，本文通过各工具在10个版本的软件中所覆盖的Activity数量，以及累计的覆盖数量进行横向对比，得到的结果如下图：</p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h6liyjrdy4j227c0d4q8n.jpg" alt="https://tva1.sinaimg.cn/large/e6c9d24ely1h6liyjrdy4j227c0d4q8n.jpg"></p>
+<p>可以看到FASTBOT2相交其它工具有着较大的提升。其中抖音由于页面更加复杂（包含在线购物和视频流等功能），FASTBOT2的优势更加明显。</p>
+<p>下图还以维恩图的形式展示了FASTBOT2与其它工具的重合程度。</p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h6lj0imvotj212808gjsd.jpg" alt="https://tva1.sinaimg.cn/large/e6c9d24ely1h6lj0imvotj212808gjsd.jpg"></p>
+<p>对于RQ2，本文分别比较了单独使用概率模型（PM）、单独使用强化学习模型（RL）和联合两个模型（RL+PM）的Activity覆盖率情况，结果如图所示：</p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h6lj2jr58qj212e0g6tag.jpg" alt="https://tva1.sinaimg.cn/large/e6c9d24ely1h6lj2jr58qj212e0g6tag.jpg"></p>
+<p>可以看到两者的联合有着很大的提升。由于在初始阶段，Q-table的值还未能充分体现真实期望，RL的效果相对较差，当后期Q-table的值较为理想时，效果会超过PM。若在初始阶段使用PM进行事件选择，同时对Q-table进行学习，则在后期使用Q-table做为事件选择依据，可以有比较好的提升。</p>
+
+  </section>
+  <footer>
+    
+    
+
+    
+    <nav class="p-pagination c-pagination">
+      <div class="c-pagination__ctrl">
+        <div class="c-pagination__newer">
+          
+        </div>
+        <div class="c-pagination__older">
+          
+          <a href="https://hagemon.github.io/posts/neuron-coverage-for-adequacy-testing/">Older</a>
+          
+        </div>
+      </div>
+    </nav>
+    
+    
 
 
+    
 
+  </footer>
+</article>
   </main>
   <footer class="l-footer">
     
@@ -308,3 +334,4 @@
   <script type="text/javascript" src="https://hagemon.github.io/js/bundle.js" defer></script>
 </body>
 </html>
+
