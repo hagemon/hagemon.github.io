@@ -7,7 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Hagemon Production</copyright>
-    <lastBuildDate>Tue, 27 Sep 2022 22:46:03 +0800</lastBuildDate><atom:link href="https://hagemon.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 14 Oct 2022 17:03:56 +0800</lastBuildDate><atom:link href="https://hagemon.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ODIN-Detecting Non-crashing Functional Bugs in Android Apps via Deep-State Differential Analysis</title>
+      <link>https://hagemon.github.io/posts/odin/</link>
+      <pubDate>Fri, 14 Oct 2022 17:03:56 +0800</pubDate>
+      
+      <guid>https://hagemon.github.io/posts/odin/</guid>
+      <description>A note for Detecting Non-crashing Functional Bugs in Android Apps via Deep-State Differential Analysis by Jue Wang from Nanjing University.
+Introduction Non-crashing functional bugs are ofen buried in rare program paths, which are difficult to detect but lead to servere consequences.
+This paper proposed ODIN, a novel technique to detect non-crashing functional bugs via deep-state differential analysis.
+There exists two observations of automatic generated test inputs:
+ Only a small portion of tests input would reach an errorneous app state.</description>
+    </item>
+    
     <item>
       <title>Fastbot2</title>
       <link>https://hagemon.github.io/posts/fastbot2/</link>
